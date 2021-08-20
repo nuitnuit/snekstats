@@ -5,6 +5,16 @@
     color: black;
 }
 
+a:visited{
+    color: #4aed9b;
+}
+a:hover{
+    color: #0c9752;
+}
+a:link{
+    color: #18ba69;
+}
+
 /*
     A little revision for CSS
 
