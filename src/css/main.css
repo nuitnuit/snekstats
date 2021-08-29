@@ -1,0 +1,84 @@
+.menuBar{
+    width: 100%;
+    height: 100%;
+    background-color: #6354e8;
+    color: black;
+}
+
+a:visited{
+    color: #4aed9b;
+}
+a:hover{
+    color: #0c9752;
+}
+a:link{
+    color: #18ba69;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+code {
+font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+  
+
+/*
+    A little revision for CSS
+
+    .asd applies CSS changes to elements with class="asd",
+    p.asd applies CSS changes to elements with class="asd" and tag="p",
+
+    Valid CSS:
+        h1 
+        {
+            font-size: 20px;
+        }
+
+        h2.asd
+        {
+            font-size: 18px;
+        }
+
+        .asd
+        {
+            color: red;
+        }
+
+    E is an ancestor, F is a descendant:
+        <E>
+            <F></F>
+        </E>
+
+        OR
+
+        <E>
+            <A>
+                <F></F>
+            </A>
+        </E>
+
+    Applying style to descendant of ancestor:
+        E F {
+            font-size: 20px;
+        }
+
+    
+    E is a parent, F is a child:
+        <E>
+            <F></F>
+        </E>
+
+    Applying style to child of parent:
+        E > F {
+            font-size: 20px;
+        }
+
+*/
