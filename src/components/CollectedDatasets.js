@@ -5,7 +5,7 @@ import '../App.css';
 function CollectedDatasets() {
     return (
         <div className="CollectedDatasets">
-            <h1>This is CollectedDatasets page</h1>
+            <h1>This is Collected Datasets page</h1>
         </div>
     );
 }
