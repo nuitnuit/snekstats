@@ -7,7 +7,7 @@ function Footerbar() {
             <footer class="py-3 bg-primary">
                 <div class="container">
                     <p class="m-0 text-center text-white">
-                        Copyright 2021-2022 Snekstats. All right reserved.
+                        Copyright 2021&#8208;2022 Snekstats. All right reserved.
                     </p>
                 </div>
             </footer>

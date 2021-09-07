@@ -18,11 +18,12 @@ function Home() {
                         />
                     </div>
                     <div class="col-lg-5">
-                        <p>
-                            Lorem Ipsum is simply dummy text of the printing and typesetting
-                            industry. Lorem Ipsum has been the industry's standard dummy text
-                            ever since the 1500s, when an unknown printer took a galley of
-                            type and scrambled it to make a type specimen book.
+                        <p align="justify">
+                            Snekstats is a data visualisation page that shows meaningful information aboubt your country's obesity rate. 
+                            The page has several datasets sources for you to choose from, each of them providing a different type of filtration and analysis. 
+                            You can also view the raw data in table format and interact with it. <br/><br/>
+                            Our goal is to provide a better understanding of the obesity rate in your country. <br/><br/>
+                            We hope you enjoy our website&#33;
                         </p>
                     </div>
                 </div>
