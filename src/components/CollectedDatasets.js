@@ -32,7 +32,7 @@ function CollectedDatasets() {
                         </label>
                     </div>
                     <div class="col-md-12">
-                        <h1>CONTENT HERE PLS THX</h1>
+                         <StaticTable/> 
                     </div>
                 </div>
             </Container>
