@@ -5,10 +5,12 @@ import CSV_DATA from '../data/CSV_DATA.json'
 
 import '../css/staticTable.css'
 
-//const CSVdata = require('./csvToJson');
-//console.log(CSVdata.dataJson())
-//const MOCK_DATA = CSVdata.dataJson()
-//console.log(MOCK_DATA)
+/*
+const CSVdata = require('./csvToJson');
+console.log(CSVdata.dataJson())
+const MOCK_DATA = CSVdata.dataJson()
+console.log(MOCK_DATA)
+*/
 
 const COLUMNS = [
     {
@@ -30,17 +32,16 @@ const COLUMNS = [
 ]
  
 export const StaticTable= ()  => {
-
-//   const [data, setData] = useState([] )
-//   useEffect(() => {
-//     csv('/women.csv') //women.csv must be in the public folder
-//     .then(data => {
-//       setData(data);
-//       (console.log(data));
-//     });
-//   },[])
-
-  //console.log(data)
+  /*
+   const [data, setData] = useState([] )
+   useEffect(() => {
+     csv('/women.csv') //women.csv must be in the public folder
+     .then(data => {
+       setData(data);
+       (console.log(data));
+     });
+   },[])
+  console.log(data)*/
 
   const columns = useMemo(() => COLUMNS, [])
   const data = useMemo(()=> CSV_DATA, [])

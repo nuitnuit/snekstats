@@ -23,8 +23,7 @@ function Home() {
                             The page has several datasets sources for you to choose from, each of them providing a different type of filtration and analysis. 
                             You can also view the raw data in table format and interact with it. <br/><br/>
                             Our goal is to provide a better understanding of the obesity rate in your country. <br/><br/>
-                            We hope you enjoy our website&#33; <br/>
-                            Sample change.
+                            We hope you enjoy our website&#33;
                         </p>
                     </div>
                 </div>
