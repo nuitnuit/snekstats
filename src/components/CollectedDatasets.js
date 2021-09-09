@@ -5,6 +5,7 @@ import '../App.css';
 import tableIcon from "../assets/table.png";
 import graphIcon from "../assets/graph.png";
 import piechartIcon from "../assets/piechart.png";
+import women from "../data/women.csv";
 import  { StaticTable }  from './StaticTable'
 
 function CollectedDatasets() {
@@ -32,7 +33,7 @@ function CollectedDatasets() {
                         </label>
                     </div>
                     <div class="col-md-12">
-                         <StaticTable/> 
+                        <StaticTable/> 
                     </div>
                 </div>
             </Container>
