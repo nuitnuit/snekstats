@@ -1,78 +1,71 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import ReactDOM from 'react-dom';
+import React, { useMemo } from 'react';
 import {useTable} from 'react-table'
-import {csv} from 'd3';
-
+import CSV_DATA from '../data/CSV_DATA.json'
+import '../css/staticTable.css'
 
 const COLUMNS = [
   {
-    Headers:'Year',
-    accessor: 'Year'
-  },
-  {
-    Headers:'Percent',
-    accessor:'%'
-  }
+      Headers:'Country',
+      accessor: 'Country'
+    },
+    {
+      Headers:'Year',
+      accessor:'Year'
+    },
+    {
+      Headers:'Value',
+      accessor: 'Value'
+    },
+    {
+      Headers:'Gender',
+      accessor: 'Gender'
+    },
 ]
 
-function StaticTable() {
 
-  const [data, setData] = useState([] )
-  useEffect(() => {
-    csv('/women.csv') //women.csv must be in the public folder
-    .then(data => {
-      setData(data);
-      //(console.log(data));
-    });
-  },[])
+export const StaticTable= ()  => {
 
-  console.log(data)
-
-  const columns = useMemo(() => COLUMNS, [])
-  const tempdata = useMemo(()=> data, [])
-
-  const tableInstance = useTable({
-    columns: COLUMNS,
-    data: data
-  })
-
-  const{
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-  } = tableInstance
-   
-  return (
-    <table {...getTableProps()}>
-      <thead>
-        {headerGroups.map((headerGroup)=>
-        <tr {...headerGroup.getHeaderGroupProps()}>
-          {
-            headerGroup.headers.map((column)=>(
-              <th {...column.getHeaderProps()}>{column.render('Header')}</th>
-            ))
-          }
-
-        </tr>)}        
-      </thead>
-      <tbody {...getTableBodyProps()}>
-        {rows.map((row)=>{
-          prepareRow(row)
-          return(
-            <tr {...row.getRowProps()}>
-              {row.cells.map((cell)=>{
-                return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-              })}
-
-           </tr>
-          )
-        })}
-        
-      </tbody>
-    </table>
-  );
-}
-
-export default StaticTable;
+    const columns = useMemo(() => COLUMNS, [])
+    const data = useMemo(()=> CSV_DATA, [])
+  
+    const tableInstance = useTable({
+      columns,
+      data
+    })
+  
+    const {
+      getTableProps,
+      getTableBodyProps,
+      headerGroups,
+      rows,
+      prepareRow,
+    } = tableInstance
+     
+    return (
+      <table {...getTableProps()}>
+        <thead>
+          {headerGroups.map((headerGroup)=>(
+          <tr {...headerGroup.getHeaderGroupProps()}>
+            {headerGroup.headers.map((column)=>(
+                <th {...column.getHeaderProps()}>{column.render('Headers')}</th>
+              ))}
+          </tr>
+          ))}        
+        </thead>
+        <tbody {...getTableBodyProps()}>
+          {rows.map((row)=>{
+            prepareRow(row)
+            return(
+              <tr {...row.getRowProps()}>
+                {row.cells.map((cell)=>{
+                  return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                })}
+  
+             </tr>
+            )
+          })}
+          
+        </tbody>
+      </table>
+    );
+  }
