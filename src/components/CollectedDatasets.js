@@ -5,7 +5,7 @@ import '../App.css';
 import tableIcon from "../assets/table.png";
 import graphIcon from "../assets/graph.png";
 import piechartIcon from "../assets/piechart.png";
-import women from "../data/women.csv";
+import  { StaticTable }  from './StaticTable'
 
 function CollectedDatasets() {
     return (
