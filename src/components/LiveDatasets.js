@@ -1,5 +1,6 @@
 
 import React from "react"
+import { LiveTable } from './LiveTable'
 import '../App.css';
 
 function LiveDatasets() {
