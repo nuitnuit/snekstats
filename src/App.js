@@ -13,7 +13,6 @@ import LiveDatasets from './components/LiveDatasets';
 class App extends Component {
   render() {
     return (
-
       <BrowserRouter>
         <Topbar />
         <div>
@@ -30,6 +29,5 @@ class App extends Component {
       </BrowserRouter >
     );
   }
-
 }
 export default App;
