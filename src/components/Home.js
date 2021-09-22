@@ -5,19 +5,19 @@ function Home() {
         <div className="home">
             <Container>
                 <br />
-                <div class="d-flex justify-content-center">
+                <div className="d-flex justify-content-center">
                     <h1>Welcome To SnekStats</h1>
                 </div>
-                <div class="row align-items-center my-5">
+                <div className="row align-items-center my-5">
                     <br />
-                    <div class="col-lg-7">
+                    <div className="col-lg-7">
                         <img
-                            class="img-fluid rounded mb-4 mb-lg-0"
+                            className="img-fluid rounded mb-4 mb-lg-0"
                             src="https://themedicalbiochemistrypage.org/wp-content/uploads/2020/05/obesity-title-image.jpg"
                             alt="Obesity pic" width="600" height="400"
                         />
                     </div>
-                    <div class="col-lg-5">
+                    <div className="col-lg-5">
                         <p align="justify">
                             Snekstats is a data visualisation page that shows meaningful information aboubt your country's obesity rate. 
                             The page has several datasets sources for you to choose from, each of them providing a different type of filtration and analysis. 
