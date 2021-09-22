@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import SnekstatsContainer from './components/SnekstatsContainer'
 import App from './App';
 
 ReactDOM.render(
