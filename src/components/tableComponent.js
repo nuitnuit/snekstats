@@ -9,23 +9,22 @@ class StaticTableComponent extends React.Component {
       rows: [],
       paginationCount: 5
     }
-    this.render()
-    {
-      return (
-        <div style={{ height: 400, width: '100%' }}>
+  }
+  render() {
+    return (
+      <div style={{ height: 400, width: '100%' }}>
 
-          <DataGrid
-            rows={this.state.rows}
-            columns={this.state.headers}
-            pageSize={this.state.paginationCount}
-            rowsPerPageOptions={this.state.paginationCount}
-            checkboxSelection
-          />
-        </div>
-      );
-    }
+        <DataGrid
+          rows={this.state.rows}
+          columns={this.state.headers}
+          pageSize={this.state.paginationCount}
+          rowsPerPageOptions={this.state.paginationCount}
+        />
+      </div>
+    );
   }
 }
+
 
 export { StaticTableComponent };
 

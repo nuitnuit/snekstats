@@ -6,32 +6,32 @@ const columns = [
     {
         field: "Id",
         headerName: 'ID',
-        width: 100
+        width: 150
     },
     {
         headerName: 'SpatialDim',
         field: 'SpatialDim',
-        width: 200
+        width: 150
     },
     {
         headerName: 'TimeDim',
         field: 'TimeDim',
-        width: 200
+        width: 150
     },
     {
         headerName: 'Dim1',
         field: 'Dim1',
-        width: 200
+        width: 150
     },
     {
         headerName: 'Dim2',
         field: 'Dim2',
-        width: 200
+        width: 150
     },
     {
         headerName: 'NumericValue',
         field: 'NumericValue',
-        width: 200
+        width: 150
     },
 ]
 
@@ -85,7 +85,7 @@ class LiveTable extends React.Component {
             return (
                 <div style={{ height: '100%', width: '100%' }}>
 
-                    <DataGrid autoHeight getRowId={(r) => r.Id} columns={columns} rows={items} pageSize={20} id="Id" rowsPerPageOptions={[500]} checkboxSelection />
+                    <DataGrid autoHeight getRowId={(r) => r.Id} columns={columns} rows={items} pageSize={20} id="Id" rowsPerPageOptions={[500]} />
 
                 </div >
             );
