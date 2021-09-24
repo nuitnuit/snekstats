@@ -1,22 +1,19 @@
 import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 
-class StaticTableComponent extends React.Component
-{
-  constructor(props)
-  {
+class StaticTableComponent extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {
-      headers: null,
+      headers: [],
       rows: [],
       paginationCount: 5
     }
   }
-  render()
-  {
-    return(
+  render() {
+    return (
       <div style={{ height: 400, width: '100%' }}>
-        
+
         <DataGrid
           rows={this.state.rows}
           columns={this.state.headers}
@@ -29,7 +26,7 @@ class StaticTableComponent extends React.Component
 }
 
 
-export {StaticTableComponent};
+export { StaticTableComponent };
 
 /*//import { appendFileSync } from 'fs';
 import React from 'react';
@@ -45,7 +42,7 @@ async function getData(fetchAddr){
   const response = await fetch(fetchAddr)
   .then(response => response.text())
   .then(data => {
-    var dataArray = data.split("\n")   
+    var dataArray = data.split("\n")
     var headers = dataArray[0]
      var head = headers.split(",")
       var finalData = {};
@@ -59,12 +56,12 @@ async function getData(fetchAddr){
           {
             thing[head[j]] = rowData[j];
           }
-        }       
+        }
         finalData[i.toString()] = (thing);
       }
       console.log(finalData);
   })
-  
+
   return response;
   }
 

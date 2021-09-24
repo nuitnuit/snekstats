@@ -1,4 +1,3 @@
-
 import React from "react"
 import Container from "react-bootstrap/Container";
 import '../App.css';
@@ -10,7 +9,7 @@ import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
-import  { StaticTable }  from './StaticTable';
+import { StaticTable } from './StaticTable';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -35,16 +34,14 @@ class CollectedDatasets extends React.Component {
             datasetAddr: "https://snekosnekstats.000webhostapp.com/data/compiled_countries_d1.csv",
             dataViewNum: 1,
         };
-    this.updateDataset = this.updateDataset.bind(this);
+        this.updateDataset = this.updateDataset.bind(this);
     }
-    updateDataset(datasetNum)
-    {
+    updateDataset(datasetNum) {
         this.setState(prevState => ({
             datasetHeader: "Dataset " + datasetNum,
             datasetNum: datasetNum
         }));
-        switch(datasetNum)
-        {
+        switch (datasetNum) {
             case 1:
                 this.setState({
                     datasetAddr: "https://snekosnekstats.000webhostapp.com/data/compiled_countries_d1.csv"
@@ -55,7 +52,7 @@ class CollectedDatasets extends React.Component {
                     datasetAddr: "https://snekosnekstats.000webhostapp.com/data/cleanedNCD_d2.csv"
                 })
                 break;
-            case 3: 
+            case 3:
                 this.setState({
                     datasetAddr: ""
                 })
@@ -64,13 +61,11 @@ class CollectedDatasets extends React.Component {
                 break;
         }
     }
-    updateDataViewNum(dataViewNum)
-    {
+    updateDataViewNum(dataViewNum) {
         this.setState(prevState => ({
             dataViewNum: dataViewNum
         }))
-        switch(dataViewNum)
-        {
+        switch (dataViewNum) {
             case 1:
                 this.setState({
                     datasetAddr: "https://snekosnekstats.000webhostapp.com/data/compiled_countries_d1.csv"
@@ -81,7 +76,7 @@ class CollectedDatasets extends React.Component {
                     datasetAddr: "https://snekosnekstats.000webhostapp.com/data/cleanedNCD_d2.csv"
                 })
                 break;
-            case 3: 
+            case 3:
                 this.setState({
                     datasetAddr: ""
                 })
@@ -104,12 +99,12 @@ class CollectedDatasets extends React.Component {
                             <Dropdown as={ButtonGroup} size="lg">
                                 <Button variant="success">Selected dataset: </Button>
                                 <Dropdown.Toggle variant="success" id="dataset-dropdown-header">
-                                {this.state.datasetHeader}
+                                    {this.state.datasetHeader}
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
                                     <Dropdown.Item onClick={() => this.updateDataset(1)}>Dataset 1</Dropdown.Item>
                                     <Dropdown.Item onClick={() => this.updateDataset(2)}>Dataset 2</Dropdown.Item>
-                                </Dropdown.Menu>    
+                                </Dropdown.Menu>
                             </Dropdown>
                         </Col>
                     </Row>
@@ -118,11 +113,11 @@ class CollectedDatasets extends React.Component {
                             <ToggleButtonGroup
                                 orientation="vertical"
                                 value={this.state.dataViewNum}
-                                onChange={(event, value)=>{
-                                    this.updateDataViewNum(value);                                
+                                onChange={(event, value) => {
+                                    this.updateDataViewNum(value);
                                 }}
                                 exclusive
-                                >
+                            >
                                 <ToggleButton value={1}>
                                     <TableViewIcon></TableViewIcon>
                                 </ToggleButton>
@@ -173,7 +168,6 @@ export default CollectedDatasets;
     <div className="col-md-12">
     </div>
 </div>
-
 <Col>
     <ButtonGroup aria-label="Basic example">
         
@@ -182,5 +176,4 @@ export default CollectedDatasets;
         <Button variant="secondary"><img src={piechartIcon} width="40" height="40"></img></Button>
     </ButtonGroup>
 </Col>
-
 */}

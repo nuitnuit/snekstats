@@ -33,6 +33,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "proxy": "https://ghoapi.azureedge.net",
   "eslintConfig": {
     "extends": [
       "react-app",
