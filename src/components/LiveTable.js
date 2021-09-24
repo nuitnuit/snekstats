@@ -1,63 +1,95 @@
-import React, { useMemo, useEffect, useState } from 'react';
-import { getList } from '../../src/services/List';
-import Table from "./Table"
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import React from 'react';
+import Spinner from "react-bootstrap/Spinner";
+import { DataGrid } from '@mui/x-data-grid';
 
+const columns = [
+    {
+        field: "Id",
+        headerName: 'ID',
+        width: 100
+    },
+    {
+        headerName: 'SpatialDim',
+        field: 'SpatialDim',
+        width: 200
+    },
+    {
+        headerName: 'TimeDim',
+        field: 'TimeDim',
+        width: 200
+    },
+    {
+        headerName: 'Dim1',
+        field: 'Dim1',
+        width: 200
+    },
+    {
+        headerName: 'Dim2',
+        field: 'Dim2',
+        width: 200
+    },
+    {
+        headerName: 'NumericValue',
+        field: 'NumericValue',
+        width: 200
+    },
+]
 
-export default function LiveTable() {
-    const columns = useMemo(() => [
-        {
-            Headers: 'SpatialDim',
-            accessor: 'value.SpatialDim'
-        },
-        {
-            Headers: 'TimeDim',
-            accessor: 'value.TimeDim'
-        },
-        {
-            Headers: 'Dim1',
-            accessor: 'value.Dim1'
-        },
-        {
-            Headers: 'Dim2',
-            accessor: 'value.Dim2'
-        },
-        {
-            Headers: 'NumericValue',
-            accessor: 'value.NumericValue'
-        },
-    ]
-    );
-    const [list, setList] = useState({ value: [] });
-    const [isLoading, setIsLoading] = useState(false);
-    const [hasError, setHasError] = useState(false);
-    useEffect(() => {
-        let mounted = true;
-        setIsLoading(true);
-        setHasError(false);
-        getList()
-            .then(items => {
-                if (mounted) {
-                    setList(items)
-                }
+class LiveTable extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            error: null,
+            isLoaded: false,
+            items: [],
+            fetchAddr: this.props.fetchAddr,
+        };
+    }
+
+    componentDidMount() {
+        if (this.state.fetchAddr !== null) {
+            console.log(this.state.fetchAddr);
+            fetch(this.state.fetchAddr)
+                .then(res => res.json())
+                .then(
+                    (result) => {
+                        this.setState({
+                            isLoaded: true,
+                            items: result.value,
+                        });
+                    },
+                    (error) => {
+                        this.setState({
+                            isLoaded: true,
+                            error
+                        });
+                    }
+                )
+        }
+        else {
+            this.setState({
+                isLoaded: true,
+                renderItem: <p>No datasets selected</p>
             })
-        setIsLoading(false);
-        return () => mounted = false;
-    }, [])
-    console.log(list.value);
+        }
+    }
 
-    return (
-        <div className="wrapper">
-            {hasError && <p>Something went wrong.</p>}
-            {isLoading ? (<p style="text-align:center">Loading ...</p>) : (
-                list.value.map(item => (/*<Table columns={columns} data={item} />*/<ul><h3>{item.SpatialDim}</h3></ul>))
-            )}
-        </div >
-    );
+    render() {
+        const { error, isLoaded, items } = this.state;
+        if (error) {
+            return <div>Error: {error.message}</div>;
+        } else if (!isLoaded) {
+            return <div><Spinner animation="border" role="status"></Spinner>Loading...</div>;
+        } else {
+            return (
+                <div style={{ height: '100%', width: '100%' }}>
+
+                    <DataGrid autoHeight getRowId={(r) => r.Id} columns={columns} rows={items} pageSize={20} id="Id" rowsPerPageOptions={[500]} checkboxSelection />
+
+                </div >
+            );
+        }
+    }
 }
+export { LiveTable }
