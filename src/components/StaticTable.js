@@ -10,19 +10,19 @@ import '../css/staticTable.css'
    {
      super(props);
      this.state = {
+       fetchAddr: this.props.fetchAddr,
+       staticData: this.props.staticData,
+       viewType: this.props.viewType,
        isLoaded: false,
        finalData: null,
        error: null,
-       fetchAddr: this.props.fetchAddr,
        renderItem: null,
-       staticData: false
       }
     }
     componentDidMount()
     {
       if (this.state.fetchAddr !== null)
       {
-        
         fetch(this.state.fetchAddr)
         .then(response => response.text())
         .then((data) => 
@@ -50,9 +50,9 @@ import '../css/staticTable.css'
             this.setState({
               isLoaded: true,
               finalData: finalData,
-              renderItem: <StaticTableComponent rows={this.state.finalData}/>
+              renderItem: <StaticTableComponent rows={this.state.finalData} headers={head}/>
             })
-            console.log(finalData);
+            console.log(head);
           }
         },
         (error) => {
@@ -72,7 +72,6 @@ import '../css/staticTable.css'
       }
     }
     
-    
     render()
     {
       const { error, isLoaded } = this.state;
@@ -91,64 +90,63 @@ import '../css/staticTable.css'
         );
       }
     }
-
-
-    /*
-     const [data, setData] = useState([] )
-     useEffect(() => {
-       csv('/women.csv') //women.csv must be in the public folder
-       .then(data => {
-         setData(data);
-         (console.log(data));
-       });
-     },[])
-    console.log(data)*/
-    
-    /*
-    const columns = useMemo(() => COLUMNS, [])
-    const data = useMemo(()=> CSV_DATA, [])
-    
-    const tableInstance = useTable({
-      columns,
-      data
-    })
-    
-    const {
-      getTableProps,
-      getTableBodyProps,
-      headerGroups,
-      rows,
-      prepareRow,
-    } = tableInstance
-    
-    return (
-      <table {...getTableProps()}>
-        <thead>
-          {headerGroups.map((headerGroup)=>(
-          <tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map((column)=>(
-                <th {...column.getHeaderProps()}>{column.render('Headers')}</th>
-              ))}
-          </tr>
-          ))}        
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row)=>{
-            prepareRow(row)
-            return(
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell)=>{
-                  return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                })}
-
+  }
+  
+  export {StaticTable};
+  
+      /*
+       const [data, setData] = useState([] )
+       useEffect(() => {
+         csv('/women.csv') //women.csv must be in the public folder
+         .then(data => {
+           setData(data);
+           (console.log(data));
+         });
+       },[])
+      console.log(data)*/
+      
+      /*
+      const columns = useMemo(() => COLUMNS, [])
+      const data = useMemo(()=> CSV_DATA, [])
+      
+      const tableInstance = useTable({
+        columns,
+        data
+      })
+      
+      const {
+        getTableProps,
+        getTableBodyProps,
+        headerGroups,
+        rows,
+        prepareRow,
+      } = tableInstance
+      
+      return (
+        <table {...getTableProps()}>
+          <thead>
+            {headerGroups.map((headerGroup)=>(
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map((column)=>(
+                  <th {...column.getHeaderProps()}>{column.render('Headers')}</th>
+                ))}
             </tr>
-            )
-          })}
-          
-        </tbody>
-      </table>
-    );
-  */
-}
-
-export {StaticTable};
+            ))}        
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {rows.map((row)=>{
+              prepareRow(row)
+              return(
+                <tr {...row.getRowProps()}>
+                  {row.cells.map((cell)=>{
+                    return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                  })}
+  
+              </tr>
+              )
+            })}
+            
+          </tbody>
+        </table>
+      );
+    */
