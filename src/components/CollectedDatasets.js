@@ -99,7 +99,7 @@ class CollectedDatasets extends React.Component {
                     <div className="d-flex justify-content-center">
                         <h1>Welcome To SnekStats</h1>
                     </div>
-                    <Row xs="auto">
+                    <Row className="m-3">
                         <Col>
                             <Dropdown as={ButtonGroup} size="lg">
                                 <Button variant="success">Selected dataset: </Button>
@@ -113,8 +113,8 @@ class CollectedDatasets extends React.Component {
                             </Dropdown>
                         </Col>
                     </Row>
-                    <Row>
-                        <Col>
+                    <Row className="m-3">
+                        <Col xs={1}>
                             <ToggleButtonGroup
                                 orientation="vertical"
                                 value={this.state.dataViewNum}
@@ -140,7 +140,7 @@ class CollectedDatasets extends React.Component {
                                 </ToggleButton>
                             </ToggleButtonGroup>
                         </Col>
-                        <Col>
+                        <Col xs={true} className="text-center align-self-center">
                             <StaticTable 
                                 fetchAddr = {this.state.datasetAddr}
                                 viewType = {this.state.dataViewNum}

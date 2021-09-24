@@ -1,5 +1,5 @@
 import React from 'react';
-import Spinner from "react-bootstrap/Spinner";
+import CircularProgress from '@mui/material/CircularProgress';
 import { StaticTableComponent } from './tableComponent';
 
 import '../css/staticTable.css'
@@ -80,9 +80,9 @@ import '../css/staticTable.css'
       } else if (!isLoaded) {
         return (
           <>
+            <CircularProgress size={80} />
             <p>Loading dataset</p>
-          </>,
-          <Spinner animation="border" role="status"></Spinner>
+          </>
         );
     } else {
       return (
