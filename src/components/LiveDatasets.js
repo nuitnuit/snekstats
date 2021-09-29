@@ -94,11 +94,11 @@ class CollectedDatasets extends React.Component {
                     <div className="d-flex justify-content-center">
                         <h1>Welcome To SnekStats</h1>
                     </div>
-                    <Row >
+                    <Row className="m-3">
                         <Col>
                             <Dropdown as={ButtonGroup} size="lg">
-                                <Button variant="success">Selected live dataset: </Button>
-                                <Dropdown.Toggle variant="success" id="dataset-dropdown-header">
+                                <Button variant="primary">Selected live dataset: </Button>
+                                <Dropdown.Toggle variant="primary" id="dataset-dropdown-header">
                                     {this.state.datasetHeader}
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
@@ -108,8 +108,8 @@ class CollectedDatasets extends React.Component {
                             </Dropdown>
                         </Col>
                     </Row>
-                    <Row>
-                        <Col>
+                    <Row className="m-3">
+                        <Col xs={1}>
                             <ToggleButtonGroup
                                 orientation="vertical"
                                 value={this.state.dataViewNum}
@@ -135,7 +135,7 @@ class CollectedDatasets extends React.Component {
                                 </ToggleButton>
                             </ToggleButtonGroup>
                         </Col>
-                        <Col xs={11}>
+                        <Col xs={true} className="text-center align-self-center">
                             <LiveTable
                                 fetchAddr={this.state.datasetAddr}
                                 viewType={this.state.dataViewNum}

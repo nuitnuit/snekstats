@@ -29,11 +29,13 @@ import '../css/staticTable.css'
         {
           var finalData = {};
           var headers, head, dataArray;
+          console.log("dataset changed");
           if (this.state.staticData === true)
           {
             dataArray = data.split("\n")   
             headers = dataArray[0]
             head = headers.split(",")
+            console.log(head);
             for(let i = 1; i < dataArray.length; i++)
             {
               var thing = {};
@@ -44,8 +46,9 @@ import '../css/staticTable.css'
                 {
                   thing[head[j]] = rowData[j];
                 }
-              }       
+              }
               finalData[i] = thing;
+              console.log(finalData);
             }
             this.setState({
               isLoaded: true,

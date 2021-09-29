@@ -1,6 +1,7 @@
 import React from 'react';
 import Spinner from "react-bootstrap/Spinner";
 import { DataGrid } from '@mui/x-data-grid';
+import { CircularProgress } from '@mui/material';
 
 const columns = [
     {
@@ -49,7 +50,7 @@ class LiveTable extends React.Component {
 
     componentDidMount() {
         if (this.state.fetchAddr !== null) {
-            console.log(this.state.fetchAddr);
+            var countries = require("i18n-iso-countries");
             fetch(this.state.fetchAddr)
                 .then(res => res.json())
                 .then(
@@ -80,7 +81,12 @@ class LiveTable extends React.Component {
         if (error) {
             return <div>Error: {error.message}</div>;
         } else if (!isLoaded) {
-            return <div><Spinner animation="border" role="status"></Spinner>Loading...</div>;
+            return (
+                <>
+                    <CircularProgress size={80} />  
+                    <p>Loading dataset</p>
+                </>
+            );
         } else {
             return (
                 <div style={{ height: '100%', width: '100%' }}>

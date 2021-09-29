@@ -5,8 +5,8 @@ class StaticTableComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      headers: [],
-      rows: [],
+      headers: this.props.headers,
+      rows: this.props.rows,
       paginationCount: 5
     }
   }
