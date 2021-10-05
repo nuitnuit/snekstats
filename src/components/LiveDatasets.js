@@ -25,7 +25,7 @@ import PieChartIcon from '@mui/icons-material/PieChart';
 import MultilineChartIcon from '@mui/icons-material/MultilineChart';
 import PublicIcon from '@mui/icons-material/Public';
 
-class CollectedDatasets extends React.Component {
+class LiveDatasets extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -139,6 +139,7 @@ class CollectedDatasets extends React.Component {
                             <LiveTable
                                 fetchAddr={this.state.datasetAddr}
                                 viewType={this.state.dataViewNum}
+                                isLoaded={false}
                             />
                         </Col>
                     </Row>
@@ -148,32 +149,4 @@ class CollectedDatasets extends React.Component {
     }
 }
 
-export default CollectedDatasets;
-
-{/*<div className="row align-items-center my-5">
-    <div className="btn-group btn-group-toggle" data-toggle="buttons">
-        <label className="btn btn-secondary active">
-            <input type="radio" name="viewType" id="option1" autocomplete="off" checked/> 
-            <img src={tableIcon} width="50" height="50"></img>
-        </label>
-        <label className="btn btn-secondary">
-            <input type="radio" name="viewType" id="option2" autocomplete="off"/>
-            <img src={graphIcon} width="50" height="50"></img>
-        </label>
-        <label className="btn btn-secondary">
-            <input type="radio" name="viewType" id="option2" autocomplete="off"/>
-            <img src={piechartIcon} width="50" height="50"></img>
-        </label>
-    </div>
-    <div className="col-md-12">
-    </div>
-</div>
-<Col>
-    <ButtonGroup aria-label="Basic example">
-        
-        <Button variant="secondary" active><img src={tableIcon} width="40" height="40"></img></Button>
-        <Button variant="secondary"><img src={graphIcon} width="40" height="40"></img></Button>
-        <Button variant="secondary"><img src={piechartIcon} width="40" height="40"></img></Button>
-    </ButtonGroup>
-</Col>
-*/}
+export default LiveDatasets;

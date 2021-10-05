@@ -46,10 +46,12 @@ class LiveTable extends React.Component {
             items: [],
             fetchAddr: this.props.fetchAddr,
         };
+        this.loadDatasets = this.loadDatasets.bind(this);
     }
 
-    componentDidMount() {
+    loadDatasets() {
         if (this.state.fetchAddr !== null) {
+            console.log("live dataset changed");
             var countries = require("i18n-iso-countries");
             fetch(this.state.fetchAddr)
                 .then(res => res.json())
@@ -75,6 +77,22 @@ class LiveTable extends React.Component {
             })
         }
     }
+    componentDidMount() {
+        this.loadDatasets();
+    }
+
+    componentDidUpdate() {
+        console.log(this.props.fetchAddr)
+        console.log(this.state.currentAddr)
+        if (this.state.currentAddr !== this.props.fetchAddr) {
+            this.setState({
+                currentAddr: this.props.fetchAddr,
+                isLoaded: false
+            })
+            this.loadDatasets();
+        }
+    }
+
 
     render() {
         const { error, isLoaded, items } = this.state;
@@ -83,7 +101,7 @@ class LiveTable extends React.Component {
         } else if (!isLoaded) {
             return (
                 <>
-                    <CircularProgress size={80} />  
+                    <CircularProgress size={80} />
                     <p>Loading dataset</p>
                 </>
             );
