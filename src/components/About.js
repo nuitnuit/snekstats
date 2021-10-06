@@ -31,7 +31,7 @@ function About() {
                             <p>Roles: <ul>
                                             <li>Group leader</li>
                                             <li>Product manager</li>
-                                            <li>Developer</li>
+                                            <li>Developer 1</li>
                                      </ul>
                             </p>
                         </Card>
@@ -41,20 +41,51 @@ function About() {
                             <h4><b>Ryan Ooi Jia-Jiun</b></h4>
                             <Avatar alt = "ryan" src={ryan} sx = {{width: 80, height: 80}}/>
                             <p>"I love to cook"</p>
-                            <p>Major : Software Engineering,{"\n"}Digital Systems Security</p>
+                            <p>Major : <ul>
+                                            <li>Software Engineering</li>
+                                            <li>Digital Systems Security</li>
+                                     </ul>
+                            </p>
+                            <p>Roles: <ul>
+                                            <li>UI/UX lead</li>
+                                            <li>Scrum Master 2</li>
+                                            <li>Developer 3</li>
+                                     </ul>
+                            </p>
                         </Card>
                     </Col>
                     <Col className="card">
                         <div className="container">
                             <h4><b>Loke Yenyu</b></h4>
-                            <p>Architect Engineer</p>
+                            <Avatar alt = "ryan" src={ryan} sx = {{width: 80, height: 80}}/>
+                            <p>"I love to cook"</p>
+                            <p>Major : <ul>
+                                            <li>Software Engineering</li>
+                                            <li>Digital Systems Security</li>
+                                     </ul>
+                            </p>
+                            <p>Roles: <ul>
+                                            <li>Project Coordinator</li>
+                                            <li>Lead developer</li>
+                                     </ul>
+                            </p>
                         </div>
                     </Col>
                     <Col className="card">
                         <div className="container">
                             <h4><b>Kho Yi Ning</b></h4>
                             <Avatar alt = "lin" src={naomi} sx = {{width: 80, height: 80}}/>
-                            <p>Architect Engineer</p>
+                            <p>"I like art"</p>
+                            <p>Major : <ul>
+                                            <li>Software Engineering</li>
+                                            <li>Game Development</li>
+                                     </ul>
+                            </p>
+                            <p>Roles: <ul>
+                                            <li>Scrum master</li>
+                                            <li>Developer 2</li>
+                                     </ul>
+                            </p>
                         </div>
                     </Col>
                 </Row>
