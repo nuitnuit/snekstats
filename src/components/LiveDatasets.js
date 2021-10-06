@@ -1,22 +1,12 @@
 import React from "react"
 import Container from "react-bootstrap/Container";
 import '../App.css';
-import tableIcon from "../assets/table.png";
-import graphIcon from "../assets/graph.png";
-import piechartIcon from "../assets/piechart.png";
 import Dropdown from 'react-bootstrap/Dropdown';
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import { LiveTable } from './LiveTable';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
-import Grid from "@mui/material/Grid";
-import Stack from "@mui/material/Stack"
 import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import TableViewIcon from '@mui/icons-material/TableView';
