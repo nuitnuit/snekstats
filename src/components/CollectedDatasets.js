@@ -70,26 +70,6 @@ class CollectedDatasets extends React.Component {
                     {
                         console.log(this.state.datasetAddr)
                     }
-                    
-                    {/*<div className="row align-items-center my-5">
-                        <div className="btn-group btn-group-toggle" data-toggle="buttons">
-                            <label className="btn btn-secondary active">
-                                <input type="radio" name="viewType" id="option1" autocomplete="off" checked/> 
-                                <img src={tableIcon} width="50" height="50"></img>
-                            </label>
-                            <label className="btn btn-secondary">
-                                <input type="radio" name="viewType" id="option2" autocomplete="off"/>
-                                <img src={graphIcon} width="50" height="50"></img>
-                            </label>
-                            <label className="btn btn-secondary">
-                                <input type="radio" name="viewType" id="option2" autocomplete="off"/>
-                                <img src={piechartIcon} width="50" height="50"></img>
-                            </label>
-                        </div>
-                        <div className="col-md-12">
-                        </div>
-                    </div>*/}
-
                 </Container>
             </div>
         );
