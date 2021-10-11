@@ -25,8 +25,8 @@ function Obesity() {
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#symptoms" role="tab" data-toggle="tab">
-                Symptoms of Obesity
+              <a class="nav-link" href="#risks" role="tab" data-toggle="tab">
+                Risks of Obesity
               </a>
             </li>
             <li class="nav-item">
@@ -55,34 +55,9 @@ function Obesity() {
               <img class="card-img-top" src="https://media.istockphoto.com/photos/consequences-of-obesity-picture-id485112437?s=612x612" alt="Card image cap"></img>
              
                 <p class="card-text">
-                  Overweight and obesity are defined as abnormal or excessive
-                  fat accumulation that may impair health. Body mass index (BMI)
-                  is a simple index of weight-for-height that is commonly used
-                  to classify overweight and obesity in adults. It is defined as
-                  a person's weight in kilograms divided by the square of his
-                  height in meters (kg/m2)
-                </p>
-                <p class="card-text">
-                  In 2019, an estimated 38.2 million children under the age of 5
-                  years were overweight or obese. Once considered a high-income
-                  country problem, overweight and obesity are now on the rise in
-                  low- and middle-income countries, particularly in urban
-                  settings. In Africa, the number of overweight children under 5
-                  has increased by nearly 24% percent since 2000. Almost half of
-                  the children under 5 who were overweight or obese in 2019
-                  lived in Asia. Over 340 million children and adolescents aged
-                  5-19 were overweight or obese in 2016. The prevalence of
-                  overweight and obesity among children and adolescents aged
-                  5-19 has risen dramatically from just 4% in 1975 to just over
-                  18% in 2016. The rise has occurred similarly among both boys
-                  and girls: in 2016 18% of girls and 19% of boys were
-                  overweight. While just under 1% of children and adolescents
-                  aged 5-19 were obese in 1975, more 124 million children and
-                  adolescents (6% of girls and 8% of boys) were obese in 2016.
-                  Overweight and obesity are linked to more deaths worldwide
-                  than underweight. Globally there are more people who are obese
-                  than underweight – this occurs in every region except parts of
-                  sub-Saharan Africa and Asia.
+                According to the World Health Organization,
+                Overweight and obesity are defined as abnormal or excessive fat accumulation that presents a risk to health.
+                These conditions are determined by our BMI(Body Mass Index).
                 </p>
               </div>
             </div>
@@ -110,26 +85,19 @@ function Obesity() {
               </div>
             </div>
           </div>
-          <div role="tabpanel" class="tab-pane" id="symptoms">
+          <div role="tabpanel" class="tab-pane" id="risks">
             <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Symptoms</h5>
+              <h5 class="card-title">Risks</h5>
               <img class="card-img-top" src="https://media.istockphoto.com/photos/fat-or-obese-man-chest-body-with-heart-and-red-ekg-heartbeat-curve-picture-id1197645998?s=612x612" alt="Card image cap"></img>
                 <p class="card-text">
-                  Raised BMI is a major risk factor for noncommunicable diseases
-                  such as: cardiovascular diseases (mainly heart disease and
-                  stroke), which were the leading cause of death in 2012;
-                  diabetes; musculoskeletal disorders (especially osteoarthritis
-                  – a highly disabling degenerative disease of the joints); some
-                  cancers (including endometrial, breast, ovarian, prostate,
-                  liver, gallbladder, kidney, and colon). The risk for these
-                  noncommunicable diseases increases, with increases in BMI.
-                  Childhood obesity is associated with a higher chance of
-                  obesity, premature death and disability in adulthood. But in
-                  addition to increased future risks, obese children experience
-                  breathing difficulties, increased risk of fractures,
-                  hypertension, early markers of cardiovascular disease, insulin
-                  resistance and psychological effects.
+                <ol>
+                        <li>Chronic diseases that can cause death(i.e. cardiovascular disease, stroke)</li>
+                        <li>Diabetes and its associated conditions(blindness, limb amputations,kidney failure)</li>
+                        <li>Musculoskeletal disorders(i.e. osteoarthritis)</li>
+                        <li>Risk of cancers(endometrial, breast, ovarian, prostate, liver, gallbladder, kidney and colon) </li>
+                        <li>Childhood obesity that continues into adulthood</li>
+                  </ol>
                 </p>
               </div>
             </div>
