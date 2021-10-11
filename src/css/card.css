@@ -31,7 +31,12 @@
 
   .headerText
   {
-	font-size:200%;
+	 font-size:200%;
+  }
+
+  .smallHeaderText
+  {
+    font-size:150%;
   }
 
   .card {
@@ -39,8 +44,19 @@
 	transition: 0.3s;
 	display: inline-flex;
 	float:left;
+  padding: 10px;
   }
 
   p {
 	  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  }
+
+  .About {
+    padding-top: 10px;
+    padding-left: 10px;
+  }
+
+  .Avatar {
+    margin-left: auto;
+    margin-right: auto;
   }

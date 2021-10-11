@@ -11,17 +11,21 @@ import Avatar from '@mui/material/Avatar';
 import lin from "../assets/lin.png"
 import ryan from "../assets/ryan.png"
 import naomi from "../assets/naomi.jpg"
+import loke from "../assets/loke.png"
 
 function About() {
     return (
         <div className="About">
-            <Container>
+            <Container padding = "10px">
                 <Row>
                     <p className="headerText">Team Sneko <img src={sneko2} alt="team-logo" /></p>
+                    <p>We are a group of university students whose aim is to create health datasets which are accessible to the public. Our focus is obesity
+                      and we will be providing both real-time datasets and historical datasets. We also make the datasets easy to understand
+                      by visualizing the data using different graphs.</p>
                     <Col className="card">
                         <Card variant="outlined">
                             <h4><b>Lee Jun Lin</b></h4>
-                            <Avatar alt = "lin" src={lin} sx = {{width: 80, height: 80}}/>
+                            <Avatar className = "Avatar" alt = "lin" src={lin} sx = {{width: 80, height: 80}}/>
                             <p>"I love my cat"</p>
                             <p>Major : <ul>
                                             <li>Software Engineering</li>
@@ -39,7 +43,7 @@ function About() {
                     <Col className="card">
                         <Card variant="outlined">
                             <h4><b>Ryan Ooi Jia-Jiun</b></h4>
-                            <Avatar alt = "ryan" src={ryan} sx = {{width: 80, height: 80}}/>
+                            <Avatar className = "Avatar" alt = "ryan" src={ryan} sx = {{width: 80, height: 80}}/>
                             <p>"I love to cook"</p>
                             <p>Major : <ul>
                                             <li>Software Engineering</li>
@@ -55,10 +59,11 @@ function About() {
                         </Card>
                     </Col>
                     <Col className="card">
+                    <Card variant="outlined">
                         <div className="container">
                             <h4><b>Loke Yenyu</b></h4>
-                            <Avatar alt = "ryan" src={ryan} sx = {{width: 80, height: 80}}/>
-                            <p>"I love to cook"</p>
+                            <Avatar className = "Avatar" alt = "loke" src={loke} sx = {{width: 80, height: 80}}/>
+                            <p>"I love rabbits"</p>
                             <p>Major : <ul>
                                             <li>Software Engineering</li>
                                             <li>Digital Systems Security</li>
@@ -70,11 +75,13 @@ function About() {
                                      </ul>
                             </p>
                         </div>
+                    </Card>
                     </Col>
                     <Col className="card">
+                    <Card variant="outlined">
                         <div className="container">
                             <h4><b>Kho Yi Ning</b></h4>
-                            <Avatar alt = "lin" src={naomi} sx = {{width: 80, height: 80}}/>
+                            <Avatar className = "Avatar" alt = "lin" src={naomi} sx = {{width: 80, height: 80}}/>
                             <p>"I like art"</p>
                             <p>Major : <ul>
                                             <li>Software Engineering</li>
@@ -87,6 +94,7 @@ function About() {
                                      </ul>
                             </p>
                         </div>
+                        </Card>
                     </Col>
                 </Row>
             </Container>
@@ -95,6 +103,7 @@ function About() {
                 https://mui.com/components/avatars/
                 https://mui.com/components/paper/
             */}
+            <p>{'\n'}</p>
         </div>
     );
 }
