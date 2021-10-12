@@ -14,6 +14,7 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import PieChartIcon from '@mui/icons-material/PieChart';
 import MultilineChartIcon from '@mui/icons-material/MultilineChart';
 import PublicIcon from '@mui/icons-material/Public';
+import LiveDatasetsFilter from '../components/LiveDatasetsFilter';
 
 class LiveDatasets extends React.Component {
     constructor(props) {
@@ -44,7 +45,17 @@ class LiveDatasets extends React.Component {
                 break;
             case 3:
                 this.setState({
-                    datasetAddr: ""
+                    datasetAddr: "/api/NCD_BMI_PLUS1C"
+                })
+                break;
+            case 4:
+                this.setState({
+                    datasetAddr: "/api/NCD_BMI_PLUS2C"
+                })
+                break;
+            case 5:
+                this.setState({
+                    datasetAddr: "/api/NCD_BMI_MINUS2C"
                 })
                 break;
             default:
@@ -68,7 +79,17 @@ class LiveDatasets extends React.Component {
                 break;
             case 3:
                 this.setState({
-                    datasetAddr: ""
+                    datasetAddr: "/api/NCD_BMI_PLUS1C"
+                })
+                break;
+            case 4:
+                this.setState({
+                    datasetAddr: "/api/NCD_BMI_PLUS2C"
+                })
+                break;
+            case 5:
+                this.setState({
+                    datasetAddr: "/api/NCD_BMI_MINUS2C"
                 })
                 break;
             default:
@@ -94,6 +115,9 @@ class LiveDatasets extends React.Component {
                                 <Dropdown.Menu>
                                     <Dropdown.Item onClick={() => this.updateDataset(1)}>Live Dataset 1</Dropdown.Item>
                                     <Dropdown.Item onClick={() => this.updateDataset(2)}>Live Dataset 2</Dropdown.Item>
+                                    <Dropdown.Item onClick={() => this.updateDataset(3)}>Live Dataset 3</Dropdown.Item>
+                                    <Dropdown.Item onClick={() => this.updateDataset(4)}>Live Dataset 4</Dropdown.Item>
+                                    <Dropdown.Item onClick={() => this.updateDataset(5)}>Live Dataset 5</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                         </Col>
@@ -126,10 +150,12 @@ class LiveDatasets extends React.Component {
                             </ToggleButtonGroup>
                         </Col>
                         <Col xs={true} className="text-center align-self-center">
+                            <LiveDatasetsFilter />
                             <LiveTable
                                 fetchAddr={this.state.datasetAddr}
                                 viewType={this.state.dataViewNum}
                                 isLoaded={false}
+                                dataSetNum={this.state.datasetNum}
                             />
                         </Col>
                     </Row>

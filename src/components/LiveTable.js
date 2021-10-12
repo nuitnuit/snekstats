@@ -2,6 +2,9 @@ import React from 'react';
 import Spinner from "react-bootstrap/Spinner";
 import { DataGrid } from '@mui/x-data-grid';
 import { CircularProgress } from '@mui/material';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 
 const columns = [
     {
@@ -50,10 +53,10 @@ class LiveTable extends React.Component {
     }
 
     loadDatasets() {
-        if (this.state.fetchAddr !== null) {
-            console.log("live dataset changed");
+        if (this.props.fetchAddr !== null) {
+            console.log("live dataset changed " + this.props.fetchAddr);
             var countries = require("i18n-iso-countries");
-            fetch(this.state.fetchAddr)
+            fetch(this.props.fetchAddr)
                 .then(res => res.json())
                 .then(
                     (result) => {
@@ -69,6 +72,86 @@ class LiveTable extends React.Component {
                         });
                     }
                 )
+            switch (this.props.dataSetNum) {
+                case 1:
+                    for (let i = this.state.items.length - 1; i >= 0; i--) {
+                        if (this.state.items[i]["SpatialDimType"] === "COUNTRY") {
+
+                        }
+                        if (this.state.items[i]["TimeDimType"] === "YEAR") {
+
+                        }
+                        if (this.state.items[i]["Dim1Type"] === "SEX") {
+
+                        }
+                    }
+                case 2:
+                    for (let i = this.state.items.length - 1; i >= 0; i--) {
+                        if (this.state.items[i]["SpatialDimType"] === "COUNTRY") {
+
+                        }
+                        if (this.state.items[i]["TimeDimType"] === "YEAR") {
+
+                        }
+                        if (this.state.items[i]["Dim1Type"] === "SEX") {
+
+                        }
+                    }
+                case 3:
+                    for (let i = this.state.items.length - 1; i >= 0; i--) {
+                        if (this.state.items[i]["SpatialDimType"] === "COUNTRY") {
+
+                        }
+                        if (this.state.items[i]["TimeDimType"] === "YEAR") {
+
+                        }
+                        if (this.state.items[i]["Dim1Type"] === "SEX") {
+
+                        }
+                        if (this.state.items[i]["Dim2Type"] === "AGEGROUP") {
+
+                        }
+                    }
+                case 4:
+                    for (let i = this.state.items.length - 1; i >= 0; i--) {
+                        if (this.state.items[i]["SpatialDimType"] === "REGION") {
+
+                        }
+                        else if (this.state.items[i]["SpatialDimType"] === "COUNTRY") {
+
+                        }
+                        if (this.state.items[i]["TimeDimType"] === "YEAR") {
+
+                        }
+                        if (this.state.items[i]["Dim1Type"] === "SEX") {
+
+                        }
+                        if (this.state.items[i]["Dim2Type"] === "AGEGROUP") {
+
+                        }
+                    }
+                case 5:
+                    for (let i = this.state.items.length - 1; i >= 0; i--) {
+                        if (this.state.items[i]["SpatialDimType"] === "WORLDBANKINCOMEGROUP") {
+
+                        }
+                        else if (this.state.items[i]["SpatialDimType"] === "REGION") {
+
+                        }
+                        else if (this.state.items[i]["SpatialDimType"] === "COUNTRY") {
+
+                        }
+                        if (this.state.items[i]["TimeDimType"] === "YEAR") {
+
+                        }
+                        if (this.state.items[i]["Dim1Type"] === "SEX") {
+
+                        }
+                        if (this.state.items[i]["Dim2Type"] === "AGEGROUP") {
+
+                        }
+                    }
+            }
         }
         else {
             this.setState({
@@ -92,8 +175,6 @@ class LiveTable extends React.Component {
             this.loadDatasets();
         }
     }
-
-
     render() {
         const { error, isLoaded, items } = this.state;
         if (error) {
@@ -108,9 +189,7 @@ class LiveTable extends React.Component {
         } else {
             return (
                 <div style={{ height: '100%', width: '100%' }}>
-
                     <DataGrid autoHeight getRowId={(r) => r.Id} columns={columns} rows={items} pageSize={20} id="Id" rowsPerPageOptions={[500]} />
-
                 </div >
             );
         }
