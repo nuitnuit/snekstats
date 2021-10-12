@@ -6,7 +6,6 @@ import '../App.css';
 import sneko2 from "../assets/sneko2.png";
 import Card from '@mui/material/Card';
 import '../css/card.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import Avatar from '@mui/material/Avatar';
 import lin from "../assets/lin.png"
 import ryan from "../assets/ryan.png"
