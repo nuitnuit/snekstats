@@ -1,9 +1,6 @@
 import React from "react"
 import Container from "react-bootstrap/Container";
 import '../App.css';
-import tableIcon from "../assets/table.png";
-import graphIcon from "../assets/graph.png";
-import piechartIcon from "../assets/piechart.png";
 import Dropdown from 'react-bootstrap/Dropdown';
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
