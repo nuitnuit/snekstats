@@ -5,10 +5,8 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 
 
-class FiltrationPanel extends React.Component
-{
-    constructor(props)
-    {
+class FiltrationPanel extends React.Component {
+    constructor(props) {
         super(props);
         this.state = {
             yearList: this.props.yearList,
@@ -20,14 +18,12 @@ class FiltrationPanel extends React.Component
             renderItem: null,
         }
     }
-    
-        
-    
-    componentDidMount()
-    {
+
+
+
+    componentDidMount() {
         var sliderComponent;
-        if (this.props.singlePointSlider === true)
-        {
+        if (this.props.singlePointSlider === true) {
             sliderComponent = <Slider
                 defaultValue={Math.max(...this.state.yearList)}
                 step={1}
@@ -37,10 +33,9 @@ class FiltrationPanel extends React.Component
                 onChange={this.props.onYearValChange}
                 min={Math.min(...this.props.yearList)}
                 max={Math.max(...this.props.yearList)}
-                />
+            />
         }
-        else
-        {
+        else {
             sliderComponent = <Slider
                 size="small"
                 defaultValue={[Math.max(...this.state.yearList) - 1, Math.max(...this.state.yearVal)]}
@@ -55,25 +50,24 @@ class FiltrationPanel extends React.Component
 
         this.setState({
             renderItem: <>
-            <Row>
-                <Col xs={1}>
-                    {Math.min(...this.props.yearList)}
-                </Col>
-                <Col>
-                    {sliderComponent}
-                    <h4>Year</h4>
-                </Col>
-                <Col xs={1}>
-                    {Math.max(...this.props.yearList)}
-                </Col>
-            </Row>
-            {/*list of checkboxes foes here somewhere*/}
-                
+                <Row>
+                    <Col xs={1}>
+                        {Math.min(...this.props.yearList)}
+                    </Col>
+                    <Col>
+                        {sliderComponent}
+                        <h4>Year</h4>
+                    </Col>
+                    <Col xs={1}>
+                        {Math.max(...this.props.yearList)}
+                    </Col>
+                </Row>
+                {/*list of checkboxes foes here somewhere*/}
+
             </>,
         });
     }
-    render()
-    {
+    render() {
         return <>
             {this.state.renderItem}
         </>
