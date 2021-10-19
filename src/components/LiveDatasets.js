@@ -66,35 +66,6 @@ class LiveDatasets extends React.Component {
         this.setState(prevState => ({
             dataViewNum: dataViewNum
         }))
-        switch (dataViewNum) {
-            case 1:
-                this.setState({
-                    datasetAddr: "/api/NCD_BMI_30A"
-                })
-                break;
-            case 2:
-                this.setState({
-                    datasetAddr: "/api/NCD_BMI_30C"
-                })
-                break;
-            case 3:
-                this.setState({
-                    datasetAddr: "/api/NCD_BMI_PLUS1C"
-                })
-                break;
-            case 4:
-                this.setState({
-                    datasetAddr: "/api/NCD_BMI_PLUS2C"
-                })
-                break;
-            case 5:
-                this.setState({
-                    datasetAddr: "/api/NCD_BMI_MINUS2C"
-                })
-                break;
-            default:
-                break;
-        }
     }
 
     render() {
@@ -128,7 +99,9 @@ class LiveDatasets extends React.Component {
                                 orientation="vertical"
                                 value={this.state.dataViewNum}
                                 onChange={(event, value) => {
-                                    this.updateDataViewNum(value);
+                                    if (value !== null) {
+                                        this.updateDataViewNum(value);
+                                    }
                                 }}
                                 exclusive
                             >
@@ -150,7 +123,7 @@ class LiveDatasets extends React.Component {
                             </ToggleButtonGroup>
                         </Col>
                         <Col xs={true} className="text-center align-self-center">
-                            <LiveDatasetsFilter />
+                            {/*<LiveDatasetsFilter />*/}
                             <LiveTable
                                 fetchAddr={this.state.datasetAddr}
                                 viewType={this.state.dataViewNum}
