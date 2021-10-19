@@ -48,6 +48,7 @@ class LiveTable extends React.Component {
             isLoaded: false,
             items: [],
             fetchAddr: this.props.fetchAddr,
+            filteredData: [],
         };
         this.loadDatasets = this.loadDatasets.bind(this);
     }
@@ -60,9 +61,23 @@ class LiveTable extends React.Component {
                 .then(res => res.json())
                 .then(
                     (result) => {
+
+                        var filteredData = [], data = result.value;
+                        for (let i = 0; i < data.length; i++) {
+                            var row = data[i];
+                            if (row.Dim1 === 'MLE')
+                            {
+                                row.Dim1 = 'Male';
+                            }
+                            else if (row.Dim1 === 'FMLE')
+                            {
+                                row.Dim1 = 'Female';
+                            }
+                            filteredData.push(row)
+                        }
                         this.setState({
                             isLoaded: true,
-                            items: result.value,
+                            items: filteredData,
                         });
                     },
                     (error) => {
@@ -72,19 +87,10 @@ class LiveTable extends React.Component {
                         });
                     }
                 )
+                
+            //indicator code translation
             switch (this.props.dataSetNum) {
                 case 1:
-                    for (let i = this.state.items.length - 1; i >= 0; i--) {
-                        if (this.state.items[i]["SpatialDimType"] === "COUNTRY") {
-
-                        }
-                        if (this.state.items[i]["TimeDimType"] === "YEAR") {
-
-                        }
-                        if (this.state.items[i]["Dim1Type"] === "SEX") {
-
-                        }
-                    }
                 case 2:
                     for (let i = this.state.items.length - 1; i >= 0; i--) {
                         if (this.state.items[i]["SpatialDimType"] === "COUNTRY") {
@@ -98,6 +104,7 @@ class LiveTable extends React.Component {
                         }
                     }
                 case 3:
+                    console.log(("YEARS05-19").split("-")); //["05", 19]
                     for (let i = this.state.items.length - 1; i >= 0; i--) {
                         if (this.state.items[i]["SpatialDimType"] === "COUNTRY") {
 
@@ -152,6 +159,7 @@ class LiveTable extends React.Component {
                         }
                     }
             }
+            //different view types
         }
         else {
             this.setState({
@@ -189,7 +197,7 @@ class LiveTable extends React.Component {
         } else {
             return (
                 <div style={{ height: '100%', width: '100%' }}>
-                    <DataGrid autoHeight getRowId={(r) => r.Id} columns={columns} rows={items} pageSize={20} id="Id" rowsPerPageOptions={[500]} />
+                    <DataGrid autoHeight getRowId={(r) => r.Id} columns={columns} rows={this.state.items} pageSize={20} id="Id" rowsPerPageOptions={[500]} />
                 </div >
             );
         }

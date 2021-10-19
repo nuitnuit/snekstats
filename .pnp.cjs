@@ -60,6 +60,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react", "npm:17.0.2"],
             ["react-bootstrap", "virtual:2650d3ace55aeae7b50c929062b1fc0cc8a10373fd832daf310cf83a91407acf866f08fbe50d80d0bfa13944bb7cc65ce997259e17fd04f7f637de5510e6f93a#npm:1.6.3"],
             ["react-dom", "virtual:2650d3ace55aeae7b50c929062b1fc0cc8a10373fd832daf310cf83a91407acf866f08fbe50d80d0bfa13944bb7cc65ce997259e17fd04f7f637de5510e6f93a#npm:17.0.2"],
+            ["react-google-charts", "virtual:2650d3ace55aeae7b50c929062b1fc0cc8a10373fd832daf310cf83a91407acf866f08fbe50d80d0bfa13944bb7cc65ce997259e17fd04f7f637de5510e6f93a#npm:3.0.15"],
             ["react-google-drive-picker", "npm:1.1.4"],
             ["react-router-dom", "virtual:2650d3ace55aeae7b50c929062b1fc0cc8a10373fd832daf310cf83a91407acf866f08fbe50d80d0bfa13944bb7cc65ce997259e17fd04f7f637de5510e6f93a#npm:5.3.0"],
             ["react-scripts", "virtual:2650d3ace55aeae7b50c929062b1fc0cc8a10373fd832daf310cf83a91407acf866f08fbe50d80d0bfa13944bb7cc65ce997259e17fd04f7f637de5510e6f93a#npm:4.0.3"],
@@ -18721,6 +18722,37 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["react-google-charts", [
+        ["npm:3.0.15", {
+          "packageLocation": "./.yarn/cache/react-google-charts-npm-3.0.15-f83f514315-72266c9f06.zip/node_modules/react-google-charts/",
+          "packageDependencies": [
+            ["react-google-charts", "npm:3.0.15"]
+          ],
+          "linkType": "SOFT",
+        }],
+        ["virtual:2650d3ace55aeae7b50c929062b1fc0cc8a10373fd832daf310cf83a91407acf866f08fbe50d80d0bfa13944bb7cc65ce997259e17fd04f7f637de5510e6f93a#npm:3.0.15", {
+          "packageLocation": "./.yarn/__virtual__/react-google-charts-virtual-b8038faf56/0/cache/react-google-charts-npm-3.0.15-f83f514315-72266c9f06.zip/node_modules/react-google-charts/",
+          "packageDependencies": [
+            ["react-google-charts", "virtual:2650d3ace55aeae7b50c929062b1fc0cc8a10373fd832daf310cf83a91407acf866f08fbe50d80d0bfa13944bb7cc65ce997259e17fd04f7f637de5510e6f93a#npm:3.0.15"],
+            ["@types/prop-types", null],
+            ["@types/react", null],
+            ["@types/react-dom", null],
+            ["prop-types", "npm:15.7.2"],
+            ["react", "npm:17.0.2"],
+            ["react-dom", "virtual:2650d3ace55aeae7b50c929062b1fc0cc8a10373fd832daf310cf83a91407acf866f08fbe50d80d0bfa13944bb7cc65ce997259e17fd04f7f637de5510e6f93a#npm:17.0.2"],
+            ["react-load-script", "virtual:b8038faf56d3c8903546d7df69598f3bd860176e703dd9e4ff42928a84f4266873e7c08af22396dddafbc800dcd186c0ab604a000c110f351bc87e8aa132c320#npm:0.0.6"]
+          ],
+          "packagePeers": [
+            "@types/prop-types",
+            "@types/react-dom",
+            "@types/react",
+            "prop-types",
+            "react-dom",
+            "react"
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["react-google-drive-picker", [
         ["npm:1.1.4", {
           "packageLocation": "./.yarn/cache/react-google-drive-picker-npm-1.1.4-ae1e0721de-6832c23c07.zip/node_modules/react-google-drive-picker/",
@@ -18758,6 +18790,32 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/react-lifecycles-compat-npm-3.0.4-d5e285a39e-a904b0fc0a.zip/node_modules/react-lifecycles-compat/",
           "packageDependencies": [
             ["react-lifecycles-compat", "npm:3.0.4"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["react-load-script", [
+        ["npm:0.0.6", {
+          "packageLocation": "./.yarn/cache/react-load-script-npm-0.0.6-df7c033ca3-c8a19d785e.zip/node_modules/react-load-script/",
+          "packageDependencies": [
+            ["react-load-script", "npm:0.0.6"]
+          ],
+          "linkType": "SOFT",
+        }],
+        ["virtual:b8038faf56d3c8903546d7df69598f3bd860176e703dd9e4ff42928a84f4266873e7c08af22396dddafbc800dcd186c0ab604a000c110f351bc87e8aa132c320#npm:0.0.6", {
+          "packageLocation": "./.yarn/__virtual__/react-load-script-virtual-a1bf552692/0/cache/react-load-script-npm-0.0.6-df7c033ca3-c8a19d785e.zip/node_modules/react-load-script/",
+          "packageDependencies": [
+            ["react-load-script", "virtual:b8038faf56d3c8903546d7df69598f3bd860176e703dd9e4ff42928a84f4266873e7c08af22396dddafbc800dcd186c0ab604a000c110f351bc87e8aa132c320#npm:0.0.6"],
+            ["@types/prop-types", null],
+            ["@types/react", null],
+            ["prop-types", "npm:15.7.2"],
+            ["react", "npm:17.0.2"]
+          ],
+          "packagePeers": [
+            "@types/prop-types",
+            "@types/react",
+            "prop-types",
+            "react"
           ],
           "linkType": "HARD",
         }]
@@ -20389,6 +20447,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react", "npm:17.0.2"],
             ["react-bootstrap", "virtual:2650d3ace55aeae7b50c929062b1fc0cc8a10373fd832daf310cf83a91407acf866f08fbe50d80d0bfa13944bb7cc65ce997259e17fd04f7f637de5510e6f93a#npm:1.6.3"],
             ["react-dom", "virtual:2650d3ace55aeae7b50c929062b1fc0cc8a10373fd832daf310cf83a91407acf866f08fbe50d80d0bfa13944bb7cc65ce997259e17fd04f7f637de5510e6f93a#npm:17.0.2"],
+            ["react-google-charts", "virtual:2650d3ace55aeae7b50c929062b1fc0cc8a10373fd832daf310cf83a91407acf866f08fbe50d80d0bfa13944bb7cc65ce997259e17fd04f7f637de5510e6f93a#npm:3.0.15"],
             ["react-google-drive-picker", "npm:1.1.4"],
             ["react-router-dom", "virtual:2650d3ace55aeae7b50c929062b1fc0cc8a10373fd832daf310cf83a91407acf866f08fbe50d80d0bfa13944bb7cc65ce997259e17fd04f7f637de5510e6f93a#npm:5.3.0"],
             ["react-scripts", "virtual:2650d3ace55aeae7b50c929062b1fc0cc8a10373fd832daf310cf83a91407acf866f08fbe50d80d0bfa13944bb7cc65ce997259e17fd04f7f637de5510e6f93a#npm:4.0.3"],

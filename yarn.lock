@@ -13633,6 +13633,19 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"react-google-charts@npm:^3.0.15":
+  version: 3.0.15
+  resolution: "react-google-charts@npm:3.0.15"
+  dependencies:
+    react-load-script: ^0.0.6
+  peerDependencies:
+    prop-types: ">=15"
+    react: ">=16.3.0"
+    react-dom: ">=16.3.0"
+  checksum: 72266c9f06eadd1a8c57f724a9df5cfabd96f1e04e0a0bf1c6fe104b78ae9b617cac3a9a1fb5356dc492ad2608d1184b644621df0afa3c92e2cb59c98155421e
+  languageName: node
+  linkType: hard
+
 "react-google-drive-picker@npm:^1.1.4":
   version: 1.1.4
   resolution: "react-google-drive-picker@npm:1.1.4"
@@ -13665,6 +13678,16 @@ fsevents@^1.2.7:
   version: 3.0.4
   resolution: "react-lifecycles-compat@npm:3.0.4"
   checksum: a904b0fc0a8eeb15a148c9feb7bc17cec7ef96e71188280061fc340043fd6d8ee3ff233381f0e8f95c1cf926210b2c4a31f38182c8f35ac55057e453d6df204f
+  languageName: node
+  linkType: hard
+
+"react-load-script@npm:^0.0.6":
+  version: 0.0.6
+  resolution: "react-load-script@npm:0.0.6"
+  peerDependencies:
+    prop-types: ">=15"
+    react: ">=0.14.9"
+  checksum: c8a19d785ecf907ddaa869a6c93b8f627dbef64a0f81bca612743a22157f32458b7ff67d56c868b09e5edce18d4cfdbd9a6f605353b8e00c3bb29569971e1427
   languageName: node
   linkType: hard
 
@@ -15030,6 +15053,7 @@ resolve@^2.0.0-next.3:
     react: ^17.0.2
     react-bootstrap: ^1.6.3
     react-dom: ^17.0.2
+    react-google-charts: ^3.0.15
     react-google-drive-picker: ^1.1.4
     react-router-dom: ^5.3.0
     react-scripts: 4.0.3
