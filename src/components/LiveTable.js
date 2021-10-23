@@ -486,7 +486,6 @@ class LiveTable extends React.Component {
                     },];
                     break;
             }
-
         }
         else {
             this.setState({
