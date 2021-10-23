@@ -8,6 +8,7 @@ import Checkbox from '@mui/material/Checkbox';
 import Col from "react-bootstrap/Col";
 import { ResponsiveBar } from "@nivo/bar";
 import FiltrationPanel from "./FiltrationPanel";
+import { ResponsiveLine } from '@nivo/line'
 
 const columns = []
 
@@ -114,7 +115,7 @@ class LiveTable extends React.Component {
                                 row.Dim1 = 'Female';
                             }
                             else {
-                                row.Dim1 = 'Both';
+                                row.Dim1 = 'Both Sex';
                             }
 
                             for (let j = 0; j < country.length; j++) {
@@ -179,36 +180,114 @@ class LiveTable extends React.Component {
                                 });
                                 break;
                             case 2:
-                                const axisBottom = {
-                                    tickSize: 5,
-                                    tickPadding: 5,
-                                    tickRotation: 0,
-                                    legend: xLegend,
-                                    legendPosition: "middle",
-                                    legendOffset: 32
-                                };
-                                const axisLeft = {
-                                    tickSize: 5,
-                                    tickPadding: 5,
-                                    tickRotation: 0,
-                                    legend: yLegend,
-                                    legendPosition: "middle",
-                                    legendOffset: -40
-                                };
+                                var selectedYear = 1975;
+                                var barData = this.state.items;
+                                var selectedData = [];
+                                for (let i = 0; i < barData.length; i++) {
+                                    var row = barData[i];
+                                    if (!selectedData.find(o => o.country === row.SpatialDim)) {
+                                        selectedData.push({ country: row.SpatialDim, data: [] })
+                                    }
+                                    for (let j = 0; j < selectedData.length; j++) {
+                                        var yearsRow = selectedData[j];
+                                        if (yearsRow.country === row.SpatialDim) {
+                                            if (row.TimeDim === selectedYear) {
+                                                if (row.Dim1 === "Male") { //if Male, Female or Both Sex
+                                                    selectedData[j].data.push({ Male: row.NumericValue })
+                                                }
+                                                if (row.Dim1 === "Female") {
+                                                    selectedData[j].data.push({ Female: row.NumericValue })
+                                                }
+                                                if (row.Dim1 === "Both Sex") {
+                                                    selectedData[j].data.push({ BothSex: row.NumericValue })
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                console.log(selectedData);
+                                var flatArray = [];
+
+                                for (var index = 0; index < selectedData.length; index++) {
+                                    var flatObject = {};
+                                    for (var prop in selectedData[index]) {
+                                        var value = selectedData[index][prop];
+                                        if (Array.isArray(value)) {
+                                            for (var i = 0; i < value.length; i++) {
+                                                for (var inProp in value[i]) {
+                                                    flatObject[inProp] = value[i][inProp];
+                                                }
+                                            }
+                                        } else {
+                                            flatObject[prop] = value;
+                                        }
+                                    }
+                                    console.log(flatObject);
+                                    flatArray.push(flatObject);
+                                }
+                                console.log(flatArray);
                                 this.setState({
                                     renderItem:
                                         <div>
-                                            <Col style={{ height: "500px" }}>
-                                                {console.log(this.state.items)}
+                                            <Col style={{ height: "1500px" }}>
                                                 <ResponsiveBar
-                                                    data={this.state.items}
-                                                    keys={['FMLE']}
-                                                    indexBy="SpatialDim"
+                                                    data={flatArray}
+                                                    keys={['Male', 'Female', 'BothSex']}
+                                                    indexBy="country"
+                                                    margin={{ top: 50, right: 130, bottom: 300, left: 60 }}
                                                     padding={0.3}
-                                                    margin={{ top: 50, right: 130, bottom: 50, left: 70 }}
-                                                    axisBottom={axisBottom}
-                                                    axisLeft={axisLeft}
-                                                    legends={legends}
+                                                    valueScale={{ type: 'linear' }}
+                                                    indexScale={{ type: 'band', round: true }}
+                                                    colors={{ scheme: 'nivo' }}
+                                                    borderColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
+                                                    axisTop={null}
+                                                    axisRight={null}
+                                                    axisBottom={{
+                                                        tickSize: 5,
+                                                        tickPadding: 5,
+                                                        tickRotation: 90,
+                                                        legend: 'Country',
+                                                        legendPosition: 'left',
+                                                        legendOffset: 100
+                                                    }}
+                                                    axisLeft={{
+                                                        tickSize: 5,
+                                                        tickPadding: 5,
+                                                        tickRotation: 0,
+                                                        legend: 'Value',
+                                                        legendPosition: 'middle',
+                                                        legendOffset: -40
+                                                    }}
+                                                    labelSkipWidth={12}
+                                                    labelSkipHeight={12}
+                                                    labelTextColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
+                                                    legends={[
+                                                        {
+                                                            dataFrom: 'keys',
+                                                            anchor: 'bottom-right',
+                                                            direction: 'column',
+                                                            justify: false,
+                                                            translateX: 120,
+                                                            translateY: 0,
+                                                            itemsSpacing: 2,
+                                                            itemWidth: 100,
+                                                            itemHeight: 20,
+                                                            itemDirection: 'left-to-right',
+                                                            itemOpacity: 0.85,
+                                                            symbolSize: 20,
+                                                            effects: [
+                                                                {
+                                                                    on: 'hover',
+                                                                    style: {
+                                                                        itemOpacity: 1
+                                                                    }
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]}
+                                                    role="application"
+                                                    ariaLabel="Nivo bar chart demo"
+                                                    barAriaLabel={function (e) { return e.id + ": " + e.formattedValue + " in country: " + e.indexValue }}
                                                 />
                                             </Col>
                                             {/*<Col xs={2}>
@@ -232,10 +311,89 @@ class LiveTable extends React.Component {
                                 });
                                 break;
                             case 4:
+                                var pieData = this.state.items;
+                                var onceYears = [];
+                                for (let i = 0; i < pieData.length; i++) {
+                                    var row = pieData[i];
+                                    if (!onceYears.find(o => o.id === row.SpatialDim)) {
+                                        if (row.SpatialDim === "Malaysia" || row.SpatialDim === "Americas" || row.SpatialDim === "Ireland") {
+                                            onceYears.push({ id: row.SpatialDim, data: [] })
+                                        }
+                                    }
+                                    for (let j = 0; j < onceYears.length; j++) {
+                                        var yearsRow = onceYears[j];
+                                        if (yearsRow.id === row.SpatialDim) {
+                                            if (row.Dim1 === "Male") { //if Male, Female or Both Sex
+                                                onceYears[j].data.push({ x: row.TimeDim, y: row.NumericValue })
+                                            }
+                                        }
+                                    }
+                                }
                                 this.setState({
                                     renderItem:
-                                        <div style={{ width: "100%" }}>
-                                            <p>do line graph</p>
+                                        <div>
+                                            {console.log(onceYears)}
+                                            <Col style={{ height: "3000px" }}>
+                                                <ResponsiveLine
+                                                    data={onceYears}
+                                                    margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+                                                    xScale={{ type: 'point' }}
+                                                    yScale={{ type: 'linear', min: 'auto', max: 'auto', stacked: true, reverse: false }}
+                                                    yFormat=" >-.2f"
+                                                    axisTop={null}
+                                                    axisRight={null}
+                                                    axisBottom={{
+                                                        orient: 'bottom',
+                                                        tickSize: 5,
+                                                        tickPadding: 5,
+                                                        tickRotation: 90,
+                                                        legend: 'Year',
+                                                        legendOffset: 45,
+                                                        legendPosition: 'middle'
+                                                    }}
+                                                    axisLeft={{
+                                                        orient: 'left',
+                                                        tickSize: 5,
+                                                        tickPadding: 5,
+                                                        tickRotation: 0,
+                                                        legend: 'Value',
+                                                        legendOffset: -40,
+                                                        legendPosition: 'middle'
+                                                    }}
+                                                    pointSize={10}
+                                                    pointColor={{ theme: 'background' }}
+                                                    pointBorderWidth={2}
+                                                    pointBorderColor={{ from: 'serieColor' }}
+                                                    pointLabelYOffset={-12}
+                                                    useMesh={true}
+                                                    legends={[
+                                                        {
+                                                            anchor: 'bottom-right',
+                                                            direction: 'column',
+                                                            justify: false,
+                                                            translateX: 100,
+                                                            translateY: 0,
+                                                            itemsSpacing: 0,
+                                                            itemDirection: 'left-to-right',
+                                                            itemWidth: 80,
+                                                            itemHeight: 20,
+                                                            itemOpacity: 0.75,
+                                                            symbolSize: 12,
+                                                            symbolShape: 'circle',
+                                                            symbolBorderColor: 'rgba(0, 0, 0, .5)',
+                                                            effects: [
+                                                                {
+                                                                    on: 'hover',
+                                                                    style: {
+                                                                        itemBackground: 'rgba(0, 0, 0, .03)',
+                                                                        itemOpacity: 1
+                                                                    }
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]}
+                                                />
+                                            </Col>
                                         </div>
                                 });
                                 break;
