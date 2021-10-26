@@ -20,9 +20,6 @@ class FiltrationPanel extends React.Component {
                 })
             })
         })
-        Object.entries(checkBoxListState).map(([_, value]) => {
-            value[0] = true; //initialize the first item to be checked
-        })
         this.state = {
             yearList: this.props.yearList,
             onYearValChange: this.props.onYearValChange,
@@ -33,8 +30,29 @@ class FiltrationPanel extends React.Component {
         }
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        //check the state's checkboxList
+    handleUpdateFiltration()
+    {
+        var s = this.props.checkBoxList;
+        Object.entries(this.state.checkBoxListState).map(([key, value]) => {
+            Object.entries(value).map(([k, v]) => {
+                Object.entries(s[key][k]).map(([kk, _]) => {
+                    s[key][k][kk] = v
+                })
+            })
+            /*
+                from:
+                [
+                    true,
+                    ...
+                ]
+                converts to:
+                [
+                    {"Malaysia": true},
+                    ...
+                ]
+            */
+        })
+        this.props.onCheckBoxListChange(s)
     }
 
     handleParentCheckBoxchange(event, key) {
@@ -45,6 +63,7 @@ class FiltrationPanel extends React.Component {
         this.setState({
             checkBoxListState: s
         })
+        this.handleUpdateFiltration();
     }
 
     handleChildrenCheckBoxChange(event, key, k) {
@@ -53,12 +72,11 @@ class FiltrationPanel extends React.Component {
         this.setState({
             checkBoxListState: s
         })
+        this.handleUpdateFiltration();
     }
 
     render() {
-        console.log(this.state.checkBoxListState)
         const checkboxes = Object.entries(this.state.checkBoxListState).map(([key, value]) => {
-            console.log(key, value)
             return <>
                 <FormControlLabel
                     label={key}
@@ -78,7 +96,6 @@ class FiltrationPanel extends React.Component {
                         Object.entries(value).map(([k, v]) => {
                             //to build the children of the key
                             //Country as key, Malaysia, Singapore, ... as children
-                            console.log(k, v);
                             return (
                                 <>
                                     <FormControlLabel
@@ -159,14 +176,6 @@ export default FiltrationPanel;
 
 
 /*
-    {
-        Country: [ //index is based on the checkBoxList.Country supplied at props
-            true,
-            false,
-            true,
-            ...
-        ]
-    }
     //sample values of the checkboxList
     {
         Gender: [
@@ -177,6 +186,15 @@ export default FiltrationPanel;
             {Malaysia: false},
             {Singapore: true},
             {Thailand: false},
+            ...
+        ]
+    }
+    //values after conversion
+    {
+        Country: [ //index is based on the checkBoxList.Country supplied at props
+            true,
+            false,
+            true,
             ...
         ]
     }
