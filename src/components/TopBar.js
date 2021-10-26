@@ -16,8 +16,16 @@ function Topbar() {
                     <li className="nav-item">
                         <a className="nav-link" href="/about">About</a>
                     </li>
-                    <li className="nav-item">
-                        <a className="nav-link" href="/obesity">Obesity</a>
+                    <li className="nav-item dropdown">
+                    <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Obesity
+                        </a>
+                        <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a className="dropdown-item" href="/Obesity">Obesity</a>
+                            <a className="dropdown-item" href="/Risks">Risks</a>
+                            <a className="dropdown-item" href="/Prevention">Prevention</a>
+                            <a className="dropdown-item" href="/externalInfo">External Info</a>
+                        </div>
                     </li>
                     <li className="nav-item dropdown">
                         <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
