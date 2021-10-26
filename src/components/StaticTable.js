@@ -117,28 +117,28 @@ class StaticTable extends React.Component{
   }
   
    
-  render()
-  {
-      const { error, isLoaded, renderItem } = this.state;
-      if (error) {
-          return <div>Error: {error.message}</div>;
-      } else if (!isLoaded) {
-          return (
-              <>
-              <CircularProgress size={80} />
-              <p>Loading dataset</p>
-          </>
-          );
-      } else {
-      return (
-              renderItem
-          );
-      }
-  }
+    render()
+    {
+        const { error, isLoaded, renderItem } = this.state;
+        if (error) {
+            return <div>Error: {error.message}</div>;
+        } else if (!isLoaded) {
+            return (
+                <>
+                <CircularProgress size={80} />
+                <p>Loading dataset</p>
+            </>
+            );
+        } else {
+        return (
+                renderItem
+            );
+        }
+    }
 }
 
   
-  export {StaticTable};
+export {StaticTable};
   
       /*
        const [data, setData] = useState([] )
