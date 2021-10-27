@@ -5,10 +5,11 @@ import { CircularProgress } from '@mui/material';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Col from "react-bootstrap/Col";
+import { Col, Row } from "react-bootstrap";
 import { ResponsiveBar } from "@nivo/bar";
 import FiltrationPanel from "./FiltrationPanel";
-import { ResponsiveLine } from '@nivo/line'
+import { ResponsiveLine } from '@nivo/line';
+import { ResponsiveChoropleth } from '@nivo/geo';
 
 const columns = []
 
@@ -88,6 +89,7 @@ class LiveTable extends React.Component {
             //console.log("live dataset changed " + this.props.fetchAddr);
             var country = [];
             var wbig = [];
+            var oriData = [];
             fetch("/api/DIMENSION/COUNTRY/DimensionValues")//get name for countries
                 .then(res => res.json())
                 .then(
@@ -104,7 +106,7 @@ class LiveTable extends React.Component {
                 .then(res => res.json())
                 .then(
                     (result) => {
-                        var keys = [], yearList = [], countryList = [], genderList = []; //keys here is countries
+                        oriData = result.value;
                         var filteredData = [], data = result.value;
                         for (let i = 0; i < data.length; i++) {
                             var row = data[i];
@@ -117,7 +119,6 @@ class LiveTable extends React.Component {
                             else {
                                 row.Dim1 = 'Both Sex';
                             }
-
                             for (let j = 0; j < country.length; j++) {
                                 var countryRow = country[j]
                                 if (row.SpatialDim === countryRow.Code) {
@@ -205,9 +206,7 @@ class LiveTable extends React.Component {
                                         }
                                     }
                                 }
-                                console.log(selectedData);
                                 var flatArray = [];
-
                                 for (var index = 0; index < selectedData.length; index++) {
                                     var flatObject = {};
                                     for (var prop in selectedData[index]) {
@@ -222,20 +221,19 @@ class LiveTable extends React.Component {
                                             flatObject[prop] = value;
                                         }
                                     }
-                                    console.log(flatObject);
                                     flatArray.push(flatObject);
                                 }
-                                console.log(flatArray);
                                 this.setState({
                                     renderItem:
                                         <div>
-                                            <Col style={{ height: "1500px" }}>
+                                            <Row style={{ height: "2500px" }}>
                                                 <ResponsiveBar
                                                     data={flatArray}
                                                     keys={['Male', 'Female', 'BothSex']}
                                                     indexBy="country"
-                                                    margin={{ top: 50, right: 130, bottom: 300, left: 60 }}
+                                                    margin={{ top: 50, right: 130, bottom: 300, left: 300 }}
                                                     padding={0.3}
+                                                    layout="horizontal"
                                                     valueScale={{ type: 'linear' }}
                                                     indexScale={{ type: 'band', round: true }}
                                                     colors={{ scheme: 'nivo' }}
@@ -246,17 +244,17 @@ class LiveTable extends React.Component {
                                                         tickSize: 5,
                                                         tickPadding: 5,
                                                         tickRotation: 90,
-                                                        legend: 'Country',
-                                                        legendPosition: 'left',
+                                                        legend: 'Value',
+                                                        legendPosition: 'middle',
                                                         legendOffset: 100
                                                     }}
                                                     axisLeft={{
                                                         tickSize: 5,
                                                         tickPadding: 5,
                                                         tickRotation: 0,
-                                                        legend: 'Value',
+                                                        legend: 'Country',
                                                         legendPosition: 'middle',
-                                                        legendOffset: -40
+                                                        legendOffset: -200
                                                     }}
                                                     labelSkipWidth={12}
                                                     labelSkipHeight={12}
@@ -289,7 +287,7 @@ class LiveTable extends React.Component {
                                                     ariaLabel="Nivo bar chart demo"
                                                     barAriaLabel={function (e) { return e.id + ": " + e.formattedValue + " in country: " + e.indexValue }}
                                                 />
-                                            </Col>
+                                            </Row>
                                             {/*<Col xs={2}>
                                                 <FiltrationPanel
                                                     yearVal={yearList}
@@ -312,6 +310,7 @@ class LiveTable extends React.Component {
                                 break;
                             case 4:
                                 var pieData = this.state.items;
+                                var selectedGender = "Male";
                                 var onceYears = [];
                                 for (let i = 0; i < pieData.length; i++) {
                                     var row = pieData[i];
@@ -323,7 +322,7 @@ class LiveTable extends React.Component {
                                     for (let j = 0; j < onceYears.length; j++) {
                                         var yearsRow = onceYears[j];
                                         if (yearsRow.id === row.SpatialDim) {
-                                            if (row.Dim1 === "Male") { //if Male, Female or Both Sex
+                                            if (row.Dim1 === selectedGender) { //if Male, Female or Both Sex
                                                 onceYears[j].data.push({ x: row.TimeDim, y: row.NumericValue })
                                             }
                                         }
@@ -332,13 +331,12 @@ class LiveTable extends React.Component {
                                 this.setState({
                                     renderItem:
                                         <div>
-                                            {console.log(onceYears)}
                                             <Col style={{ height: "3000px" }}>
                                                 <ResponsiveLine
                                                     data={onceYears}
                                                     margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
                                                     xScale={{ type: 'point' }}
-                                                    yScale={{ type: 'linear', min: 'auto', max: 'auto', stacked: true, reverse: false }}
+                                                    yScale={{ type: 'linear', min: 'auto', max: 'auto', stacked: false, reverse: false }}
                                                     yFormat=" >-.2f"
                                                     axisTop={null}
                                                     axisRight={null}
@@ -398,10 +396,65 @@ class LiveTable extends React.Component {
                                 });
                                 break;
                             case 5:
+                                var givenData = oriData;
+                                var selectedGender = "Male";
+                                var selectedYear = 1975;
+                                var mapData = [];
+                                for (let i = 0; i < givenData.length; i++) {
+                                    var row = givenData[i];
+                                    if (!mapData.find(o => o.id === row.SpatialDim)) {
+                                        if (row.Dim1 === selectedGender && row.TimeDim === selectedYear) { //if Male, Female or Both Sex and the year is same
+                                            mapData.push({ id: row.SpatialDim, value: row.NumericValue })
+                                        }
+                                    }
+                                }
+                                console.log(mapData);
                                 this.setState({
                                     renderItem:
-                                        <div style={{ width: "100%" }}>
-                                            <p>world</p>
+                                        <div>
+                                            <Row style={{ height: "1000px" }}>
+                                                <ResponsiveChoropleth
+                                                    data={mapData}
+                                                    features="/* please have a look at the description for usage */"
+                                                    margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+                                                    colors="nivo"
+                                                    domain={[0, 1000000]}
+                                                    unknownColor="#666666"
+                                                    label="properties.name"
+                                                    valueFormat=".2s"
+                                                    projectionTranslation={[0.5, 0.5]}
+                                                    projectionRotation={[0, 0, 0]}
+                                                    enableGraticule={true}
+                                                    graticuleLineColor="#dddddd"
+                                                    borderWidth={0.5}
+                                                    borderColor="#152538"
+                                                    legends={[
+                                                        {
+                                                            anchor: 'bottom-left',
+                                                            direction: 'column',
+                                                            justify: true,
+                                                            translateX: 20,
+                                                            translateY: -100,
+                                                            itemsSpacing: 0,
+                                                            itemWidth: 94,
+                                                            itemHeight: 18,
+                                                            itemDirection: 'left-to-right',
+                                                            itemTextColor: '#444444',
+                                                            itemOpacity: 0.85,
+                                                            symbolSize: 18,
+                                                            effects: [
+                                                                {
+                                                                    on: 'hover',
+                                                                    style: {
+                                                                        itemTextColor: '#000000',
+                                                                        itemOpacity: 1
+                                                                    }
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]}
+                                                />
+                                            </Row>
                                         </div>
                                 });
                                 break;
