@@ -5,6 +5,9 @@ import Home from './components/Home';
 import About from './components/About';
 import Centers from './components/Centers';
 import Obesity from './components/Obesity';
+import Risks from './components/Risks';
+import Prevention from './components/Prevention';
+import ExternalInfo from './components/ExternalInfo';
 import Topbar from './components/TopBar';
 import Footerbar from './components/FooterBar';
 import CollectedDatasets from './components/CollectedDatasets';
@@ -21,6 +24,9 @@ class App extends Component {
             <Route path="/about" component={About} />
             <Route path="/centers" component={Centers} />
             <Route path="/obesity" component={Obesity} />
+            <Route path="/Risks" component={Risks} />
+            <Route path="/ExternalInfo" component={ExternalInfo} />
+            <Route path="/Prevention" component={Prevention} />
             <Route path="/collected-datasets" component={CollectedDatasets} />
             <Route path="/live-datasets" component={LiveDatasets} />
           </Switch>
