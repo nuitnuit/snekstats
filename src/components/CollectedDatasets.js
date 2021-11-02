@@ -13,14 +13,11 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import PieChartIcon from '@mui/icons-material/PieChart';
 import MultilineChartIcon from '@mui/icons-material/MultilineChart';
 import PublicIcon from '@mui/icons-material/Public';
-import CircularProgress from '@mui/material/CircularProgress';
-import { DataGrid } from "@mui/x-data-grid";
-import { ResponsiveBar } from "@nivo/bar"
-import FiltrationPanel from "./FiltrationPanel";
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider'
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import { StaticVisuals } from "./StaticVisuals";
 
 function onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
@@ -34,6 +31,7 @@ function onlyUnique(value, index, self) {
     console.log(unique); // ['a', 1, 2, '1']
 */
 
+
 class CollectedDatasets extends React.Component {
     constructor(props) {
         super(props);
@@ -46,6 +44,7 @@ class CollectedDatasets extends React.Component {
         };
         this.updateDataset = this.updateDataset.bind(this);
     }
+
     updateDataset(datasetNum) {
         this.setState(prevState => ({
             datasetHeader: "Dataset " + datasetNum,
@@ -128,11 +127,11 @@ class CollectedDatasets extends React.Component {
                             </ToggleButtonGroup>
                         </Col>
                         <Col xs={true} className="text-center align-self-center">
-                            <StaticVisuals 
-                                fetchAddr = {this.state.datasetAddr}
-                                viewType = {this.state.dataViewNum}
-                                isLoaded = {false}
-                                datasetNum = {this.state.datasetNum}
+                            <StaticVisuals
+                                fetchAddr={this.state.datasetAddr}
+                                viewType={this.state.dataViewNum}
+                                isLoaded={false}
+                                datasetNum={this.state.datasetNum}
                             />
                         </Col>
                     </Row>
@@ -143,374 +142,6 @@ class CollectedDatasets extends React.Component {
 }
 
 
-
-class StaticVisuals extends React.Component{
-    constructor(props)
-    {
-        super(props);
-        this.state = {
-            isLoaded: this.props.isLoaded,
-            finalData: null,
-            finalHeaders: null,
-            error: null,
-            renderItem: null,
-            currentAddr: this.props.fetchAddr,
-            viewType: this.props.viewType,
-            filteredData: null,
-            filteredHeaders: null,
-            
-            //here on is selection data
-            //things like selectedCountries, selectedYears, selectedGenders, etc.
-            //selectedObesityStatus is special for second dataset
-            //selectedCountries: [],
-            //selectedYears: [],
-            //selectedGenders: [],
-            //selectedObesitySeverities: [], //Obese, overweight, underweight, severe underweight for D2 only
-        }
-        this.loadDatasets = this.loadDatasets.bind(this);
-    }
-
-    handleSingleSliderChange = (event, newValue) => {
-        this.setState({
-            yearVal: newValue //single value
-        });
-    }
-    handleDoubleSliderChange = (event, newValue, activeThumb) => {
-        const minDistance = 1;
-        if (!Array.isArray(newValue)) {
-        return;
-        }
-        if (newValue[1] - newValue[0] < minDistance) {
-        if (activeThumb === 0) {
-            const clamped = Math.min(newValue[0], 100 - minDistance);
-            this.setState({
-                yearVal: [clamped, clamped + minDistance]
-            });
-        } else {
-            const clamped = Math.max(newValue[1], minDistance);
-            this.setState({
-                yearVal: [clamped - minDistance, clamped]
-            });
-        }
-        } else {
-            this.setState({
-                yearVal: newValue //array of 2 values [x, y]
-            });
-        }
-        
-    };
-    filterSingleYear(data, yearVal){
-        const filteredData = data.filter(row => row.Year ==  yearVal);
-        return filteredData;
-    }
-    filterDoubleYear(data, yearVal)
-    {
-        const filteredData = data.filter(row => row.Year >= yearVal[0] && row[0] <= yearVal[1]);
-        return filteredData;
-    }
-    filterCountries(data, selectedCountries)
-    {
-        if (selectedCountries.length == 0)
-            return data;
-        //else
-        const filteredData = data.filter(row =>selectedCountries.includes(...row.Country))
-        return filteredData;
-    }
-    filterGenders(data, selectedGenders)
-    {
-        if (selectedGenders.length == 0 || selectedGenders.length == 2)
-            return data;
-        //else
-        const filteredData = data.filter(row => selectedGenders.includes(...row.Gender))
-        return filteredData
-    }
-    loadDatasets()
-    {
-        if (this.props.fetchAddr !== null)
-        {
-            console.log("dataset changed");
-            fetch(this.props.fetchAddr)
-            .then(response => response.text())
-            .then((data) => 
-            {
-                var dataList = [];
-                var headers, head, dataArray;
-                if (this.props.staticData !== null) //done dont touch anymore
-                {
-                    dataArray = data.split("\n")
-                    headers = dataArray[0]
-                    head = headers.split(",")
-                    //console.log(data);
-                    var keys = [], yearList = [], countryList = [], genderList = []; //keys here is countries
-                    let i = 1, j = 0;
-                    for(; i < dataArray.length; i++)
-                    {
-                        j = 0;
-                        var rowData = dataArray[i].split(",");
-                        if (rowData !== [] && rowData[j] !== "" && rowData[j] !== undefined)
-                        {
-                            var thing = {id: i,};
-                            for(; j < head.length; j++)
-                            {
-                                thing[head[j].replace(/(\r\n|\n|\r)/gm, "")] = rowData[j].replace(/(\r\n|\n|\r)/gm, "");
-                            }
-                            dataList.push(thing);
-                            if (yearList.includes(thing.Year) === false)
-                            {
-                                yearList.push(thing.Year);
-                            }
-                            if (countryList.includes(thing.Country) === false)
-                            {
-                                countryList.push(thing.Country);
-                            }
-                            if (genderList.includes(thing.Gender === false))
-                            {
-                                genderList.push(thing.Gender);
-                            }
-                        }
-                    }
-                    console.log(keys, yearList);
-                    headers = [{field: "id", headerName: "ID"}];
-                    for (let i = 0; i < head.length; i++)
-                    {
-                        headers.push(
-                        {   
-                            field: head[i].replace(/(\r\n|\n|\r)/gm, ""), 
-                            headerName: head[i].replace(/(\r\n|\n|\r)/gm, ""),
-                            width: 200
-                        }
-                        );
-                    }
-                    this.setState((prevState) => ({
-                        isLoaded: true,
-                        finalData: dataList,
-                        finalHeaders: headers,
-                    }));
-                    /* filtering year example
-                        var x = dataList.filter(row => row.Year === "1999");
-                        console.log(x);
-                    */
-                    var xLegend, yLegend; //string title for the x and y axis
-                    const legends = [
-                        {
-                            dataFrom: "keys", //must have the legend names named as keys
-                            anchor: "bottom-right",
-                            direction: "column",
-                            justify: false,
-                            translateX: 140,
-                            translateY: 0,
-                            itemsSpacing: 2,
-                            itemWidth: 100,
-                            itemHeight: 20,
-                            itemDirection: "left-to-right",
-                            itemOpacity: 0.85,
-                            itemTextColor: "#ffffff",
-                            symbolSize: 20,
-                            effects: [
-                                {
-                                    on: "hover",
-                                    style: {
-                                        itemOpacity: 1
-                                    }
-                                }
-                            ]
-                        }
-                    ];
-                    switch(this.props.datasetNum)
-                    {
-                        case 1:
-                            xLegend = "Country"
-                            yLegend = "Obesity prevalence"
-                            switch(this.props.viewType)
-                            {
-                                case 1: //data grid
-                                    this.setState({
-                                            renderItem: 
-                                            <>
-                                                <div style={{width: "100%"}}>
-                                                    <DataGrid 
-                                                        autoHeight
-                                                        autoPageSize
-                                                        pageSize={20} 
-                                                        rows={this.state.finalData}
-                                                        columns={this.state.finalHeaders}
-                                                        legends={legends}
-                                                    />
-                                                </div>
-                                            </>,
-                                        });
-                                    break;
-                                case 2: //bar chart, yearval is not an array
-                                    const axisBottom = {
-                                        tickSize: 10,
-                                        tickPadding: 5,
-                                        tickRotation: 0,
-                                        legend: xLegend,
-                                        legendPosition: "middle",
-                                        legendOffset: 32
-                                    };
-                                    const axisLeft = {
-                                        tickSize: 10,
-                                        tickPadding: 5,
-                                        tickRotation: 0,
-                                        legend: yLegend,
-                                        legendPosition: "middle",
-                                        legendOffset: -40
-                                    };
-                                    
-                                    this.setState({
-                                        filteredData: this.state.finalData,
-                                    })
-                                    var restructuredData = [];
-                                    //combine the data in such a way
-                                    //current data:
-                                    /**
-                                    [
-                                        {
-                                            Country: "USA",
-                                            Year: "1999",
-                                            Value: 9.9,
-                                            Gender: "Male"
-                                        }
-                                    ]
-                                    desired:
-                                    [
-                                        {
-                                            Country: "USA",
-                                            Year: "1999",
-                                            Male: 9.9,
-                                            Female: 8.8
-                                        }
-                                    ]
-                                    */
-                                    let k = null;
-                                    for (let i = 0; i < this.state.finalData.length; i++)
-                                    {
-                                        if (k == null)
-                                        {
-                                            for (let j = i + 1; i < this.state.finalData.length; j++)
-                                            {
-                                                if (this.state.finalData[i].Country === this.state.finalData[j].Country && this.state.finalData[i].Year === this.state.finalData[j].Year)
-                                                {
-                                                    k = j - i;
-                                                    restructuredData.push({
-                                                        Country: this.state.finalData[i].Country,
-                                                        Year: this.state.finalData[i].Year,
-                                                        Female: this.state.finalData[i].Value,
-                                                        Male: this.finalData[k + i].value
-                                                    });
-                                                }
-                                            }
-                                        }
-                                        else
-                                        {
-                                            restructuredData.push({
-                                                Country: this.state.finalData[i].Country,
-                                                Year: this.state.finalData[i].Year,
-                                                Female: this.state.finalData[i].Value,
-                                                Male: this.finalData[k + i].value
-                                            });
-                                        }
-                                    }
-                                    this.setState({
-                                        yearVal: Math.max(...yearList),
-                                        filteredData: restructuredData,
-                                    })
-                                    this.setState({
-                                        filteredData: this.state.filteredData.filter(row => row.Year == this.state.yearVal),
-                                    })
-                                    console.log(this.state.filteredData)
-                                    this.setState({
-                                        renderItem: 
-                                        <>
-                                            <Row>
-                                                <Col style={{height: "500px"}}>
-                                                    <ResponsiveBar
-                                                        data = {this.state.filteredData}
-                                                        keys = {['Female', 'Male']}
-                                                        indexBy="Country"
-                                                        padding={0.3}
-                                                        margin={{ top: 50, right: 130, bottom: 50, left: 70 }}
-                                                        axisBottom={axisBottom}
-                                                        axisLeft={axisLeft}
-                                                        legends={legends}
-                                                        colors={{scheme: 'nivo'}}
-                                                    />
-                                                </Col>
-                                            </Row>
-                                            <FiltrationPanel 
-                                                yearList={yearList}
-                                                genderVal={genderList}
-                                                countryVal={countryList}
-                                                onYearValChange={this.handleSingleSliderChange}
-                                                singlePointSlider={true}
-                                            />
-                                        </>,
-                                    });
-                                    break;
-                            }
-                            break;
-                        case 2:
-                            xLegend = "Country"
-                            yLegend = "Prevalence"
-                            break;
-                    }
-                }
-            },
-            (error) => {
-                this.setState({
-                    isLoaded: true,
-                    error
-                })
-            })
-        }
-        else
-        {
-            this.setState({
-                isLoaded: true,
-                renderItem: <p>No datasets selected</p>
-            })
-        }
-    }
-    componentDidMount()
-    {
-        this.loadDatasets();
-    }
-    componentDidUpdate()
-    {
-        if (this.state.currentAddr !== this.props.fetchAddr || this.state.viewType !== this.props.viewType)
-        {
-            this.setState({
-                currentAddr: this.props.fetchAddr,
-                isLoaded: false,
-                viewType: this.props.viewType
-            })
-            this.loadDatasets();
-        }
-    }
-  
-   
-    render()
-    {
-        const { error, isLoaded, renderItem } = this.state;
-        if (error) {
-            return <div>Error: {error.message}</div>;
-        } else if (!isLoaded) {
-            return (
-                <>
-                <CircularProgress size={80} />
-                <p>Loading dataset</p>
-            </>
-            );
-        } else {
-        return (
-                <>
-                    {this.state.renderItem}
-                </>
-            );
-        }
-    }
-}
 export default CollectedDatasets;
 
 
@@ -540,7 +171,7 @@ class SingleSlider extends React.Component
     render()
     {
         return (
-            
+
         );
     }
 }
@@ -600,7 +231,7 @@ const handleChange3 = (event) => {
     setChecked([checked[0], event.target.checked]);
 };
 this.setState({
-    renderItem: 
+    renderItem:
     <>
         <Col>
             <ResponsiveBar data={this.state.finalData}/>
