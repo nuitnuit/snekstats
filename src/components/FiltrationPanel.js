@@ -6,8 +6,6 @@ import Col from 'react-bootstrap/Col'
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { FormGroup } from "@mui/material";
-import Box from "@mui/material/Box"
-import Container from "@mui/material/Container"
 import Masonry from '@mui/lab/Masonry';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -77,6 +75,12 @@ class FiltrationPanel extends React.Component {
             checkBoxListState: s
         })
         this.handleUpdateFiltration();
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.checkBoxList !== this.props.checkBoxList) {
+            //empty function to prevent reupdate of checkboxlist when renderItem of static visual is updated
+        }
     }
 
     render() {

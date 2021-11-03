@@ -95,9 +95,9 @@ export class StaticVisuals extends React.Component {
         }
         return restructuredData;
     }
-    onCheckBoxListChange(checkboxList) { //will receive the changed data, then converts to a an object with list of strings
+    onCheckBoxListChange(checkBoxList) { //will receive the changed data, then converts to a an object with list of strings
         var newList = {};
-        Object.entries(checkboxList).map(([key, value]) => {
+        Object.entries(checkBoxList).map(([key, value]) => {
             newList[key] = []
             Object.entries(value).map(([key2, value2]) => {
                 Object.keys(value2).map((key3) => {
@@ -107,13 +107,16 @@ export class StaticVisuals extends React.Component {
             })
         })
         this.setState({
-            filteredHeaders: newList
+            filteredHeaders: newList,
+            checkBoxList: checkBoxList
         }, () => {
+            console.log(this.state.filteredHeaders);
             this.reloadVisuals();
         })
 
     }
     reloadVisuals() {
+        console.log("reloadVisuals")
         var xLegend, yLegend;
         const legends = [
             {
@@ -154,23 +157,39 @@ export class StaticVisuals extends React.Component {
                                         pageSize={20}
                                         rows={this.state.finalData}
                                         columns={this.state.finalHeaders}
-                                        />
+                                    />
                                 </div>
                             </>,
                         });
                         break;
                     case 2: //filter year, the country, then the gender
                         var filteredData = this.restructureData(this.state.finalData)
+                        console.log(this.state.checkBoxList, this.state.filteredHeaders.Gender)
+                        console.log(0, new Date())
                         filteredData = this.filterSingleYear(filteredData, this.state.yearVal)
                         filteredData = this.filterCountries(filteredData, this.state.filteredHeaders.Country)
                         this.setState({
                             filteredData: filteredData,
-                            visual: <ResponsiveBar
-                                    data={filteredData}
-                                    {...this.state.visualProps}
-                                    />
-                        }, () => {
-                            console.log(this.state.filteredData)
+                            renderItem: <>
+                                <Row>
+                                    <Col style={{ height: "500px" }}>
+                                            <ResponsiveBar
+                                                data={filteredData}
+                                                keys={this.state.filteredHeaders.Gender}
+                                                {...this.state.visualProps}
+                                            />
+                                    </Col>
+                                </Row>
+                                <FiltrationPanel
+                                    yearList={this.state.lists.yearList}
+                                    genderVal={this.state.lists.genderList}
+                                    countryVal={this.state.lists.countryList}
+                                    checkBoxList={this.state.checkBoxList}
+                                    onCheckBoxListChange={this.onCheckBoxListChange}
+                                    onYearValChange={this.handleSingleSliderChange}
+                                    singlePointSlider={true}
+                                />
+                            </>,
                         });
                         break;
                     case 3:
@@ -193,7 +212,7 @@ export class StaticVisuals extends React.Component {
                                         pageSize={20}
                                         rows={this.state.finalData}
                                         columns={this.state.finalHeaders}
-                                        />
+                                    />
                                 </div>
                             </>,
                         });
@@ -350,6 +369,7 @@ export class StaticVisuals extends React.Component {
     }
 
     loadVisuals() {
+        console.log("loadVisual")
         var xLegend, yLegend;
         const legends = [
             {
@@ -391,7 +411,7 @@ export class StaticVisuals extends React.Component {
                                         pageSize={20}
                                         rows={this.state.finalData}
                                         columns={this.state.finalHeaders}
-                                        />
+                                    />
                                 </div>
                             </>,
                         });
@@ -447,31 +467,22 @@ export class StaticVisuals extends React.Component {
                             filteredData: this.state.filteredData
                                 .filter(row => row.Year == this.state.yearVal), //filter the data by the maximum year
                         });
-                        var barItem = (
-                            <ResponsiveBar
-                                data={this.state.filteredData}
-                                keys={['Female', 'Male']}
-                                indexBy="Country"
-                                padding={0.3}
-                                margin={{ top: 50, right: 130, bottom: 50, left: 70 }}
-                                axisBottom={axisBottom}
-                                axisLeft={axisLeft}
-                                legends={legends}
-                                colors={{ scheme: 'nivo' }}
-                            />
-                        );
+                        var visProps = {
+                            indexBy: "Country",
+                            padding: 0.3,
+                            margin: { top: 50, right: 130, bottom: 50, left: 70 },
+                            axisBottom: axisBottom,
+                            axisLeft: axisLeft,
+                            legends: legends,
+                            colors: { scheme: 'nivo' },
+                        }
                         this.setState({
-                            visualProps: {
-                                keys: ['Female', 'Male'],
-                                indexBy: "Country",
-                                padding: 0.3,
-                                margin: { top: 50, right: 130, bottom: 50, left: 70 },
-                                axisBottom: axisBottom,
-                                axisLeft: axisLeft,
-                                legends: legends,
-                                colors: { scheme: 'nivo' },
-                            },
-                            visual: barItem,
+                            visualProps: visProps,
+                            visual: <ResponsiveBar
+                                data={this.state.filteredData}
+                                keys={this.state.filteredHeaders.Gender}
+                                {...visProps}
+                            />
                         })
                         this.setState({
                             renderItem: <>
@@ -497,7 +508,7 @@ export class StaticVisuals extends React.Component {
             case 2:
                 xLegend = "Country";
                 yLegend = "Prevalence";
-                switch(this.props.viewType) {
+                switch (this.props.viewType) {
                     case 1: //data grid
                         this.setState({
                             renderItem: <>
@@ -508,12 +519,12 @@ export class StaticVisuals extends React.Component {
                                         pageSize={20}
                                         rows={this.state.finalData}
                                         columns={this.state.finalHeaders}
-                                        />
+                                    />
                                 </div>
                             </>,
                         });
                         break;
-                    }
+                }
                 break;
         }
     }
@@ -531,11 +542,11 @@ export class StaticVisuals extends React.Component {
             });
             this.loadDatasets();
         }
-        
     }
 
     render() {
-        const { error, isLoaded, renderItem } = this.state;
+        console.log("render")
+        const { error, isLoaded, renderItem, filteredData } = this.state;
         if (error) {
             return <div>Error: {error.message}</div>;
         } else if (!isLoaded) {
@@ -548,7 +559,7 @@ export class StaticVisuals extends React.Component {
         } else {
             return (
                 <>
-                    {this.state.renderItem}
+                    {renderItem}
                 </>
             );
         }
