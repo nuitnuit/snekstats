@@ -111,7 +111,6 @@ export class StaticVisuals extends React.Component {
         }, () => {
             this.reloadVisuals();
         })
-
     }
     reloadVisuals() {
         var xLegend, yLegend;
@@ -154,7 +153,7 @@ export class StaticVisuals extends React.Component {
                                         pageSize={20}
                                         rows={this.state.finalData}
                                         columns={this.state.finalHeaders}
-                                        />
+                                    />
                                 </div>
                             </>,
                         });
@@ -166,9 +165,9 @@ export class StaticVisuals extends React.Component {
                         this.setState({
                             filteredData: filteredData,
                             visual: <ResponsiveBar
-                                    data={filteredData}
-                                    {...this.state.visualProps}
-                                    />
+                                data={filteredData}
+                                {...this.state.visualProps}
+                            />
                         }, () => {
                             console.log(this.state.filteredData)
                         });
@@ -193,7 +192,7 @@ export class StaticVisuals extends React.Component {
                                         pageSize={20}
                                         rows={this.state.finalData}
                                         columns={this.state.finalHeaders}
-                                        />
+                                    />
                                 </div>
                             </>,
                         });
@@ -391,7 +390,7 @@ export class StaticVisuals extends React.Component {
                                         pageSize={20}
                                         rows={this.state.finalData}
                                         columns={this.state.finalHeaders}
-                                        />
+                                    />
                                 </div>
                             </>,
                         });
@@ -447,6 +446,7 @@ export class StaticVisuals extends React.Component {
                             filteredData: this.state.filteredData
                                 .filter(row => row.Year == this.state.yearVal), //filter the data by the maximum year
                         });
+                        console.log(this.state.filteredData);
                         var barItem = (
                             <ResponsiveBar
                                 data={this.state.filteredData}
@@ -480,6 +480,7 @@ export class StaticVisuals extends React.Component {
                                         {this.state.visual}
                                     </Col>
                                 </Row>
+                                {console.log(checkBoxList)}
                                 <FiltrationPanel
                                     yearList={this.state.lists.yearList}
                                     genderVal={this.state.lists.genderList}
@@ -497,7 +498,7 @@ export class StaticVisuals extends React.Component {
             case 2:
                 xLegend = "Country";
                 yLegend = "Prevalence";
-                switch(this.props.viewType) {
+                switch (this.props.viewType) {
                     case 1: //data grid
                         this.setState({
                             renderItem: <>
@@ -508,12 +509,12 @@ export class StaticVisuals extends React.Component {
                                         pageSize={20}
                                         rows={this.state.finalData}
                                         columns={this.state.finalHeaders}
-                                        />
+                                    />
                                 </div>
                             </>,
                         });
                         break;
-                    }
+                }
                 break;
         }
     }
@@ -531,7 +532,7 @@ export class StaticVisuals extends React.Component {
             });
             this.loadDatasets();
         }
-        
+
     }
 
     render() {

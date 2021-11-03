@@ -14,7 +14,6 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import PieChartIcon from '@mui/icons-material/PieChart';
 import MultilineChartIcon from '@mui/icons-material/MultilineChart';
 import PublicIcon from '@mui/icons-material/Public';
-import LiveDatasetsFilter from '../components/LiveDatasetsFilter';
 
 class LiveDatasets extends React.Component {
     constructor(props) {
