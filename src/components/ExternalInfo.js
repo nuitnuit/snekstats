@@ -1,29 +1,89 @@
 import React from "react";
-import Card from 'react-bootstrap/Card'
+import Card from "react-bootstrap/Card";
+import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Tabs from "react-bootstrap/Tabs";
-import Tab from 'react-bootstrap/Tab'
+import Tab from "react-bootstrap/Tab";
+import WHOLogo from "../assets/WHOLogo.png";
+import CDCLogo from "../assets/CDCLogo.png";
+import WikipediaLogo from "../assets/WikipediaLogo.png";
 import "../App.css";
-import { Row , Col} from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 
 function ExternalInfo() {
   return (
     <div className="ExternalInfo">
-    <Container padding = "10px">
-    <Row>
-      <Col>
-    <h1>More Info</h1>
-              
-              <p class="card-text">
-                You may Click the following links to view more about the subject
-              </p>
-              <a href="https://www.who.int/health-topics/obesity" class="btn btn-primary m-2">WHO</a>
-              <a href="https://www.cdc.gov/obesity/index.html" class="btn btn-primary m-2">CDC</a>
-              <a href="https://en.wikipedia.org/wiki/Obesity" class="btn btn-primary m-2">Wikipedia</a>
-    </Col>
-    </Row>
-    </Container>
-  </div>
+      <Container padding="10px">
+        <h1>More Info</h1>
+        <h4>
+          You may Click the following links to view more about the subject{" "}
+        </h4>
+        <Row>
+          <Col>
+            <Card>
+              <Card.Header>World Health Organization</Card.Header>
+              <Card.Img variant="top" src={WHOLogo} />
+              <Card.Text className="m-3">
+                Overweight and obesity are defined as abnormal or excessive fat
+                accumulation that presents a risk to health. A body mass index
+                (BMI) over 25 is considered overweight, and over 30 is obese.
+                The issue has grown to epidemic proportions, with over 4 million
+                people dying each year as a result of being overweight or obese
+                in 2017 according to the global burden of disease.
+              </Card.Text>
+              <Button
+                variant="primary"
+                href="https://www.who.int/health-topics/obesity"
+              >
+                WHO
+              </Button>
+            </Card>
+          </Col>
+          <Col>
+            <Card>
+              <Card.Header>
+                Centers for Disease Control and Prevention
+              </Card.Header>
+              <Card.Img variant="top" src={CDCLogo} />
+              <Card.Text className="m-3">
+                Childhood obesity is a serious health problem in the United
+                States. 1 in 5 children and adolescents in the US have obesity.
+                Some groups of children are more affected than others, but all
+                children are at risk of gaining weight that is higher than what
+                is considered healthy.
+              </Card.Text>
+              <Button
+                variant="primary"
+                href="https://www.cdc.gov/obesity/index.html"
+              >
+                CDC
+              </Button>
+            </Card>
+          </Col>
+          <Col>
+            <Card>
+              <Card.Header>Wikipedia</Card.Header>
+              <Card.Img variant="top" src={WikipediaLogo} />
+              <Card.Text className="m-3">
+                Obesity is a medical condition in which excess body fat has
+                accumulated to an extent that it may have a negative effect on
+                health.[1] People are generally considered obese when their body
+                mass index (BMI), a measurement obtained by dividing a person's
+                weight by the square of the person's height—despite known
+                allometric inaccuracies[a]—is over 30 kg/m2; the range 25–30
+                kg/m2 is defined as overweight.
+              </Card.Text>
+              <Button
+                variant="primary"
+                href="https://en.wikipedia.org/wiki/Obesity"
+              >
+                Wikipedia
+              </Button>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+    </div>
   );
 }
 

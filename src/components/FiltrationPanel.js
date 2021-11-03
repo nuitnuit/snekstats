@@ -7,7 +7,12 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { FormGroup } from "@mui/material";
 import Box from "@mui/material/Box"
-
+import Container from "@mui/material/Container"
+import Masonry from '@mui/lab/Masonry';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 class FiltrationPanel extends React.Component {
     constructor(props) {
         super(props);
@@ -30,8 +35,7 @@ class FiltrationPanel extends React.Component {
         }
     }
 
-    handleUpdateFiltration()
-    {
+    handleUpdateFiltration() {
         var s = this.props.checkBoxList;
         Object.entries(this.state.checkBoxListState).map(([key, value]) => {
             Object.entries(value).map(([k, v]) => {
@@ -78,43 +82,51 @@ class FiltrationPanel extends React.Component {
     render() {
         const checkboxes = Object.entries(this.state.checkBoxListState).map(([key, value]) => {
             return <>
-                <FormControlLabel
-                    label={key}
-                    key={key}
-                    control={
-                        <Checkbox
-                            checked={this.state.checkBoxListState[key].every((v) => v === true)}
-                            indeterminate={this.state.checkBoxListState[key].some((v) => v === true) && (this.state.checkBoxListState[key].every((v) => v === true) === false)}
-                            onChange={(event) => {
-                                this.handleParentCheckBoxchange(event, key)
-                            }}
+                <Accordion>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                    >
+                        <FormControlLabel
+                            label={key}
+                            key={key}
+                            control={
+                                <Checkbox
+                                    checked={this.state.checkBoxListState[key].every((v) => v === true)}
+                                    indeterminate={this.state.checkBoxListState[key].some((v) => v === true) && (this.state.checkBoxListState[key].every((v) => v === true) === false)}
+                                    onChange={(event) => {
+                                        this.handleParentCheckBoxchange(event, key)
+                                    }}
+                                />
+                            }
                         />
-                    }
-                />
-                <Box sx={{ display: 'flex', flexDirection: 'row', ml: 4 }}>
-                    {
-                        Object.entries(value).map(([k, v]) => {
-                            //to build the children of the key
-                            //Country as key, Malaysia, Singapore, ... as children
-                            return (
-                                <>
-                                    <FormControlLabel
-                                        label={Object.entries(this.props.checkBoxList[key][k]).map(([name, __]) => { return name })[0]}
-                                        key={key, ":", k}
-                                        control={
-                                            <Checkbox
-                                                checked={this.state.checkBoxListState[key][k]}
-                                                onChange={(event) => {
-                                                    this.handleChildrenCheckBoxChange(event, key, k)
-                                                }}
-                                            />
-                                        }
-                                    />
-                                </>
-                            );
-                        })
-                    }
-                </Box>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                            <Masonry>
+                                {
+                                    Object.entries(value).map(([k, v]) => {
+                                        //to build the children of the key
+                                        //Country as key, Malaysia, Singapore, ... as children
+                                        return (
+                                            <>
+                                                <FormControlLabel
+                                                    label={Object.entries(this.props.checkBoxList[key][k]).map(([name, __]) => { return name })[0]}
+                                                    key={key, ":", k}
+                                                    control={
+                                                        <Checkbox
+                                                            checked={this.state.checkBoxListState[key][k]}
+                                                            onChange={(event) => {
+                                                                this.handleChildrenCheckBoxChange(event, key, k)
+                                                            }}
+                                                        />
+                                                    }
+                                                />
+                                            </>
+                                        );
+                                    })
+                                }
+                            </Masonry>
+                    </AccordionDetails>
+                </Accordion>
             </>
         })
         var sliderComponent;

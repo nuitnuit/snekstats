@@ -37,8 +37,7 @@ const Calculator = () => {
 
   return (
     <Container>
-    <Row>
-      
+    <Row>      
       <Col sm={4}>
         <div className="BMICalculator">
           <Form>
