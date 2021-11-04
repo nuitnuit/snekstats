@@ -110,13 +110,11 @@ export class StaticVisuals extends React.Component {
             filteredHeaders: newList,
             checkBoxList: checkBoxList
         }, () => {
-            console.log(this.state.filteredHeaders);
             this.reloadVisuals();
         })
 
     }
     reloadVisuals() {
-        console.log("reloadVisuals")
         var xLegend, yLegend;
         const legends = [
             {
@@ -164,8 +162,6 @@ export class StaticVisuals extends React.Component {
                         break;
                     case 2: //filter year, the country, then the gender
                         var filteredData = this.restructureData(this.state.finalData)
-                        console.log(this.state.checkBoxList, this.state.filteredHeaders.Gender)
-                        console.log(0, new Date())
                         filteredData = this.filterSingleYear(filteredData, this.state.yearVal)
                         filteredData = this.filterCountries(filteredData, this.state.filteredHeaders.Country)
                         this.setState({
@@ -291,7 +287,6 @@ export class StaticVisuals extends React.Component {
     }
     loadDatasets() {
         if (this.props.fetchAddr !== null) {
-            console.log("dataset changed");
             fetch(this.props.fetchAddr)
                 .then(response => response.text())
                 .then((data) => {
@@ -369,7 +364,6 @@ export class StaticVisuals extends React.Component {
     }
 
     loadVisuals() {
-        console.log("loadVisual")
         var xLegend, yLegend;
         const legends = [
             {
@@ -478,6 +472,7 @@ export class StaticVisuals extends React.Component {
                         }
                         this.setState({
                             visualProps: visProps,
+                            checkBoxList: checkBoxList,
                             visual: <ResponsiveBar
                                 data={this.state.filteredData}
                                 keys={this.state.filteredHeaders.Gender}
@@ -545,7 +540,6 @@ export class StaticVisuals extends React.Component {
     }
 
     render() {
-        console.log("render")
         const { error, isLoaded, renderItem, filteredData } = this.state;
         if (error) {
             return <div>Error: {error.message}</div>;
