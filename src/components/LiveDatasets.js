@@ -73,7 +73,7 @@ class LiveDatasets extends React.Component {
                 <Container>
                     <br />
                     <div className="d-flex justify-content-center">
-                        <h1>Welcome To SnekStats</h1>
+
                     </div>
                     <Row className="m-3">
                         <Col>

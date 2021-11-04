@@ -105,30 +105,30 @@ class FiltrationPanel extends React.Component {
                         />
                     </AccordionSummary>
                     <AccordionDetails>
-                            <Masonry>
-                                {
-                                    Object.entries(value).map(([k, v]) => {
-                                        //to build the children of the key
-                                        //Country as key, Malaysia, Singapore, ... as children
-                                        return (
-                                            <>
-                                                <FormControlLabel
-                                                    label={Object.entries(this.props.checkBoxList[key][k]).map(([name, __]) => { return name })[0]}
-                                                    key={key, ":", k}
-                                                    control={
-                                                        <Checkbox
-                                                            checked={this.state.checkBoxListState[key][k]}
-                                                            onChange={(event) => {
-                                                                this.handleChildrenCheckBoxChange(event, key, k)
-                                                            }}
-                                                        />
-                                                    }
-                                                />
-                                            </>
-                                        );
-                                    })
-                                }
-                            </Masonry>
+                        <Masonry>
+                            {
+                                Object.entries(value).map(([k, v]) => {
+                                    //to build the children of the key
+                                    //Country as key, Malaysia, Singapore, ... as children
+                                    return (
+                                        <>
+                                            <FormControlLabel
+                                                label={Object.entries(this.props.checkBoxList[key][k]).map(([name, __]) => { return name })[0]}
+                                                key={key, ":", k}
+                                                control={
+                                                    <Checkbox
+                                                        checked={this.state.checkBoxListState[key][k]}
+                                                        onChange={(event) => {
+                                                            this.handleChildrenCheckBoxChange(event, key, k)
+                                                        }}
+                                                    />
+                                                }
+                                            />
+                                        </>
+                                    );
+                                })
+                            }
+                        </Masonry>
                     </AccordionDetails>
                 </Accordion>
             </>
