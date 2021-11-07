@@ -30,8 +30,6 @@ class FiltrationPanel extends React.Component {
             onYearValChange: this.props.onYearValChange,
             onCheckBoxListChange: this.props.onCheckBoxListChange,
             checkBoxListState: checkBoxListState,
-            renderItem: null,
-            checked: true
         }
     }
 
@@ -80,18 +78,29 @@ class FiltrationPanel extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (prevProps.checkBoxList !== this.props.checkBoxList) {
+        if (prevProps.checkBoxList !== this.props.checkBoxList && this.props.checkBoxList != null) {
             //empty function to prevent reupdate of checkboxlist when renderItem of static visual is updated
         }
     }
 
     render() {
+        var checkBoxListState = {};
+        
+        console.log(this.props.checkBoxList)
         var checkboxes;
-        if (this.state.checkboxListState === {}) {
-            checkboxes = <></>
+        if (this.state.checkBoxListState === {} || this.props.checkBoxList === null || this.props.checkBoxList === undefined) {
+            checkboxes = null
         }
         else {
-            checkboxes = Object.entries(this.state.checkBoxListState).map(([key, value]) => {
+            Object.entries(this.props.checkBoxList).map(([key, _]) => {
+                checkBoxListState[key] = [];
+                Object.entries(_).map(([k, value]) => {
+                    Object.entries(value).map(([__, v]) => {
+                        checkBoxListState[key].push(v)
+                    })
+                })
+            })
+            checkboxes = Object.entries(checkBoxListState).map(([key, value]) => {
                 return <>
                     <Accordion>
                         <AccordionSummary
@@ -102,8 +111,9 @@ class FiltrationPanel extends React.Component {
                                 key={key}
                                 control={
                                     <Checkbox
-                                        checked={this.state.checkBoxListState[key].every((v) => v === true)}
-                                        indeterminate={this.state.checkBoxListState[key].some((v) => v === true) && (this.state.checkBoxListState[key].every((v) => v === true) === false)}
+                                        key={key}
+                                        checked={checkBoxListState[key].every((v) => v === true)}
+                                        indeterminate={checkBoxListState[key].some((v) => v === true) && (checkBoxListState[key].every((v) => v === true) === false)}
                                         onChange={(event) => {
                                             this.handleParentCheckBoxchange(event, key)
                                         }}
@@ -124,7 +134,7 @@ class FiltrationPanel extends React.Component {
                                                     key={key, ":", k}
                                                     control={
                                                         <Checkbox
-                                                            checked={this.state.checkBoxListState[key][k]}
+                                                            checked={checkBoxListState[key][k]}
                                                             onChange={(event) => {
                                                                 this.handleChildrenCheckBoxChange(event, key, k)
                                                             }}
@@ -141,34 +151,53 @@ class FiltrationPanel extends React.Component {
                 </>
             })
         }
-        var sliderComponent;
-        if (this.props.singlePointSlider === true) {
-            sliderComponent = <Slider
-                //orientation="vertical"
-                defaultValue={Math.max(...this.state.yearList)}
-                step={1}
-                marks
-                aria-label="Default"
-                valueLabelDisplay="auto"
-                onChange={this.props.onYearValChange}
-                min={Math.min(...this.props.yearList)}
-                max={Math.max(...this.props.yearList)}
-            />
-        }
-        else {
-            sliderComponent = <Slider
-                //orientation="vertical"
-                size="small"
-                defaultValue={[(Math.max(...this.state.yearList) - 1),
-                Math.max(...this.state.yearVal)]}
-                step={1}
-                marks
-                aria-label="Small"
-                valueLabelDisplay="auto"
-                onChange={this.props.onYearValChange}
-                min={Math.min(...this.props.yearList)}
-                max={Math.max(...this.props.yearList)}
-            />
+
+        var yearComponent = null;
+        if (this.props.singlePointSlider === true || this.props.doublePointSlider === true) {
+            var sliderComponent;
+            if (this.props.singlePointSlider === true) {
+                sliderComponent = <Slider
+                    //orientation="vertical"
+                    defaultValue={Math.max(...this.state.yearList)}
+                    step={1}
+                    marks
+                    aria-label="Default"
+                    valueLabelDisplay="auto"
+                    onChange={this.props.onYearValChange}
+                    min={Math.min(...this.props.yearList)}
+                    max={Math.max(...this.props.yearList)}
+                />
+            }
+            else {
+                sliderComponent = <Slider
+                    //orientation="vertical"
+                    size="small"
+                    defaultValue={[(Math.max(...this.state.yearList) - 1),
+                    Math.max(...this.state.yearVal)]}
+                    step={1}
+                    marks
+                    aria-label="Small"
+                    valueLabelDisplay="auto"
+                    onChange={this.props.onYearValChange}
+                    min={Math.min(...this.props.yearList)}
+                    max={Math.max(...this.props.yearList)}
+                />
+            }
+            yearComponent =
+                <>
+                    <h4>Year</h4>
+                    <Row>
+                        <Col xs={1}>
+                            {Math.min(...this.props.yearList)}
+                        </Col>
+                        <Col>
+                            {sliderComponent}
+                        </Col>
+                        <Col xs={1}>
+                            {Math.max(...this.props.yearList)}
+                        </Col>
+                    </Row>
+                </>
         }
         return <>
             <>
@@ -179,18 +208,7 @@ class FiltrationPanel extends React.Component {
                         </FormGroup>
                     </Col>
                 </Row>
-                <h4>Year</h4>
-                <Row>
-                    <Col xs={1}>
-                        {Math.min(...this.props.yearList)}
-                    </Col>
-                    <Col>
-                        {sliderComponent}
-                    </Col>
-                    <Col xs={1}>
-                        {Math.max(...this.props.yearList)}
-                    </Col>
-                </Row>
+                {yearComponent}
             </>
         </>
     }
