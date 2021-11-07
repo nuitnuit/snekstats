@@ -38,7 +38,7 @@ export class StaticVisuals extends React.Component {
         switch (this.props.datasetNum) {
             case 1:
                 switch (this.props.viewType) {
-                    case 2:
+                    case 2: //done
                         /*
                         //combine the data in such a way
                         //current data:
@@ -128,7 +128,7 @@ export class StaticVisuals extends React.Component {
                         )
                         console.log(restructuredData)
                         break;
-                    case 5:
+                    case 5: //done
                         /*
                         //combine the data in such a way
                         //current data:
@@ -262,28 +262,28 @@ export class StaticVisuals extends React.Component {
                     case 4:
 
                         break;
-                    case 5: //completed but the choropleth not showing for both reload and load
-
+                    case 5:
                         var data = this.filterGenders(this.state.finalData, this.state.filteredHeaders) //only filter by female
-                        data = this.filterSingleYear(data, Math.max(...this.state.lists.yearList))
+                        data = this.filterSingleYear(data, this.state.yearVal)
                         data = this.restructureData(data)
-                        console.log(this.state.filteredHeaders)
+                        var ASEANCOUNTRIES = featuresArray.features.filter(feature => this.state.lists.countryList.includes(feature.properties.name))
                         this.setState({
                             filteredData: data,
                             renderItem:
                                 <>
                                     <Row>
-                                        <Col>
+                                        <Col style={{ height: "600px" }}>
                                             <ResponsiveChoropleth
-                                                data={this.state.filteredData}
-                                                features={featuresArray.features}
+                                                data={data}
+                                                features={ASEANCOUNTRIES}
                                                 margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
                                                 colors="nivo"
-                                                domain={[0.0, 100.0]}
+                                                domain={[0.0, 30.0]}
                                                 unknownColor="#666666"
                                                 label="properties.name"
-                                                //valueFormat=".2s"
-                                                projectionTranslation={[0.5, 0.5]}
+                                                valueFormat=".2s"
+                                                projectionScale={600}
+                                                projectionTranslation={[-0.6, 0.5]}
                                                 projectionRotation={[0, 0, 0]}
                                                 enableGraticule={true}
                                                 graticuleLineColor="#dddddd"
@@ -763,57 +763,61 @@ export class StaticVisuals extends React.Component {
                         data = this.filterGenders(this.state.finalData, defaultGender) //only filter by female
                         data = this.filterSingleYear(data, Math.max(...this.state.lists.yearList))
                         data = this.restructureData(data)
-                        console.log(data)
+                        var ASEANCOUNTRIES = featuresArray.features.filter(feature => this.state.lists.countryList.includes(feature.properties.name))
                         this.setState({
                             filteredData: data,
                             yearVal: Math.max(...this.state.lists.yearList),
                             filteredHeaders: defaultGender
                         })
-                        console.log(this.state.filteredData)
                         this.setState({
                             visual:
                                 <>
-                                    <ResponsiveChoropleth
-                                        data={this.state.filteredData}
-                                        features={featuresArray.features}
-                                        margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
-                                        colors="nivo"
-                                        domain={[0.0, 100.0]}
-                                        unknownColor="#666666"
-                                        label="properties.name"
-                                        //valueFormat=".2s"
-                                        projectionTranslation={[0.5, 0.5]}
-                                        projectionRotation={[0, 0, 0]}
-                                        enableGraticule={true}
-                                        graticuleLineColor="#dddddd"
-                                        borderWidth={0.5}
-                                        borderColor="#152538"
-                                        legends={[
-                                            {
-                                                anchor: 'bottom-left',
-                                                direction: 'column',
-                                                justify: true,
-                                                translateX: 20,
-                                                translateY: -100,
-                                                itemsSpacing: 0,
-                                                itemWidth: 94,
-                                                itemHeight: 18,
-                                                itemDirection: 'left-to-right',
-                                                itemTextColor: '#444444',
-                                                itemOpacity: 0.85,
-                                                symbolSize: 18,
-                                                effects: [
+                                    <Row>
+                                        <Col style={{ height: "600px" }}>
+                                            <ResponsiveChoropleth
+                                                data={this.state.filteredData}
+                                                features={ASEANCOUNTRIES}
+                                                margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+                                                colors="nivo"
+                                                domain={[0.0, 30.0]}
+                                                unknownColor="#666666"
+                                                label="properties.name"
+                                                valueFormat=".2s"
+                                                projectionScale={600}
+                                                projectionTranslation={[-0.65, 0.5]}
+                                                projectionRotation={[0, 0, 0]}
+                                                enableGraticule={true}
+                                                graticuleLineColor="#dddddd"
+                                                borderWidth={0.5}
+                                                borderColor="#152538"
+                                                legends={[
                                                     {
-                                                        on: 'hover',
-                                                        style: {
-                                                            itemTextColor: '#000000',
-                                                            itemOpacity: 1
-                                                        }
+                                                        anchor: 'bottom-left',
+                                                        direction: 'column',
+                                                        justify: true,
+                                                        translateX: 20,
+                                                        translateY: -100,
+                                                        itemsSpacing: 0,
+                                                        itemWidth: 94,
+                                                        itemHeight: 18,
+                                                        itemDirection: 'left-to-right',
+                                                        itemTextColor: '#444444',
+                                                        itemOpacity: 0.85,
+                                                        symbolSize: 18,
+                                                        effects: [
+                                                            {
+                                                                on: 'hover',
+                                                                style: {
+                                                                    itemTextColor: '#000000',
+                                                                    itemOpacity: 1
+                                                                }
+                                                            }
+                                                        ]
                                                     }
-                                                ]
-                                            }
-                                        ]}
-                                    />
+                                                ]}
+                                            />
+                                        </Col>
+                                    </Row>
                                 </>
                         })
                         this.setState({
@@ -887,7 +891,6 @@ export class StaticVisuals extends React.Component {
 
     render() {
         const { error, isLoaded, renderItem, filteredData } = this.state;
-        console.log(renderItem)
         if (error) {
             return <div>Error: {error.message}</div>;
         } else if (!isLoaded) {
