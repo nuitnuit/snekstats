@@ -15,14 +15,16 @@ class FiltrationPanel extends React.Component {
     constructor(props) {
         super(props);
         var checkBoxListState = {};
-        Object.entries(this.props.checkBoxList).map(([key, _]) => {
-            checkBoxListState[key] = [];
-            Object.entries(_).map(([k, value]) => {
-                Object.entries(value).map(([__, v]) => {
-                    checkBoxListState[key].push(v)
+        if (this.props.checkBoxList != null) {
+            Object.entries(this.props.checkBoxList).map(([key, _]) => {
+                checkBoxListState[key] = [];
+                Object.entries(_).map(([k, value]) => {
+                    Object.entries(value).map(([__, v]) => {
+                        checkBoxListState[key].push(v)
+                    })
                 })
             })
-        })
+        }
         this.state = {
             yearList: this.props.yearList,
             onYearValChange: this.props.onYearValChange,
@@ -84,55 +86,61 @@ class FiltrationPanel extends React.Component {
     }
 
     render() {
-        const checkboxes = Object.entries(this.state.checkBoxListState).map(([key, value]) => {
-            return <>
-                <Accordion>
-                    <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                    >
-                        <FormControlLabel
-                            label={key}
-                            key={key}
-                            control={
-                                <Checkbox
-                                    checked={this.state.checkBoxListState[key].every((v) => v === true)}
-                                    indeterminate={this.state.checkBoxListState[key].some((v) => v === true) && (this.state.checkBoxListState[key].every((v) => v === true) === false)}
-                                    onChange={(event) => {
-                                        this.handleParentCheckBoxchange(event, key)
-                                    }}
-                                />
-                            }
-                        />
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <Masonry>
-                            {
-                                Object.entries(value).map(([k, v]) => {
-                                    //to build the children of the key
-                                    //Country as key, Malaysia, Singapore, ... as children
-                                    return (
-                                        <>
-                                            <FormControlLabel
-                                                label={Object.entries(this.props.checkBoxList[key][k]).map(([name, __]) => { return name })[0]}
-                                                key={key, ":", k}
-                                                control={
-                                                    <Checkbox
-                                                        checked={this.state.checkBoxListState[key][k]}
-                                                        onChange={(event) => {
-                                                            this.handleChildrenCheckBoxChange(event, key, k)
-                                                        }}
-                                                    />
-                                                }
-                                            />
-                                        </>
-                                    );
-                                })
-                            }
-                        </Masonry>
-                    </AccordionDetails>
-                </Accordion>
-            </>
-        })
+        var checkboxes;
+        if (this.state.checkboxListState === {}) {
+            checkboxes = <></>
+        }
+        else {
+            checkboxes = Object.entries(this.state.checkBoxListState).map(([key, value]) => {
+                return <>
+                    <Accordion>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon />}
+                        >
+                            <FormControlLabel
+                                label={key}
+                                key={key}
+                                control={
+                                    <Checkbox
+                                        checked={this.state.checkBoxListState[key].every((v) => v === true)}
+                                        indeterminate={this.state.checkBoxListState[key].some((v) => v === true) && (this.state.checkBoxListState[key].every((v) => v === true) === false)}
+                                        onChange={(event) => {
+                                            this.handleParentCheckBoxchange(event, key)
+                                        }}
+                                    />
+                                }
+                            />
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Masonry>
+                                {
+                                    Object.entries(value).map(([k, v]) => {
+                                        //to build the children of the key
+                                        //Country as key, Malaysia, Singapore, ... as children
+                                        return (
+                                            <>
+                                                <FormControlLabel
+                                                    label={Object.entries(this.props.checkBoxList[key][k]).map(([name, __]) => { return name })[0]}
+                                                    key={key, ":", k}
+                                                    control={
+                                                        <Checkbox
+                                                            checked={this.state.checkBoxListState[key][k]}
+                                                            onChange={(event) => {
+                                                                this.handleChildrenCheckBoxChange(event, key, k)
+                                                            }}
+                                                        />
+                                                    }
+                                                />
+                                            </>
+                                        );
+                                    })
+                                }
+                            </Masonry>
+                        </AccordionDetails>
+                    </Accordion>
+                </>
+            })
+        }
         var sliderComponent;
         if (this.props.singlePointSlider === true) {
             sliderComponent = <Slider
@@ -171,13 +179,13 @@ class FiltrationPanel extends React.Component {
                         </FormGroup>
                     </Col>
                 </Row>
+                <h4>Year</h4>
                 <Row>
                     <Col xs={1}>
                         {Math.min(...this.props.yearList)}
                     </Col>
                     <Col>
                         {sliderComponent}
-                        <h4>Year</h4>
                     </Col>
                     <Col xs={1}>
                         {Math.max(...this.props.yearList)}

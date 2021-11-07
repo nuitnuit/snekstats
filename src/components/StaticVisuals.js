@@ -5,7 +5,14 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { DataGrid } from "@mui/x-data-grid";
 import { ResponsiveBar } from "@nivo/bar";
 import FiltrationPanel from "./FiltrationPanel";
-
+import { ResponsiveChoropleth } from "@nivo/geo"
+import { ResponsiveLine } from '@nivo/line'
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import featuresArray from '../data/world_countries.json';
 export class StaticVisuals extends React.Component {
     constructor(props) {
         super(props);
@@ -33,26 +40,26 @@ export class StaticVisuals extends React.Component {
                 switch (this.props.viewType) {
                     case 2:
                         /*
-                       //combine the data in such a way
-                       //current data:
-                       [
-                           {
-                               Country: "USA",
-                               Year: "1999",
-                               Value: 9.9,
-                               Gender: "Male"
-                           }
-                       ]
-                       desired:
-                       [
-                           {
-                               Country: "USA",
-                               Year: "1999",
-                               Male: 9.9,
-                               Female: 8.8
-                           }
-                       ]
-                       */
+                        //combine the data in such a way
+                        //current data:
+                        [
+                            {
+                                Country: "USA",
+                                Year: "1999",
+                                Value: 9.9,
+                                Gender: "Male"
+                            }
+                        ]
+                        desired:
+                        [
+                            {
+                                Country: "USA",
+                                Year: "1999",
+                                Male: 9.9,
+                                Female: 8.8
+                            }
+                        ]
+                        */
                         let k = null;
                         for (let i = 0; i < this.state.finalData.length; i++) {
                             if (k === null) {
@@ -85,6 +92,73 @@ export class StaticVisuals extends React.Component {
                             }
                         }
                         break;
+                    case 4: //done
+                        /*
+                            [
+                                {
+                                    Country: "USA",
+                                    Year: "1999",
+                                    Value: 9.9,
+                                    Gender: "Male"
+                                }
+                            ]
+                            [
+                                {
+                                    id: "Japan",
+                                    "data":[
+                                        {
+                                            "x": "1976",
+                                            "y": 1.56
+                                        },
+                                    ]
+                                }
+                            ]
+                        */
+                        restructuredData = this.state.lists.countryList.map(country => {
+                            return {
+                                id: country,
+                                data: this.state.finalData.filter(row => row.Country === country).map(row => {
+                                    return {
+                                        x: row.Year,
+                                        y: Number(row.Value)
+                                    }
+                                })
+                            }
+                        }
+                        )
+                        console.log(restructuredData)
+                        break;
+                    case 5:
+                        /*
+                        //combine the data in such a way
+                        //current data:
+                        [
+                            {
+                                Country: "USA",
+                                Year: "1999",
+                                Value: 9.9,
+                                Gender: "Male"
+                            }
+                        ]
+                        desired:                    
+                        [
+                            {
+                                "id": "MYS",
+                                "value": 199
+                            }
+                        ]                    
+                        */
+                        var countries = require("i18n-iso-countries");
+                        countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
+                        for (let i = 0; i < data.length; i++) {
+                            restructuredData.push(
+                                {
+                                    "id": countries.getAlpha3Code(data[i].Country, "en"),
+                                    "value": Number(data[i].Value)
+                                }
+                            );
+                        }
+                        break;
                 }
                 break;
             case 2:
@@ -113,6 +187,17 @@ export class StaticVisuals extends React.Component {
             this.reloadVisuals();
         })
     }
+    radioAgeGroupChange = (event) => {
+
+    }
+    radioGenderChange = (event) => {
+        console.log(event.target.value);
+        this.setState({
+            filteredHeaders: event.target.value
+        }, () => {
+            this.reloadVisuals()
+        });
+    }
     reloadVisuals() {
         var xLegend, yLegend;
         const legends = [
@@ -140,25 +225,9 @@ export class StaticVisuals extends React.Component {
                 ]
             }
         ];
-        switch (this.props.datasetNum) //no case 1 because case 1 is only for datagrid
-        {
+        switch (this.props.datasetNum) {
             case 1:
                 switch (this.props.viewType) {
-                    case 1:
-                        this.setState({
-                            renderItem: <>
-                                <div style={{ width: "100%" }}>
-                                    <DataGrid
-                                        autoHeight
-                                        autoPageSize
-                                        pageSize={20}
-                                        rows={this.state.finalData}
-                                        columns={this.state.finalHeaders}
-                                    />
-                                </div>
-                            </>,
-                        });
-                        break;
                     case 2: //filter year, the country, then the gender
                         var filteredData = this.restructureData(this.state.finalData)
                         filteredData = this.filterSingleYear(filteredData, this.state.yearVal)
@@ -188,10 +257,87 @@ export class StaticVisuals extends React.Component {
                         });
                         break;
                     case 3:
+
                         break;
                     case 4:
+
                         break;
-                    case 5:
+                    case 5: //completed but the choropleth not showing for both reload and load
+
+                        var data = this.filterGenders(this.state.finalData, this.state.filteredHeaders) //only filter by female
+                        data = this.filterSingleYear(data, Math.max(...this.state.lists.yearList))
+                        data = this.restructureData(data)
+                        console.log(this.state.filteredHeaders)
+                        this.setState({
+                            filteredData: data,
+                            renderItem:
+                                <>
+                                    <Row>
+                                        <Col>
+                                            <ResponsiveChoropleth
+                                                data={this.state.filteredData}
+                                                features={featuresArray.features}
+                                                margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+                                                colors="nivo"
+                                                domain={[0.0, 100.0]}
+                                                unknownColor="#666666"
+                                                label="properties.name"
+                                                //valueFormat=".2s"
+                                                projectionTranslation={[0.5, 0.5]}
+                                                projectionRotation={[0, 0, 0]}
+                                                enableGraticule={true}
+                                                graticuleLineColor="#dddddd"
+                                                borderWidth={0.5}
+                                                borderColor="#152538"
+                                                legends={[
+                                                    {
+                                                        anchor: 'bottom-left',
+                                                        direction: 'column',
+                                                        justify: true,
+                                                        translateX: 20,
+                                                        translateY: -100,
+                                                        itemsSpacing: 0,
+                                                        itemWidth: 94,
+                                                        itemHeight: 18,
+                                                        itemDirection: 'left-to-right',
+                                                        itemTextColor: '#444444',
+                                                        itemOpacity: 0.85,
+                                                        symbolSize: 18,
+                                                        effects: [
+                                                            {
+                                                                on: 'hover',
+                                                                style: {
+                                                                    itemTextColor: '#000000',
+                                                                    itemOpacity: 1
+                                                                }
+                                                            }
+                                                        ]
+                                                    }
+                                                ]}
+                                            />
+                                        </Col>
+                                    </Row>
+                                    <FormControl component="fieldset">
+                                        <FormLabel component="legend">Gender</FormLabel>
+                                        <RadioGroup
+                                            row aria-label="gender"
+                                            value={this.state.filteredHeaders}
+                                            onChange={this.radioGenderChange}
+                                            name="row-radio-buttons-group"
+                                        >
+                                            <FormControlLabel value="Female" control={<Radio />} label="Female" />
+                                            <FormControlLabel value="Male" control={<Radio />} label="Male" />
+                                        </RadioGroup>
+                                    </FormControl>
+                                    <FiltrationPanel
+                                        yearList={this.state.lists.yearList}
+                                        onCheckBoxListChange={this.onCheckBoxListChange}
+                                        onYearValChange={this.handleSingleSliderChange}
+                                        singlePointSlider={true}
+                                    />
+                                </>
+                        })
+
                         break;
                 }
                 break;
@@ -226,7 +372,7 @@ export class StaticVisuals extends React.Component {
     }
     handleSingleSliderChange = (event, newValue) => {
         this.setState({
-            yearVal: newValue //single value or [1975, 2016]
+            yearVal: newValue //single value
         }, () => {
             this.reloadVisuals()
         });
@@ -364,31 +510,6 @@ export class StaticVisuals extends React.Component {
 
     loadVisuals() {
         var xLegend, yLegend;
-        const legends = [
-            {
-                dataFrom: "keys",
-                anchor: "bottom-right",
-                direction: "column",
-                justify: false,
-                translateX: 140,
-                translateY: 0,
-                itemsSpacing: 2,
-                itemWidth: 100,
-                itemHeight: 20,
-                itemDirection: "left-to-right",
-                itemOpacity: 0.85,
-                itemTextColor: "#ffffff",
-                symbolSize: 20,
-                effects: [
-                    {
-                        on: "hover",
-                        style: {
-                            itemOpacity: 1
-                        }
-                    }
-                ]
-            }
-        ];
         switch (this.props.datasetNum) {
             case 1: //no age group
                 xLegend = "Country";
@@ -410,6 +531,7 @@ export class StaticVisuals extends React.Component {
                         });
                         break;
                     case 2: //bar chart, yearval is not an array
+
                         const axisBottom = {
                             tickSize: 10,
                             tickPadding: 5,
@@ -462,12 +584,58 @@ export class StaticVisuals extends React.Component {
                         });
                         var visProps = {
                             indexBy: "Country",
+                            margin: { top: 50, right: 130, bottom: 50, left: 60 },
                             padding: 0.3,
-                            margin: { top: 50, right: 130, bottom: 50, left: 70 },
-                            axisBottom: axisBottom,
-                            axisLeft: axisLeft,
-                            legends: legends,
+                            valueScale: { type: 'linear' },
+                            indexScale: { type: 'band', round: true },
                             colors: { scheme: 'nivo' },
+                            borderColor: { from: 'color', modifiers: [['darker', 1.6]] },
+                            axisTop: null,
+                            axisRight: null,
+                            axisBottom: {
+                                tickSize: 5,
+                                tickPadding: 5,
+                                tickRotation: 0,
+                                legend: 'country',
+                                legendPosition: 'middle',
+                                legendOffset: 32
+                            },
+                            axisLeft: {
+                                tickSize: 5,
+                                tickPadding: 5,
+                                tickRotation: 0,
+                                legend: 'food',
+                                legendPosition: 'middle',
+                                legendOffset: -40
+                            },
+                            labelSkipWidth: 12,
+                            labelSkipHeight: 12,
+                            labelTextColor: { from: 'color', modifiers: [['darker', 1.6]] },
+                            legends:
+                                [
+                                    {
+                                        dataFrom: 'keys',
+                                        anchor: 'bottom-right',
+                                        direction: 'column',
+                                        justify: false,
+                                        translateX: 120,
+                                        translateY: 0,
+                                        itemsSpacing: 2,
+                                        itemWidth: 100,
+                                        itemHeight: 20,
+                                        itemDirection: 'left-to-right',
+                                        itemOpacity: 0.85,
+                                        symbolSize: 20,
+                                        effects: [
+                                            {
+                                                on: 'hover',
+                                                style: {
+                                                    itemOpacity: 1
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
                         }
                         this.setState({
                             visualProps: visProps,
@@ -485,7 +653,6 @@ export class StaticVisuals extends React.Component {
                                         {this.state.visual}
                                     </Col>
                                 </Row>
-                                {console.log(checkBoxList)}
                                 <FiltrationPanel
                                     yearList={this.state.lists.yearList}
                                     genderVal={this.state.lists.genderList}
@@ -498,6 +665,185 @@ export class StaticVisuals extends React.Component {
                             </>,
                         });
                         break;
+                    case 3: //sunburst no need to filter year here
+                        break;
+                    case 4: //line chart, yearval is an array
+                        /*
+                            [
+                                {
+                                    id: "Japan",
+                                    "data":[
+                                        {
+                                            "x": "1976",
+                                            "y": 1.56
+                                        }
+                                    ]
+                                }
+                            ]
+                        */
+                        var restructuredData = this.restructureData();
+                        this.setState({
+                            filteredData: restructuredData,
+                        })
+                        this.setState({
+                            renderItem:
+                                <>
+                                    <div>
+                                        <Row>
+                                            <Col style={{ height: "600px" }}>
+                                                <ResponsiveLine
+                                                    data={this.state.filteredData}
+                                                    margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+                                                    xScale={{ type: 'point' }}
+                                                    yScale={{ type: 'linear', min: 'auto', max: 'auto', stacked: false, reverse: false }}
+                                                    yFormat=" >-.2f"
+                                                    axisTop={null}
+                                                    axisRight={null}
+                                                    axisBottom={{
+                                                        orient: 'bottom',
+                                                        tickSize: 5,
+                                                        tickPadding: 5,
+                                                        tickRotation: 0,
+                                                        legend: xLegend,
+                                                        legendOffset: 36,
+                                                        legendPosition: 'middle'
+                                                    }}
+                                                    axisLeft={{
+                                                        orient: 'left',
+                                                        tickSize: 5,
+                                                        tickPadding: 5,
+                                                        tickRotation: 0,
+                                                        legend: yLegend,
+                                                        legendOffset: -40,
+                                                        legendPosition: 'middle'
+                                                    }}
+                                                    pointSize={10}
+                                                    pointColor={{ theme: 'background' }}
+                                                    pointBorderWidth={2}
+                                                    pointBorderColor={{ from: 'serieColor' }}
+                                                    pointLabelYOffset={-12}
+                                                    useMesh={true}
+                                                    legends={[
+                                                        {
+                                                            anchor: 'bottom-right',
+                                                            direction: 'column',
+                                                            justify: false,
+                                                            translateX: 100,
+                                                            translateY: 0,
+                                                            itemsSpacing: 0,
+                                                            itemDirection: 'left-to-right',
+                                                            itemWidth: 80,
+                                                            itemHeight: 20,
+                                                            itemOpacity: 0.75,
+                                                            symbolSize: 12,
+                                                            symbolShape: 'circle',
+                                                            symbolBorderColor: 'rgba(0, 0, 0, .5)',
+                                                            effects: [
+                                                                {
+                                                                    on: 'hover',
+                                                                    style: {
+                                                                        itemBackground: 'rgba(0, 0, 0, .03)',
+                                                                        itemOpacity: 1
+                                                                    }
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]}
+                                                />
+                                            </Col>
+                                        </Row>
+                                    </div>
+                                </>
+                        })
+                        break;
+
+                    case 5:
+                        var data = [];
+                        const defaultGender = this.state.lists.genderList[0];
+                        data = this.filterGenders(this.state.finalData, defaultGender) //only filter by female
+                        data = this.filterSingleYear(data, Math.max(...this.state.lists.yearList))
+                        data = this.restructureData(data)
+                        console.log(data)
+                        this.setState({
+                            filteredData: data,
+                            yearVal: Math.max(...this.state.lists.yearList),
+                            filteredHeaders: defaultGender
+                        })
+                        console.log(this.state.filteredData)
+                        this.setState({
+                            visual:
+                                <>
+                                    <ResponsiveChoropleth
+                                        data={this.state.filteredData}
+                                        features={featuresArray.features}
+                                        margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+                                        colors="nivo"
+                                        domain={[0.0, 100.0]}
+                                        unknownColor="#666666"
+                                        label="properties.name"
+                                        //valueFormat=".2s"
+                                        projectionTranslation={[0.5, 0.5]}
+                                        projectionRotation={[0, 0, 0]}
+                                        enableGraticule={true}
+                                        graticuleLineColor="#dddddd"
+                                        borderWidth={0.5}
+                                        borderColor="#152538"
+                                        legends={[
+                                            {
+                                                anchor: 'bottom-left',
+                                                direction: 'column',
+                                                justify: true,
+                                                translateX: 20,
+                                                translateY: -100,
+                                                itemsSpacing: 0,
+                                                itemWidth: 94,
+                                                itemHeight: 18,
+                                                itemDirection: 'left-to-right',
+                                                itemTextColor: '#444444',
+                                                itemOpacity: 0.85,
+                                                symbolSize: 18,
+                                                effects: [
+                                                    {
+                                                        on: 'hover',
+                                                        style: {
+                                                            itemTextColor: '#000000',
+                                                            itemOpacity: 1
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        ]}
+                                    />
+                                </>
+                        })
+                        this.setState({
+                            renderItem:
+                                <>
+                                    <Row>
+                                        <Col>
+                                            {this.state.visual}
+                                        </Col>
+                                    </Row>
+                                    <FormControl component="fieldset">
+                                        <FormLabel component="legend">Gender</FormLabel>
+                                        <RadioGroup
+                                            row aria-label="gender"
+                                            value={defaultGender}
+                                            onChange={this.radioGenderChange}
+                                            name="row-radio-buttons-group"
+                                        >
+                                            <FormControlLabel value="Female" control={<Radio />} label="Female" />
+                                            <FormControlLabel value="Male" control={<Radio />} label="Male" />
+                                        </RadioGroup>
+                                    </FormControl>
+                                    <FiltrationPanel
+                                        yearList={this.state.lists.yearList}
+                                        onCheckBoxListChange={this.onCheckBoxListChange}
+                                        onYearValChange={this.handleSingleSliderChange}
+                                        singlePointSlider={true}
+                                    />
+                                </>
+                        })
                 }
                 break;
             case 2:
@@ -541,6 +887,7 @@ export class StaticVisuals extends React.Component {
 
     render() {
         const { error, isLoaded, renderItem, filteredData } = this.state;
+        console.log(renderItem)
         if (error) {
             return <div>Error: {error.message}</div>;
         } else if (!isLoaded) {
