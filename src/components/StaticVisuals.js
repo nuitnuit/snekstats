@@ -13,6 +13,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import featuresArray from '../data/world_countries.json';
+import Avatar from '@mui/material/Avatar'
 export class StaticVisuals extends React.Component {
     constructor(props) {
         super(props);
@@ -150,7 +151,7 @@ export class StaticVisuals extends React.Component {
                         */
                         var countries = require("i18n-iso-countries");
                         countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
-                        
+
                         for (let i = 0; i < data.length; i++) {
                             restructuredData.push(
                                 {
@@ -831,6 +832,37 @@ export class StaticVisuals extends React.Component {
                                                 pointColor={{ theme: 'background' }}
                                                 pointBorderWidth={2}
                                                 pointBorderColor={{ from: 'serieColor' }}
+                                                enableSlices="x"
+                                                //probably not going to use the one below anymore
+                                                /*tooltip={function (e) {
+                                                    console.log(e.point)
+                                                    return (<>
+                                                        <div
+                                                            style={{
+                                                                background: 'white',
+                                                                padding: '9px 12px',
+                                                                border: '1px solid #ccc',
+                                                            }}
+                                                        >
+                                                            <div style={{top: "50%", bottom: "50%"}}>
+                                                                <div
+                                                                    style={{
+                                                                        display: "inline-block",
+                                                                        //position:'absolute',
+                                                                        backgroundColor: e.point.serieColor,
+                                                                        borderRadius: "50%",
+                                                                        width: 20,
+                                                                        height: 20,
+                                                                    }}
+                                                                ></div>
+                                                                <strong>
+                                                                    {e.point.serieId}
+                                                                </strong>
+                                                            </div>
+                                                        </div>
+                                                    </>)
+                                                }}*/
+                                                //pointLabel={function(e){return e.id+"\n"+e.x+": "+e.y}}
                                                 pointLabelYOffset={-12}
                                                 useMesh={true}
                                                 legends={[
