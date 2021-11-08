@@ -312,6 +312,17 @@ class LiveTable extends React.Component {
         const filteredData = data.filter(row => selectedCountries.includes(row.Country));
         return filteredData;
     }
+    filterThreeCountries(data, selectedCountries) {
+        if (selectedCountries.length == 0) {
+            return data;
+        }
+        else {
+            if (selectedCountries.length == 3) {
+                const filteredData = data.filter(row => selectedCountries.includes(row.Country));
+                return filteredData;
+            }
+        }
+    }
     filterGenders(data, selectedGenders) {
         if (selectedGenders.length == 0 || selectedGenders.length == 2)
             return data;
@@ -525,7 +536,7 @@ class LiveTable extends React.Component {
                 });
                 break;
             case 2: //filter year, the country, then the gender
-                var filteredData = this.restructureData(this.state.items);
+                var filteredData = this.restructureData(this.state.items, this.props.viewType);
                 console.log(this.state.checkBoxList, this.state.filteredHeaders.Gender)
                 console.log(0, new Date())
                 filteredData = this.filterSingleYear(filteredData, this.state.yearVal)
@@ -616,47 +627,55 @@ class LiveTable extends React.Component {
                 break;
         }
     }
-    restructureData(theData) {
-        var barData = theData;
-        var selectedData = [];
-        for (let i = 0; i < barData.length; i++) {
-            var row = barData[i];
-            if (!selectedData.find(o => o.Country === row.SpatialDim && o.Year === row.TimeDim)) {
-                selectedData.push({ Country: row.SpatialDim, Year: row.TimeDim, data: [] })
-            }
-            for (let j = 0; j < selectedData.length; j++) {
-                var yearsRow = selectedData[j];
-                if (yearsRow.Country === row.SpatialDim && yearsRow.Year === row.TimeDim) {
-                    if (row.Dim1 === "Male") { //if Male, Female or Both Sex
-                        selectedData[j].data.push({ Male: row.NumericValue })
+    restructureData(theData, viewType) {
+        switch (viewType) {
+            case 2:
+                var barData = theData;
+                var selectedData = [];
+                for (let i = 0; i < barData.length; i++) {
+                    var row = barData[i];
+                    if (!selectedData.find(o => o.Country === row.SpatialDim && o.Year === row.TimeDim)) {
+                        selectedData.push({ Country: row.SpatialDim, Year: row.TimeDim, data: [] })
                     }
-                    if (row.Dim1 === "Female") {
-                        selectedData[j].data.push({ Female: row.NumericValue })
-                    }
-                    if (row.Dim1 === "Both Sex") {
-                        selectedData[j].data.push({ "Both Sex": row.NumericValue })
-                    }
-                }
-            }
-        }
-        var flatArray = [];
-        for (var index = 0; index < selectedData.length; index++) {
-            var flatObject = {};
-            for (var prop in selectedData[index]) {
-                var value = selectedData[index][prop];
-                if (Array.isArray(value)) {
-                    for (var i = 0; i < value.length; i++) {
-                        for (var inProp in value[i]) {
-                            flatObject[inProp] = value[i][inProp];
+                    for (let j = 0; j < selectedData.length; j++) {
+                        var yearsRow = selectedData[j];
+                        if (yearsRow.Country === row.SpatialDim && yearsRow.Year === row.TimeDim) {
+                            if (row.Dim1 === "Male") { //if Male, Female or Both Sex
+                                selectedData[j].data.push({ Male: row.NumericValue })
+                            }
+                            if (row.Dim1 === "Female") {
+                                selectedData[j].data.push({ Female: row.NumericValue })
+                            }
+                            if (row.Dim1 === "Both Sex") {
+                                selectedData[j].data.push({ "Both Sex": row.NumericValue })
+                            }
                         }
                     }
-                } else {
-                    flatObject[prop] = value;
                 }
-            }
-            flatArray.push(flatObject);
+                var flatArray = [];
+                for (var index = 0; index < selectedData.length; index++) {
+                    var flatObject = {};
+                    for (var prop in selectedData[index]) {
+                        var value = selectedData[index][prop];
+                        if (Array.isArray(value)) {
+                            for (var i = 0; i < value.length; i++) {
+                                for (var inProp in value[i]) {
+                                    flatObject[inProp] = value[i][inProp];
+                                }
+                            }
+                        } else {
+                            flatObject[prop] = value;
+                        }
+                    }
+                    flatArray.push(flatObject);
+                }
+                return flatArray;
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
         }
-        return flatArray;
     }
     loadVisuals() {
         //switch case for different data view (barchart,piechart,...)
@@ -670,9 +689,9 @@ class LiveTable extends React.Component {
                 });
                 break;
             case 2://bar chart
-                var restructuredData = this.restructureData(this.state.items);
+                var restructuredData = this.restructureData(this.state.items, this.props.viewType);
                 //this block generates the list of checkboxes for the data and viewtype
-                var checkBoxList = {};
+                var checkBoxList = {}; var filteredData = [];
                 //have to do manual way because not all headers should be inside the checkbox list
                 var k = 0;
                 checkBoxList.Country = this.state.lists.countryList.map((item, index) => {
@@ -699,11 +718,10 @@ class LiveTable extends React.Component {
                     filteredData: this.state.filteredData
                         .filter(row => row.Year == this.state.yearVal), //filter the data by the maximum year
                 });
-                var filteredData = this.restructureData(this.state.items);
-                console.log(this.state.checkBoxList, this.state.filteredHeaders.Gender)
+                /*var filteredData = this.restructureData(this.state.items, this.props.viewType);
                 console.log(0, new Date())
-                filteredData = this.filterSingleYear(filteredData, this.state.yearVal)
-                filteredData = this.filterCountries(filteredData, this.state.filteredHeaders.Country)
+                filteredData = this.filterSingleYear(filteredData, this.state.yearVal);
+                filteredData = this.filterCountries(filteredData, this.state.filteredHeaders.Country)*/
                 console.log(filteredData);
                 this.setState({
                     renderItem:
@@ -917,6 +935,7 @@ class LiveTable extends React.Component {
             case 4:
                 var pieData = this.state.items;
                 var selectedGender = "Male";
+                //var rand=1+Math.random()*()
                 var onceYears = [];
                 for (let i = 0; i < pieData.length; i++) {
                     var row = pieData[i];
@@ -1062,6 +1081,15 @@ class LiveTable extends React.Component {
                                     ]}
                                 />
                             </Row>
+                            <FiltrationPanel
+                                yearList={this.state.lists.yearList}
+                                genderVal={this.state.lists.genderList}
+                                countryVal={this.state.lists.countryList}
+                                checkBoxList={checkBoxList}
+                                onCheckBoxListChange={this.onCheckBoxListChange}
+                                onYearValChange={this.handleSingleSliderChange}
+                                singlePointSlider={true}
+                            />
                         </div>
                 });
                 break;
@@ -1086,8 +1114,8 @@ class LiveTable extends React.Component {
     }
     render() {
         const { error, isLoaded, items } = this.state;
-        if (error) {
-            return <div>Error: {error.message}</div>;
+        if (this.state.error) {
+            return <div>Error: Something went wrong.</div>;
         } else if (!isLoaded) {
             return (
                 <>
