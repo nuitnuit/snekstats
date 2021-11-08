@@ -39,7 +39,7 @@ class CollectedDatasets extends React.Component {
             datasetNum: 1,
             datasetHeader: "Dataset 1",
             datasetAddr: "https://raw.githubusercontent.com/nuitnuit/snekstats/master/src/data/compiled_countries_d1.csv",
-            dataViewNum: 2,
+            dataViewNum: 4,
             renderItem: null
         };
         this.updateDataset = this.updateDataset.bind(this);
