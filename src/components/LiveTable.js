@@ -47,6 +47,10 @@ class LiveTable extends React.Component {
                 })
             })
         })
+        newList = {
+            ...this.state.filteredHeaders,
+            ...newList
+        }
         this.setState({
             filteredHeaders: newList, /*{"Country": ["Malaysia", ]} */
             checkBoxList: checkBoxList
@@ -132,6 +136,7 @@ class LiveTable extends React.Component {
         this.setState({
             filteredHeaders: k
         }, () => {
+            console.log(this.state.filteredHeaders.Gender)
             this.reloadVisuals()
         });
     }
