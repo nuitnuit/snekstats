@@ -8,6 +8,11 @@ import { ResponsiveChoropleth } from '@nivo/geo';
 import featuresArray from '../data/world_countries.json';
 import FiltrationPanel from "./FiltrationPanel";
 import { ResponsiveSunburst } from '@nivo/sunburst';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 
 class LiveTable extends React.Component {
 
@@ -24,223 +29,14 @@ class LiveTable extends React.Component {
             currentAddr: this.props.fetchAddr,
             viewType: this.props.viewType,
             title: null,
+            filteredData: null,
+            filteredHeaders: null,
         };
         this.loadDatasets = this.loadDatasets.bind(this);
         this.onCheckBoxListChange = this.onCheckBoxListChange.bind(this);
     }
-    restructureData(data = undefined) {
-        if (data === undefined)
-            data = this.state.finalData;
-
-        var restructuredData = [];
-        switch (this.props.datasetNum) {
-            case 1:
-                switch (this.props.viewType) {
-                    case 2:
-                        /*
-                       //combine the data in such a way
-                       //current data:
-                       [
-                           {
-                               Country: "USA",
-                               Year: "1999",
-                               Value: 9.9,
-                               Gender: "Male"
-                           }
-                       ]
-                       desired:
-                       [
-                           {
-                               Country: "USA",
-                               Year: "1999",
-                               Male: 9.9,
-                               Female: 8.8
-                           }
-                       ]
-                       */
-                        var selectedYear = 1975;
-                        var barData = this.state.items;
-                        var selectedData = [];
-                        for (let i = 0; i < barData.length; i++) {
-                            var row = barData[i];
-                            if (!selectedData.find(o => o.country === row.SpatialDim && o.year === row.TimeDim)) {
-                                selectedData.push({ country: row.SpatialDim, year: row.TimeDim, data: [] })
-                            }
-                            for (let j = 0; j < selectedData.length; j++) {
-                                var yearsRow = selectedData[j];
-                                if (yearsRow.country === row.SpatialDim) {
-                                    if (row.TimeDim === selectedYear) {
-                                        if (row.Dim1 === "Male") { //if Male, Female or Both Sex
-                                            selectedData[j].data.push({ Male: row.NumericValue })
-                                        }
-                                        if (row.Dim1 === "Female") {
-                                            selectedData[j].data.push({ Female: row.NumericValue })
-                                        }
-                                        if (row.Dim1 === "Both Sex") {
-                                            selectedData[j].data.push({ BothSex: row.NumericValue })
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        var flatArray = [];
-                        for (var index = 0; index < selectedData.length; index++) {
-                            var flatObject = {};
-                            for (var prop in selectedData[index]) {
-                                var value = selectedData[index][prop];
-                                if (Array.isArray(value)) {
-                                    for (var i = 0; i < value.length; i++) {
-                                        for (var inProp in value[i]) {
-                                            flatObject[inProp] = value[i][inProp];
-                                        }
-                                    }
-                                } else {
-                                    flatObject[prop] = value;
-                                }
-                            }
-                            flatArray.push(flatObject);
-                        }
-                        console.log(flatArray);
-                        break;
-                }
-                break;
-            case 2:
-                switch (this.props.viewType) {
-                    case 2:
-                        break;
-                }
-        }
-        return restructuredData;
-    }
-    reloadVisuals() {
-        var xLegend, yLegend;
-        const legends = [
-            {
-                dataFrom: "keys",
-                anchor: "bottom-right",
-                direction: "column",
-                justify: false,
-                translateX: 140,
-                translateY: 0,
-                itemsSpacing: 2,
-                itemWidth: 100,
-                itemHeight: 20,
-                itemDirection: "left-to-right",
-                itemOpacity: 0.85,
-                itemTextColor: "#ffffff",
-                symbolSize: 20,
-                effects: [
-                    {
-                        on: "hover",
-                        style: {
-                            itemOpacity: 1
-                        }
-                    }
-                ]
-            }
-        ];
-        switch (this.props.datasetNum) //no case 1 because case 1 is only for datagrid
-        {
-            case 1:
-                switch (this.props.viewType) {
-                    case 1:
-                        this.setState({
-                            renderItem: <>
-                                <div style={{ width: "100%" }}>
-                                    <DataGrid
-                                        autoHeight
-                                        autoPageSize
-                                        pageSize={20}
-                                        rows={this.state.finalData}
-                                        columns={this.state.finalHeaders}
-                                    />
-                                </div>
-                            </>,
-                        });
-                        break;
-                    case 2: //filter year, the country, then the gender
-                        var filteredData = this.restructureData(this.state.finalData)
-                        filteredData = this.filterSingleYear(filteredData, this.state.yearVal)
-                        filteredData = this.filterCountries(filteredData, this.state.filteredHeaders.Country)
-                        this.setState({
-                            filteredData: filteredData,
-                            visual: <ResponsiveBar
-                                data={filteredData}
-                                {...this.state.visualProps}
-                            />
-                        }, () => {
-                            console.log(this.state.filteredData)
-                        });
-                        break;
-                    case 3:
-                        break;
-                    case 4:
-                        break;
-                    case 5:
-                        break;
-                }
-                break;
-            case 2:
-                switch (this.props.viewType) {
-                    case 1:
-                        this.setState({
-                            renderItem: <>
-                                <div style={{ width: "100%" }}>
-                                    <DataGrid
-                                        autoHeight
-                                        autoPageSize
-                                        pageSize={20}
-                                        rows={this.state.finalData}
-                                        columns={this.state.finalHeaders}
-                                    />
-                                </div>
-                            </>,
-                        });
-                        break;
-                    case 2:
-                        break;
-                    case 3:
-                        break;
-                    case 4:
-                        break;
-                    case 5:
-                        break;
-                }
-                break;
-        }
-    }
-    filterYear(data, timeDim) {
-        const filteredData = data.filter(row => row.TimeDim === timeDim);
-        return filteredData;
-    }
-    filterCountries(data, countryList) {
-        /*
-            countryList = ["Singapore", "Malaysia", ...]
-        */
-        const filteredData = data.filter(row => countryList.includes(row.SpatialDim));
-        return filteredData;
-    }
-    filterMY(data) {
-        const filteredData = data.filter(row => row.SpatialDim === "Malaysia");
-        return filteredData;
-    }
-    filterSG(data) {
-        const filteredData = data.filter(row => row.SpatialDim === "Singapore");
-        return filteredData;
-    }
-    filterMale(data) {
-        const filteredData = data.filter(row => row.Dim1 === "Male");
-        return filteredData;
-    }
-    filterFemale(data) {
-        const filteredData = data.filter(row => row.Dim1 === "Female");
-        return filteredData;
-    }
-    filterBTSX(data) {
-        const filteredData = data.filter(row => row.Dim1 === "Both");
-        return filteredData;
-    }
     onCheckBoxListChange(checkBoxList) { //will receive the changed data, then converts to a an object with list of strings
+        console.log(checkBoxList)
         var newList = {};
         Object.entries(checkBoxList).map(([key, value]) => {
             newList[key] = []
@@ -252,7 +48,7 @@ class LiveTable extends React.Component {
             })
         })
         this.setState({
-            filteredHeaders: newList,
+            filteredHeaders: newList, /*{"Country": ["Malaysia", ]} */
             checkBoxList: checkBoxList
         }, () => {
             console.log(this.state.filteredHeaders);
@@ -313,24 +109,32 @@ class LiveTable extends React.Component {
         return filteredData;
     }
     filterThreeCountries(data, selectedCountries) {
-        if (selectedCountries.length == 0) {
-            return data;
+        if (selectedCountries.length <= 3 && selectedCountries.length > 0) {
+            const filteredData = data.filter(row => selectedCountries.includes(row.Country));
+            return filteredData;
         }
         else {
-            if (selectedCountries.length == 3) {
-                const filteredData = data.filter(row => selectedCountries.includes(row.Country));
-                return filteredData;
-            }
+            return data;
         }
     }
     filterGenders(data, selectedGenders) {
         if (selectedGenders.length == 0 || selectedGenders.length == 2)
             return data;
         //else
-        const filteredData = data.filter(row => selectedGenders.includes(...row.Gender));
+        const filteredData = data.filter(row => selectedGenders.includes(row.Gender));
         return filteredData;
     }
-
+    radioGenderChange = (event) => {
+        const k = {
+            ...this.state.filteredHeaders,
+            Gender: [event.target.value]
+        }
+        this.setState({
+            filteredHeaders: k
+        }, () => {
+            this.reloadVisuals()
+        });
+    }
     loadDatasets() {
         if (this.props.fetchAddr !== null) {
             //console.log("live dataset changed " + this.props.fetchAddr);
@@ -360,44 +164,53 @@ class LiveTable extends React.Component {
                         var filteredData = [], data = result.value;
                         for (let i = 0; i < data.length; i++) {
                             var row = data[i];
-                            if (row.Dim1 === 'MLE') {
-                                row.Dim1 = 'Male';
-                            }
-                            else if (row.Dim1 === 'FMLE') {
-                                row.Dim1 = 'Female';
-                            }
-                            else {
-                                row.Dim1 = 'Both Sex';
-                            }
-                            for (let j = 0; j < country.length; j++) {
-                                var countryRow = country[j]
-                                if (row.SpatialDim === countryRow.Code) {
-                                    row.SpatialDim = countryRow.Title;
+                            if (row.NumericValue !== null) {
+                                if (row.Dim1 === 'MLE') {
+                                    row.Dim1 = 'Male';
                                 }
-                                else if (row.SpatialDim === countryRow.ParentCode) {
-                                    row.SpatialDim = countryRow.ParentTitle;
+                                else if (row.Dim1 === 'FMLE') {
+                                    row.Dim1 = 'Female';
                                 }
-                            }
-                            for (let x = 0; x < wbig.length; x++) {
-                                var wbigRow = wbig[x];
-                                if (row.SpatialDim === wbigRow.Code) {
-                                    row.SpatialDim = wbigRow.Title;
+                                else {
+                                    row.Dim1 = 'Both Sex';
                                 }
-                            }
-                            if (row.Dim2Type === "AGEGROUP") {
-                                var age = (row.Dim2.split('YEARS').pop());
-                                row.Dim2 = (age.split("-"));
-                            }
-                            filteredData.push(row)
-                            //make arrays for FiltrationPanel
-                            if (!countryList.find(o => o === row.SpatialDim)) {
-                                countryList.push(row.SpatialDim)
-                            }
-                            if (!genderList.find(o => o === row.Dim1)) {
-                                genderList.push(row.Dim1)
-                            }
-                            if (!yearList.find(o => o === row.TimeDim)) {
-                                yearList.push(row.TimeDim)
+                                /**
+                                 * 1. if the value != null
+                                 * 2. append to the finalData / items
+                                 * 3. append to countryList if the vaklue != null
+                                 */
+                                for (let j = 0; j < country.length; j++) {
+                                    var countryRow = country[j]
+
+                                    if (row.SpatialDim === countryRow.Code) {
+                                        row.SpatialDim = countryRow.Title;
+                                    }
+                                    else if (row.SpatialDim === countryRow.ParentCode) {
+                                        row.SpatialDim = countryRow.ParentTitle;
+                                    }
+
+                                }
+                                for (let x = 0; x < wbig.length; x++) {
+                                    var wbigRow = wbig[x];
+                                    if (row.SpatialDim === wbigRow.Code) {
+                                        row.SpatialDim = wbigRow.Title;
+                                    }
+                                }
+                                if (row.Dim2Type === "AGEGROUP") {
+                                    var age = (row.Dim2.split('YEARS').pop());
+                                    row.Dim2 = (age.split("-"));
+                                }
+                                filteredData.push(row)
+                                //make arrays for FiltrationPanel
+                                if (!countryList.find(o => o === row.SpatialDim)) {
+                                    countryList.push(row.SpatialDim)
+                                }
+                                if (!genderList.find(o => o === row.Dim1)) {
+                                    genderList.push(row.Dim1)
+                                }
+                                if (!yearList.find(o => o === row.TimeDim)) {
+                                    yearList.push(row.TimeDim)
+                                }
                             }
                         }
                         var lists = {
@@ -621,9 +434,191 @@ class LiveTable extends React.Component {
                 break;
             case 3:
                 break;
-            case 4:
+            case 4://line chart
+                var generalData = this.changeGeneralData(this.state.items);
+                console.log(this.state.filteredHeaders);
+                var correctAmount = true;
+                var finalData = this.filterGenders(generalData, this.state.filteredHeaders.Gender);
+                if (this.state.filteredHeaders.Country.length > 0 && this.state.filteredHeaders.Country.length <= 3) {
+                    var controlCountries = this.filterThreeCountries(finalData, this.state.filteredHeaders.Country);
+                    var restructuredData = this.restructureData(controlCountries, this.props.viewType);
+                }
+                else {
+                    correctAmount = false;
+                    var restructuredData = this.state.filteredData
+                }
+                console.log(restructuredData)
+                console.log(0, new Date())
+                this.setState({
+                    filteredData: restructuredData,
+                    renderItem:
+                        <div>
+                            <Col style={{ height: "3000px" }}>
+                                <ResponsiveLine
+                                    data={restructuredData}
+                                    margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+                                    xScale={{ type: 'point' }}
+                                    yScale={{ type: 'linear', min: 'auto', max: 'auto', stacked: false, reverse: false }}
+                                    yFormat=" >-.2f"
+                                    axisTop={null}
+                                    axisRight={null}
+                                    axisBottom={{
+                                        orient: 'bottom',
+                                        tickSize: 5,
+                                        tickPadding: 5,
+                                        tickRotation: 90,
+                                        legend: 'Year',
+                                        legendOffset: 45,
+                                        legendPosition: 'middle'
+                                    }}
+                                    axisLeft={{
+                                        orient: 'left',
+                                        tickSize: 5,
+                                        tickPadding: 5,
+                                        tickRotation: 0,
+                                        legend: 'Value',
+                                        legendOffset: -40,
+                                        legendPosition: 'middle'
+                                    }}
+                                    pointSize={10}
+                                    pointColor={{ theme: 'background' }}
+                                    pointBorderWidth={2}
+                                    pointBorderColor={{ from: 'serieColor' }}
+                                    pointLabelYOffset={-12}
+                                    useMesh={true}
+                                    legends={[
+                                        {
+                                            anchor: 'bottom-right',
+                                            direction: 'column',
+                                            justify: false,
+                                            translateX: 100,
+                                            translateY: 0,
+                                            itemsSpacing: 0,
+                                            itemDirection: 'left-to-right',
+                                            itemWidth: 80,
+                                            itemHeight: 20,
+                                            itemOpacity: 0.75,
+                                            symbolSize: 12,
+                                            symbolShape: 'circle',
+                                            symbolBorderColor: 'rgba(0, 0, 0, .5)',
+                                            effects: [
+                                                {
+                                                    on: 'hover',
+                                                    style: {
+                                                        itemBackground: 'rgba(0, 0, 0, .03)',
+                                                        itemOpacity: 1
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ]}
+                                />
+                            </Col>
+                            <FormControl component="fieldset">
+                                <FormLabel component="legend">Gender</FormLabel>
+                                <RadioGroup
+                                    row aria-label="gender"
+                                    value={this.state.filteredHeaders.Gender[0]}
+                                    onChange={this.radioGenderChange}
+                                    name="row-radio-buttons-group"
+                                >
+                                    <FormControlLabel value="Male" control={<Radio />} label="Male" />
+                                    <FormControlLabel value="Female" control={<Radio />} label="Female" />
+                                    <FormControlLabel value="Both Sex" control={<Radio />} label="Both Sex" />
+                                </RadioGroup>
+                            </FormControl>
+                            {
+                                /*correctAmount ? return(
+                                    null
+                                ):
+                                return(
+                                    <div>
+                                        Maximum 3 countries
+                                    </div>
+                                )*/
+                            }
+                            <FiltrationPanel
+                                countryVal={this.state.lists.countryList}
+                                checkBoxList={this.state.checkBoxList}
+                                onCheckBoxListChange={this.onCheckBoxListChange}
+                                onYearValChange={this.handleSingleSliderChange}
+                            />
+                        </div>
+                });
                 break;
             case 5:
+                var generalData = this.changeGeneralData(this.state.oriData)
+                var data = this.filterGenders(generalData, this.state.filteredHeaders.Gender)
+                data = this.filterSingleYear(data, this.state.yearVal)
+                data = this.restructureData(data, this.props.viewType)
+                this.setState({
+                    filteredData: data,
+                    renderItem:
+                        <div>
+                            <Row style={{ height: "700px" }}>
+                                <ResponsiveChoropleth
+                                    data={data}
+                                    features={featuresArray.features}
+                                    margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+                                    colors="nivo"
+                                    domain={[0.0, 30.0]}
+                                    unknownColor="#666666"
+                                    label="properties.name"
+                                    //valueFormat=".2s"
+                                    projectionTranslation={[0.5, 0.5]}
+                                    projectionRotation={[0, 0, 0]}
+                                    enableGraticule={true}
+                                    graticuleLineColor="#dddddd"
+                                    borderWidth={0.5}
+                                    borderColor="#152538"
+                                    legends={[
+                                        {
+                                            anchor: 'bottom-left',
+                                            direction: 'column',
+                                            justify: true,
+                                            translateX: 20,
+                                            translateY: -100,
+                                            itemsSpacing: 0,
+                                            itemWidth: 94,
+                                            itemHeight: 18,
+                                            itemDirection: 'left-to-right',
+                                            itemTextColor: '#444444',
+                                            itemOpacity: 0.85,
+                                            symbolSize: 18,
+                                            effects: [
+                                                {
+                                                    on: 'hover',
+                                                    style: {
+                                                        itemTextColor: '#000000',
+                                                        itemOpacity: 1
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ]}
+                                />
+                            </Row>
+                            <FormControl component="fieldset">
+                                <FormLabel component="legend">Gender</FormLabel>
+                                <RadioGroup
+                                    row aria-label="gender"
+                                    value={this.state.filteredHeaders.Gender[0]}
+                                    onChange={this.radioGenderChange}
+                                    name="row-radio-buttons-group"
+                                >
+                                    <FormControlLabel value="Male" control={<Radio />} label="Male" />
+                                    <FormControlLabel value="Female" control={<Radio />} label="Female" />
+                                    <FormControlLabel value="Both Sex" control={<Radio />} label="Both Sex" />
+                                </RadioGroup>
+                            </FormControl>
+                            <FiltrationPanel
+                                yearList={this.state.lists.yearList}
+                                onCheckBoxListChange={this.onCheckBoxListChange}
+                                onYearValChange={this.handleSingleSliderChange}
+                                singlePointSlider={true}
+                            />
+                        </div>
+                });
                 break;
         }
     }
@@ -670,12 +665,65 @@ class LiveTable extends React.Component {
                     flatArray.push(flatObject);
                 }
                 return flatArray;
-                break;
             case 4:
-                break;
+                var onceYears = [];
+                for (let i = 0; i < theData.length; i++) {
+                    var row = theData[i];
+                    if (!onceYears.find(o => o.id === row.Country)) {
+                        onceYears.push({ id: row.Country, data: [] })
+                    }
+                    for (let j = 0; j < onceYears.length; j++) {
+                        var yearsRow = onceYears[j];
+                        if (yearsRow.id === row.Country) {
+                            if (!onceYears[j].data.find(l => l.x === row.Year)) {
+                                onceYears[j].data.push({ x: row.Year, y: row.Value })
+                            }
+                        }
+                    }
+                }
+                //sorting ascending years
+                for (let k = 0; k < onceYears.length; k++) {
+                    onceYears[k].data.sort((a, b) => a.x - b.x);
+                }
+                return onceYears;
             case 5:
-                break;
+                var mapData = [];
+                for (let i = 0; i < theData.length; i++) {
+                    var row = theData[i];
+                    if (!mapData.find(o => o.id === row.Country)) {
+                        mapData.push({ 'id': row.Country, 'value': row.Value })
+                    }
+                }
+                return mapData;
         }
+    }
+    changeGeneralData(theData) {
+        var generalDataForm = [];
+        for (let i = 0; i < theData.length; i++) {
+            var row = theData[i];
+            if (row.Dim1 === "MLE") { //if Male, Female or Both Sex
+                row.Dim1 = "Male";
+            }
+            if (row.Dim1 === "FMLE") {
+                row.Dim1 = "Female";
+            }
+            if (row.Dim1 === "BTSX") {
+                row.Dim1 = "Both Sex";
+            }
+            generalDataForm.push({ Country: row.SpatialDim, Year: row.TimeDim, Gender: row.Dim1, Value: row.NumericValue });
+        }
+        return generalDataForm;
+    }
+    randomNum(min, max) {
+        var n = [];
+        for (var i = 0; i < 3; i++) {
+            var num;
+            do {
+                num = (Math.floor(Math.random() * max) + min);
+            } while (n.indexOf(num) !== -1);
+            n.push(num);
+        }
+        return n;
     }
     loadVisuals() {
         //switch case for different data view (barchart,piechart,...)
@@ -690,8 +738,9 @@ class LiveTable extends React.Component {
                 break;
             case 2://bar chart
                 var restructuredData = this.restructureData(this.state.items, this.props.viewType);
+                console.log(restructuredData);
                 //this block generates the list of checkboxes for the data and viewtype
-                var checkBoxList = {}; var filteredData = [];
+                var checkBoxList = {};
                 //have to do manual way because not all headers should be inside the checkbox list
                 var k = 0;
                 checkBoxList.Country = this.state.lists.countryList.map((item, index) => {
@@ -718,10 +767,10 @@ class LiveTable extends React.Component {
                     filteredData: this.state.filteredData
                         .filter(row => row.Year == this.state.yearVal), //filter the data by the maximum year
                 });
-                /*var filteredData = this.restructureData(this.state.items, this.props.viewType);
+                var filteredData = this.restructureData(this.state.items, this.props.viewType);
                 console.log(0, new Date())
                 filteredData = this.filterSingleYear(filteredData, this.state.yearVal);
-                filteredData = this.filterCountries(filteredData, this.state.filteredHeaders.Country)*/
+                filteredData = this.filterCountries(filteredData, this.state.filteredHeaders.Country)
                 console.log(filteredData);
                 this.setState({
                     renderItem:
@@ -803,163 +852,169 @@ class LiveTable extends React.Component {
                 break;
             case 3://sunburst
                 //basic json
-                const myData = {
-                    "title": "Prevalence of Obesity",
-                    "children": [
-                    ]
-                }
-                //array of colours for colour scheme
-                var colorArr = ["#90b2e8", "#0095f2", "#acfa9b", "#69c272", "#ffcc8a", "#fc96ff", "#d595fc", "#f26868"];
-                //construct dynamic json
-                for (var timeDim = 2010; timeDim < 2016; timeDim++) {
-                    var json = {
-                        "title": timeDim,
-                        "color": timeDim % 2 == 0 ? colorArr[0] : colorArr[1], //if even first color, odd second color
-                        "size": 200,
-                        "children":
-                            [
-                                {
-                                    "title": "MY",
-                                    "color": colorArr[2],
-                                    "size": 400,
-                                    "children":
-                                        [
-                                            {
-                                                "title": "Male",
-                                                "color": colorArr[4],
-                                                "size": 1000,
-                                                "children":
-                                                    [
-                                                        {
-                                                            "size": [this.filterMY(this.filterMale(this.filterYear(this.state.data, timeDim)))][0][0].NumericValue * 80// get numeric value here
-                                                        }
-                                                    ]
-                                            },
-                                            {
-                                                "title": "Female",
-                                                "color": colorArr[5],
-                                                "size": 1000,
-                                                "children":
-                                                    [
-                                                        {
-                                                            "size": [this.filterMY(this.filterFemale(this.filterYear(this.state.data, timeDim)))][0][0].NumericValue * 80 // get numeric value here
-                                                        }
-                                                    ]
-                                            },
-                                            {
-                                                "title": "Both",
-                                                "color": colorArr[6],
-                                                "size": 1000,
-                                                "children":
-                                                    [
-                                                        {
-                                                            "size": [this.filterMY(this.filterBTSX(this.filterYear(this.state.data, timeDim)))][0][0].NumericValue * 80 // get numeric value here
-                                                        }
-                                                    ]
-                                            }
-                                        ]
-                                },
-                                {
-                                    "title": "SG",
-                                    "color": colorArr[3],
-                                    "size": 400,
-                                    "children":
-                                        [
-                                            {
-                                                "title": "Male",
-                                                "color": colorArr[4],
-                                                "size": 1000,
-                                                "children":
-                                                    [
-                                                        {
-                                                            "size": [this.filterSG(this.filterMale(this.filterYear(this.state.data, timeDim)))][0][0].NumericValue * 100 // get numeric value here
-                                                        }
-                                                    ]
-                                            },
-                                            {
-                                                "title": "Female",
-                                                "color": colorArr[5],
-                                                "size": 1000,
-                                                "children":
-                                                    [
-                                                        {
-                                                            "size": [this.filterSG(this.filterFemale(this.filterYear(this.state.data, timeDim)))][0][0].NumericValue * 100 // get numeric value here
-                                                        }
-                                                    ]
-                                            },
-                                            {
-                                                "title": "Both",
-                                                "color": colorArr[6],
-                                                "size": 1000,
-                                                "children":
-                                                    [
-                                                        {
-                                                            "size": [this.filterSG(this.filterBTSX(this.filterYear(this.state.data, timeDim)))][0][0].NumericValue * 100// get numeric value here
-                                                        }
-                                                    ]
-                                            }
-                                        ]
-                                }
-                            ]
-                    };
-                    myData.children.push(json);
-                }
-                console.log(myData);
-                this.setState({
-                    renderItem:
-                        <div>
-                            <Col style={{ height: "500px" }}>
-                                <div style={{ width: "100%" }}>
-                                    <ResponsiveSunburst
-                                        hideRootNode
-                                        id="NumericValue"
-                                        value="NumericValue" //added
-                                        colorType="literal"
-                                        colors={{ scheme: 'nivo' }}
-                                        data={myData}
-                                        title={this.state.title}
-                                        height={300}
-                                        width={350}
-                                        cornerRadius={2}
-                                        //borderColor={{ theme: 'background' }}
-                                        childColor={{ from: 'color', modifiers: [['brighter', 0.1]] }}
-                                        enableArcLabels={true}
-                                        arcLabelsSkipAngle={10}
-                                        arcLabelsTextColor={{ from: 'color', modifiers: [['darker', 1.4]] }}
-                                    />
-                                </div>
-                            </Col>
-                        </div>
-                });
+                /* const myData = {
+                     "title": "Prevalence of Obesity",
+                     "children": [
+                     ]
+                 }
+                 //array of colours for colour scheme
+                 var colorArr = ["#90b2e8", "#0095f2", "#acfa9b", "#69c272", "#ffcc8a", "#fc96ff", "#d595fc", "#f26868"];
+                 //construct dynamic json
+                 for (var timeDim = 2010; timeDim < 2016; timeDim++) {
+                     var json = {
+                         "title": timeDim,
+                         "color": timeDim % 2 == 0 ? colorArr[0] : colorArr[1], //if even first color, odd second color
+                         "size": 200,
+                         "children":
+                             [
+                                 {
+                                     "title": "MY",
+                                     "color": colorArr[2],
+                                     "size": 400,
+                                     "children":
+                                         [
+                                             {
+                                                 "title": "Male",
+                                                 "color": colorArr[4],
+                                                 "size": 1000,
+                                                 "children":
+                                                     [
+                                                         {
+                                                             "size": [this.filterMY(this.filterMale(this.filterYear(this.state.data, timeDim)))][0][0].NumericValue * 80// get numeric value here
+                                                         }
+                                                     ]
+                                             },
+                                             {
+                                                 "title": "Female",
+                                                 "color": colorArr[5],
+                                                 "size": 1000,
+                                                 "children":
+                                                     [
+                                                         {
+                                                             "size": [this.filterMY(this.filterFemale(this.filterYear(this.state.data, timeDim)))][0][0].NumericValue * 80 // get numeric value here
+                                                         }
+                                                     ]
+                                             },
+                                             {
+                                                 "title": "Both",
+                                                 "color": colorArr[6],
+                                                 "size": 1000,
+                                                 "children":
+                                                     [
+                                                         {
+                                                             "size": [this.filterMY(this.filterBTSX(this.filterYear(this.state.data, timeDim)))][0][0].NumericValue * 80 // get numeric value here
+                                                         }
+                                                     ]
+                                             }
+                                         ]
+                                 },
+                                 {
+                                     "title": "SG",
+                                     "color": colorArr[3],
+                                     "size": 400,
+                                     "children":
+                                         [
+                                             {
+                                                 "title": "Male",
+                                                 "color": colorArr[4],
+                                                 "size": 1000,
+                                                 "children":
+                                                     [
+                                                         {
+                                                             "size": [this.filterSG(this.filterMale(this.filterYear(this.state.data, timeDim)))][0][0].NumericValue * 100 // get numeric value here
+                                                         }
+                                                     ]
+                                             },
+                                             {
+                                                 "title": "Female",
+                                                 "color": colorArr[5],
+                                                 "size": 1000,
+                                                 "children":
+                                                     [
+                                                         {
+                                                             "size": [this.filterSG(this.filterFemale(this.filterYear(this.state.data, timeDim)))][0][0].NumericValue * 100 // get numeric value here
+                                                         }
+                                                     ]
+                                             },
+                                             {
+                                                 "title": "Both",
+                                                 "color": colorArr[6],
+                                                 "size": 1000,
+                                                 "children":
+                                                     [
+                                                         {
+                                                             "size": [this.filterSG(this.filterBTSX(this.filterYear(this.state.data, timeDim)))][0][0].NumericValue * 100// get numeric value here
+                                                         }
+                                                     ]
+                                             }
+                                         ]
+                                 }
+                             ]
+                     };
+                     myData.children.push(json);
+                 }
+                 console.log(myData);
+                 this.setState({
+                     renderItem:
+                         <div>
+                             <Col style={{ height: "500px" }}>
+                                 <div style={{ width: "100%" }}>
+                                     <ResponsiveSunburst
+                                         hideRootNode
+                                         id="NumericValue"
+                                         value="NumericValue" //added
+                                         colorType="literal"
+                                         colors={{ scheme: 'nivo' }}
+                                         data={myData}
+                                         title={this.state.title}
+                                         height={300}
+                                         width={350}
+                                         cornerRadius={2}
+                                         //borderColor={{ theme: 'background' }}
+                                         childColor={{ from: 'color', modifiers: [['brighter', 0.1]] }}
+                                         enableArcLabels={true}
+                                         arcLabelsSkipAngle={10}
+                                         arcLabelsTextColor={{ from: 'color', modifiers: [['darker', 1.4]] }}
+                                     />
+                                 </div>
+                             </Col>
+                         </div>
+                 });*/
                 break;
-            case 4:
-                var pieData = this.state.items;
-                var selectedGender = "Male";
-                //var rand=1+Math.random()*()
-                var onceYears = [];
-                for (let i = 0; i < pieData.length; i++) {
-                    var row = pieData[i];
-                    if (!onceYears.find(o => o.id === row.SpatialDim)) {
-                        if (row.SpatialDim === "Malaysia" || row.SpatialDim === "Americas" || row.SpatialDim === "Ireland") {
-                            onceYears.push({ id: row.SpatialDim, data: [] })
-                        }
-                    }
-                    for (let j = 0; j < onceYears.length; j++) {
-                        var yearsRow = onceYears[j];
-                        if (yearsRow.id === row.SpatialDim) {
-                            if (row.Dim1 === selectedGender) { //if Male, Female or Both Sex
-                                onceYears[j].data.push({ x: row.TimeDim, y: row.NumericValue })
-                            }
-                        }
-                    }
+            case 4://line chart
+                //3 random numbers
+                var randomNums = this.randomNum(1, this.state.lists.countryList.length)
+                var selectedCountries = [this.state.lists.countryList[randomNums[0]], this.state.lists.countryList[randomNums[1]], this.state.lists.countryList[randomNums[2]]];
+                console.log(selectedCountries);
+                var generalData = this.changeGeneralData(this.state.items);
+                console.log(generalData)
+                var finalData = this.filterGenders(generalData, [this.state.lists.genderList[0]]);
+                var controlCountries = this.filterThreeCountries(finalData, selectedCountries);
+                var restructuredData = this.restructureData(controlCountries, this.props.viewType);
+                console.log(restructuredData)
+                console.log(0, new Date())
+                var checkBoxList = {};
+                var k = 0;
+                checkBoxList.Country = this.state.lists.countryList.map((item, index) => {
+                    var obj = {};
+                    obj[item] = (item === selectedCountries[0] || item === selectedCountries[1] || item === selectedCountries[2]) ? true : false;
+                    return obj;
+                });
+                console.log(checkBoxList.Country);
+                var headers = {
+                    Country: selectedCountries,
+                    Gender: [this.state.lists.genderList[0]]
                 }
-                console.log(onceYears)
+                console.log(checkBoxList);
                 this.setState({
+                    checkBoxList: checkBoxList,
+                    filteredHeaders: headers,
+                    filteredData: restructuredData,
                     renderItem:
                         <div>
                             <Col style={{ height: "3000px" }}>
                                 <ResponsiveLine
-                                    data={onceYears}
+                                    data={restructuredData}
                                     margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
                                     xScale={{ type: 'point' }}
                                     yScale={{ type: 'linear', min: 'auto', max: 'auto', stacked: false, reverse: false }}
@@ -1018,29 +1073,47 @@ class LiveTable extends React.Component {
                                     ]}
                                 />
                             </Col>
+                            <FormControl component="fieldset">
+                                <FormLabel component="legend">Gender</FormLabel>
+                                <RadioGroup
+                                    row aria-label="gender"
+                                    value={this.state.lists.genderList[0]}
+                                    onChange={this.radioGenderChange}
+                                    name="row-radio-buttons-group"
+                                >
+                                    <FormControlLabel value="Male" control={<Radio />} label="Male" />
+                                    <FormControlLabel value="Female" control={<Radio />} label="Female" />
+                                    <FormControlLabel value="Both Sex" control={<Radio />} label="Both Sex" />
+                                </RadioGroup>
+                            </FormControl>
+                            <FiltrationPanel
+                                yearList={this.state.lists.yearList}
+                                checkBoxList={checkBoxList}
+                                onCheckBoxListChange={this.onCheckBoxListChange}
+                                onYearValChange={this.handleSingleSliderChange}
+                            />
                         </div>
                 });
                 break;
             case 5:
-                var givenData = this.state.oriData;
-                var selectedGender = "MLE";
-                var selectedYear = 2016;
-                var mapData = [];
-                for (let i = 0; i < givenData.length; i++) {
-                    var row = givenData[i];
-                    if (!mapData.find(o => o.id === row.SpatialDim)) {
-                        if (row.Dim1 === selectedGender && row.TimeDim === selectedYear) { //if Male, Female or Both Sex and the year is same
-                            mapData.push({ 'id': row.SpatialDim, 'value': row.NumericValue })
-                        }
-                    }
+                var data = [];
+                var generalData = this.changeGeneralData(this.state.oriData)
+                data = this.filterGenders(generalData, this.state.lists.genderList[0])
+                data = this.filterSingleYear(data, Math.max(...this.state.lists.yearList))
+                data = this.restructureData(data, this.props.viewType)
+                console.log(data);
+                var k = {
+                    Gender: [this.state.lists.genderList[0]]
                 }
-                console.log(givenData);
                 this.setState({
+                    filteredData: data,
+                    filteredHeaders: k,
+                    yearVal: Math.max(...this.state.lists.yearList),
                     renderItem:
                         <div>
                             <Row style={{ height: "700px" }}>
                                 <ResponsiveChoropleth
-                                    data={mapData}
+                                    data={data}
                                     features={featuresArray.features}
                                     margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
                                     colors="nivo"
@@ -1081,11 +1154,21 @@ class LiveTable extends React.Component {
                                     ]}
                                 />
                             </Row>
+                            <FormControl component="fieldset">
+                                <FormLabel component="legend">Gender</FormLabel>
+                                <RadioGroup
+                                    row aria-label="gender"
+                                    value={this.state.lists.genderList[0]}
+                                    onChange={this.radioGenderChange}
+                                    name="row-radio-buttons-group"
+                                >
+                                    <FormControlLabel value="Male" control={<Radio />} label="Male" />
+                                    <FormControlLabel value="Female" control={<Radio />} label="Female" />
+                                    <FormControlLabel value="Both Sex" control={<Radio />} label="Both Sex" />
+                                </RadioGroup>
+                            </FormControl>
                             <FiltrationPanel
                                 yearList={this.state.lists.yearList}
-                                genderVal={this.state.lists.genderList}
-                                countryVal={this.state.lists.countryList}
-                                checkBoxList={checkBoxList}
                                 onCheckBoxListChange={this.onCheckBoxListChange}
                                 onYearValChange={this.handleSingleSliderChange}
                                 singlePointSlider={true}
@@ -1100,8 +1183,6 @@ class LiveTable extends React.Component {
     }
 
     componentDidUpdate() {
-        //console.log(this.props.fetchAddr)
-        //console.log(this.state.currentAddr)
         if (this.state.currentAddr !== this.props.fetchAddr || this.state.viewType !== this.props.viewType) {
             this.setState({
                 currentAddr: this.props.fetchAddr,
@@ -1115,7 +1196,7 @@ class LiveTable extends React.Component {
     render() {
         const { error, isLoaded, items } = this.state;
         if (this.state.error) {
-            return <div>Error: Something went wrong.</div>;
+            return <div>Data Is Currently Unavailable.</div>;
         } else if (!isLoaded) {
             return (
                 <>
