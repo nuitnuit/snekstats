@@ -85,8 +85,6 @@ class FiltrationPanel extends React.Component {
 
     render() {
         var checkBoxListState = {};
-        
-        console.log(this.props.checkBoxList)
         var checkboxes;
         if (this.state.checkBoxListState === {} || this.props.checkBoxList === null || this.props.checkBoxList === undefined) {
             checkboxes = null
