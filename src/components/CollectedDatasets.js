@@ -18,20 +18,8 @@ import Slider from '@mui/material/Slider'
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { Tooltip } from "@mui/material";
-import { StaticVisuals } from "./StaticVisuals";
-
-function onlyUnique(value, index, self) {
-    return self.indexOf(value) === index;
-}
-
-// usage example:
-/*
-    var a = ['a', 1, 'a', 2, '1'];
-    var unique = a.filter(onlyUnique);
-
-    console.log(unique); // ['a', 1, 2, '1']
-*/
-
+import StaticVisuals from "./StaticVisuals";
+import { withSnackbar } from 'notistack';
 
 class CollectedDatasets extends React.Component {
     constructor(props) {
@@ -44,6 +32,11 @@ class CollectedDatasets extends React.Component {
             renderItem: null
         };
         this.updateDataset = this.updateDataset.bind(this);
+        this.forceUpdate = this.forceUpdate.bind(this);
+    }
+
+    alertUser = () => {
+
     }
 
     updateDataset(datasetNum) {
@@ -76,7 +69,10 @@ class CollectedDatasets extends React.Component {
             dataViewNum: dataViewNum
         }))
     }
-
+    callForceUpdate = () => {
+        this.forceUpdate()
+        console.log("forced")
+    }
     render() {
         return (
             <div className="CollectedDatasets" >
@@ -99,7 +95,7 @@ class CollectedDatasets extends React.Component {
                             </Dropdown>
                         </Col>
                     </Row>
-                    <Row style={{ minWidth: "1000px" }}>
+                    <Row style={{ minWidth: "0px" }}>
                         <Col xs={1}>
                             <ToggleButtonGroup
                                 orientation="vertical"
@@ -115,7 +111,6 @@ class CollectedDatasets extends React.Component {
                                         <TableViewIcon></TableViewIcon>
                                     </ToggleButton>
                                 </Tooltip>
-
                                 <Tooltip title="Bar chart" placement="left">
                                     <ToggleButton value={2}>
                                         <BarChartIcon></BarChartIcon>
@@ -136,11 +131,11 @@ class CollectedDatasets extends React.Component {
                                         <PublicIcon></PublicIcon>
                                     </ToggleButton>
                                 </Tooltip>
-
                             </ToggleButtonGroup>
                         </Col>
                         <Col xs={true} className="text-center align-self-center">
                             <StaticVisuals
+                                /*callForceUpdate={this.callForceUpdate}*/
                                 fetchAddr={this.state.datasetAddr}
                                 viewType={this.state.dataViewNum}
                                 isLoaded={false}

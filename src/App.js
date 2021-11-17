@@ -12,27 +12,30 @@ import Topbar from './components/TopBar';
 import Footerbar from './components/FooterBar';
 import CollectedDatasets from './components/CollectedDatasets';
 import LiveDatasets from './components/LiveDatasets';
+import { SnackbarProvider } from 'notistack';
 
 class App extends Component {
   render() {
     return (
-      <BrowserRouter>
-        <Topbar />
-        <div>
-          <Switch>
-            <Route path="/" component={Home} exact />
-            <Route path="/about" component={About} />
-            <Route path="/centers" component={Centers} />
-            <Route path="/obesity" component={Obesity} />
-            <Route path="/Risks" component={Risks} />
-            <Route path="/ExternalInfo" component={ExternalInfo} />
-            <Route path="/Prevention" component={Prevention} />
-            <Route path="/collected-datasets" component={CollectedDatasets} />
-            <Route path="/live-datasets" component={LiveDatasets} />
-          </Switch>
-        </div>
-        <Footerbar />
-      </BrowserRouter >
+      <SnackbarProvider maxSnack={3} >
+        <BrowserRouter>
+          <Topbar />
+          <div>
+            <Switch>
+              <Route path="/" component={Home} exact />
+              <Route path="/about" component={About} />
+              <Route path="/centers" component={Centers} />
+              <Route path="/obesity" component={Obesity} />
+              <Route path="/Risks" component={Risks} />
+              <Route path="/ExternalInfo" component={ExternalInfo} />
+              <Route path="/Prevention" component={Prevention} />
+              <Route path="/collected-datasets" component={CollectedDatasets} />
+              <Route path="/live-datasets" component={LiveDatasets} />
+            </Switch>
+          </div>
+          <Footerbar />
+        </BrowserRouter >
+      </SnackbarProvider>
     );
   }
 }

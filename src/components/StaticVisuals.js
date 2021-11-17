@@ -15,8 +15,10 @@ import FormLabel from '@mui/material/FormLabel';
 import featuresArray from '../data/world_countries.json';
 import { ResponsiveSunburst } from '@nivo/sunburst'
 import { useTheme } from '@nivo/core'
+import Switch from '@mui/material/Switch';
+import { withSnackbar } from "notistack";
 
-export class StaticVisuals extends React.Component {
+class StaticVisuals extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -33,6 +35,14 @@ export class StaticVisuals extends React.Component {
         this.loadDatasets = this.loadDatasets.bind(this);
         this.onCheckBoxListChange = this.onCheckBoxListChange.bind(this);
     }
+
+    alertMessage = () => {
+        this.props.enqueueSnackbar("Please select a maximum of up to 15 countries", {
+            preventDuplicate: true,
+            variant: 'error',
+        })
+    }
+
     restructureData(data = undefined) {
         if (data == undefined)
 
@@ -221,7 +231,7 @@ export class StaticVisuals extends React.Component {
                 break;
             case 2:
                 switch (this.props.viewType) {
-                    case 2:
+                    case 2://no need to restructure
                         break;
                 }
         }
@@ -249,8 +259,27 @@ export class StaticVisuals extends React.Component {
             this.reloadVisuals();
         })
     }
+    radioSeverityChange = (event) => {
+        const k = {
+            ...this.state.filteredHeaders,
+            Severity: [event.target.value]
+        }
+        this.setState({
+            filteredHeaders: k
+        }, () => {
+            this.reloadVisuals()
+        });
+    }
     radioAgeGroupChange = (event) => {
-
+        const k = {
+            ...this.state.filteredHeaders,
+            AgeGroup: [event.target.value]
+        }
+        this.setState({
+            filteredHeaders: k
+        }, () => {
+            this.reloadVisuals()
+        });
     }
     radioGenderChange = (event) => {
         const k = {
@@ -259,6 +288,17 @@ export class StaticVisuals extends React.Component {
         }
         this.setState({
             filteredHeaders: k
+        }, () => {
+            this.reloadVisuals()
+        });
+    }
+    handleGroupModeChange = (event) => {
+        var headers = this.state.filteredHeaders
+        this.setState({
+            filteredHeaders: {
+                ...headers,
+                GroupMode: event.target.checked
+            }
         }, () => {
             this.reloadVisuals()
         });
@@ -405,7 +445,7 @@ export class StaticVisuals extends React.Component {
                                                 pointBorderWidth={2}
                                                 pointBorderColor={{ from: 'serieColor' }}
                                                 enableSlices="x"
-                                                
+
                                                 pointLabelYOffset={-12}
                                                 useMesh={true}
                                                 legends={[
@@ -554,7 +594,124 @@ export class StaticVisuals extends React.Component {
                         });
                         break;
                     case 2:
-                        console.log(this.state.lists)
+                        if (this.state.filteredHeaders.Country.length > 15 || this.state.filteredHeaders.Country.length == 0)
+                        {
+                            this.alertMessage()
+                            break;
+                        }
+                        var restructuredData = this.filterGenders(this.state.finalData, [this.state.filteredHeaders.Gender[0]])
+                        restructuredData = this.filterCountries(restructuredData, this.state.filteredHeaders.Country)
+                        restructuredData = restructuredData.filter(row => row.Year == this.state.yearVal);
+                        restructuredData = this.filterAgeGroup(restructuredData, this.state.filteredHeaders.AgeGroup[0])
+                        var visProps = {
+                            indexBy: "Country",
+                            layout: "horizontal",
+                            margin: { top: 50, right: 130, bottom: 50, left: 180 },
+                            valueFormat: " > .2f",
+                            padding: 0.3,
+                            valueScale: { type: 'linear' },
+                            indexScale: { type: 'band', round: true },
+                            colors: { scheme: 'paired' },
+                            borderColor: { from: 'color', modifiers: [['darker', 1.6]] },
+                            axisTop: null,
+                            axisRight: null,
+                            axisBottom: {
+                                tickSize: 5,
+                                tickPadding: 5,
+                                tickRotation: 0,
+                                legend: yLegend,
+                                legendPosition: 'middle',
+                                legendOffset: 32
+                            },
+                            axisLeft: {
+                                tickSize: 5,
+                                tickPadding: 5,
+                                tickRotation: 0,
+                                legend: xLegend,
+                                legendPosition: 'middle',
+                                legendOffset: -140
+                            },
+                            labelSkipWidth: 12,
+                            labelSkipHeight: 12,
+                            labelTextColor: { from: 'color', modifiers: [['darker', 1.6]] },
+                            legends:
+                                [
+                                    {
+                                        dataFrom: 'keys',
+                                        anchor: 'bottom-right',
+                                        direction: 'column',
+                                        justify: false,
+                                        translateX: 120,
+                                        translateY: 0,
+                                        itemsSpacing: 2,
+                                        itemWidth: 100,
+                                        itemHeight: 20,
+                                        itemDirection: 'left-to-right',
+                                        itemOpacity: 0.85,
+                                        symbolSize: 20,
+                                        effects: [
+                                            {
+                                                on: 'hover',
+                                                style: {
+                                                    itemOpacity: 1
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                        }
+                        if (this.state.filteredHeaders.GroupMode) {
+                            visProps.groupMode = "grouped"
+                        }
+                        this.setState({
+                            visualProps: visProps,
+                            renderItem: <>
+                                <Row>
+                                    <Col style={{ minHeight: "500px", maxHeight: "auto" }}>
+                                        <ResponsiveBar
+                                            data={restructuredData}
+                                            keys={this.state.filteredHeaders.Severity}
+                                            {...visProps}
+                                        />
+                                    </Col>
+                                </Row>
+                                {/* add the radio here for agegroup and gender*/}
+                                <FormControlLabel control={<Switch onChange={this.handleGroupModeChange} />} label="Group mode" />
+                                <FormControl component="fieldset">
+                                    <FormLabel component="legend">Age Group</FormLabel>
+                                    <RadioGroup
+                                        row aria-label="agegroup"
+                                        value={this.state.filteredHeaders.AgeGroup[0]}
+                                        onChange={this.radioAgeGroupChange}
+                                        name="row-radio-buttons-group"
+                                    >
+                                        {
+                                            this.renderAgeGroupRadios()
+                                        }
+
+                                    </RadioGroup>
+                                </FormControl>
+                                <FormControl component="fieldset">
+                                    <FormLabel component="legend">Gender</FormLabel>
+                                    <RadioGroup
+                                        row aria-label="gender"
+                                        value={this.state.filteredHeaders.Gender[0]}
+                                        onChange={this.radioGenderChange}
+                                        name="row-radio-buttons-group"
+                                    >
+                                        <FormControlLabel value="Boys" control={<Radio />} label="Boys" />
+                                        <FormControlLabel value="Girls" control={<Radio />} label="Girls" />
+                                    </RadioGroup>
+                                </FormControl>
+                                <FiltrationPanel
+                                    yearList={this.state.lists.yearList}
+                                    checkBoxList={this.state.checkBoxList}
+                                    onCheckBoxListChange={this.onCheckBoxListChange}
+                                    onYearValChange={this.handleSingleSliderChange}
+                                    singlePointSlider={true}
+                                />
+                            </>,
+                        });
                         break;
                     case 3:
                         break;
@@ -604,6 +761,10 @@ export class StaticVisuals extends React.Component {
             });
         }
     };
+    filterAgeGroup(data, ageGroup) {
+        const filteredData = data.filter(row => row.AgeGroup == ageGroup);
+        return filteredData;
+    }
     filterSingleYear(data, yearVal) {
         const filteredData = data.filter(row => row.Year == yearVal);
         return filteredData;
@@ -638,7 +799,7 @@ export class StaticVisuals extends React.Component {
                         dataArray = data.split("\n");
                         headers = dataArray[0];
                         head = headers.split(",");
-                        var yearList = [], countryList = [], genderList = [], ageGroupList = [];
+                        var yearList = [], countryList = [], genderList = [], ageGroupList = [], severityList = [];
                         let i = 1, j = 0;
                         for (; i < dataArray.length; i++) {
                             j = 0;
@@ -665,11 +826,16 @@ export class StaticVisuals extends React.Component {
                                 }
                             }
                         }
+                        var severity = []
+                        severity = (this.props.datasetNum == 2 ? [
+                            "obese", "overweight", "underweight", "moderatetosevereunderweight"
+                        ] : [])
                         var lists = {
                             yearList: yearList,
                             countryList: countryList,
                             genderList: genderList,
                             ageGroupList: ageGroupList,
+                            severityList: severity
                         };
                         headers = [{ field: "id", headerName: "ID" }];
                         for (let i = 0; i < head.length; i++) {
@@ -681,6 +847,7 @@ export class StaticVisuals extends React.Component {
                                 }
                             );
                         }
+
                         this.setState((prevState) => ({
                             isLoaded: true,
                             finalData: dataList,
@@ -704,7 +871,15 @@ export class StaticVisuals extends React.Component {
             });
         }
     }
-
+    renderAgeGroupRadios() {
+        var radios = [];
+        for (let i = 5; i <= 19; i++) {
+            radios.push(
+                <FormControlLabel value={i} control={<Radio />} label={i} />
+            )
+        }
+        return radios;
+    }
     loadVisuals() {
         var xLegend, yLegend;
         switch (this.props.datasetNum) {
@@ -754,15 +929,20 @@ export class StaticVisuals extends React.Component {
                         var checkBoxList = {};
                         //have to do manual way because not all headers should be inside the checkbox list
                         var k = 0;
+                        var selectedCountries = []
+                        selectedCountries = this.state.lists.countryList.slice(0, 10)
+                        restructuredData = this.filterCountries(restructuredData, selectedCountries)
                         checkBoxList.Country = this.state.lists.countryList.map((item, index) => {
                             var obj = {};
-                            obj[item] = k < 10 ? true : false;
+                            obj[item] = (k < 10 ? true : false);
+                            k++
                             return obj;
                         });
                         k = 0;
                         checkBoxList.Gender = this.state.lists.genderList.map((item, index) => {
                             var obj = {};
-                            obj[item] = k < 10 ? true : false;
+                            obj[item] = (k < 10 ? true : false);
+                            k++
                             return obj;
                         });
                         var headers = {
@@ -788,7 +968,7 @@ export class StaticVisuals extends React.Component {
                                 tickSize: 5,
                                 tickPadding: 5,
                                 tickRotation: 0,
-                                legend: 'country',
+                                legend: xLegend,
                                 legendPosition: 'middle',
                                 legendOffset: 32
                             },
@@ -796,7 +976,7 @@ export class StaticVisuals extends React.Component {
                                 tickSize: 5,
                                 tickPadding: 5,
                                 tickRotation: 0,
-                                legend: 'food',
+                                legend: yLegend,
                                 legendPosition: 'middle',
                                 legendOffset: -40
                             },
@@ -858,7 +1038,6 @@ export class StaticVisuals extends React.Component {
                             yearVal: Math.max(...this.state.lists.yearList),
                         })
                         var restructuredData = this.restructureData();
-                        console.log(restructuredData)
                         this.setState({
                             renderItem: <>
                                 <Row>
@@ -922,7 +1101,7 @@ export class StaticVisuals extends React.Component {
                         var k = 0;
                         checkBoxList.Country = this.state.lists.countryList.map((item, index) => {
                             var obj = {};
-                            obj[item] = k < 10 ? true : false;
+                            obj[item] = (k < 10 ? true : false);
                             return obj;
                         });
                         var headers = {
@@ -970,7 +1149,6 @@ export class StaticVisuals extends React.Component {
                                                 enableSlices="x"
                                                 //probably not going to use the one below anymore
                                                 /*tooltip={function (e) {
-                                                    console.log(e.point)
                                                     return (<>
                                                         <div
                                                             style={{
@@ -1001,28 +1179,28 @@ export class StaticVisuals extends React.Component {
                                                 pointLabelYOffset={-12}
                                                 useMesh={true}
                                                 legends={[{
-                                                        anchor: 'bottom-right',
-                                                        direction: 'column',
-                                                        justify: false,
-                                                        translateX: 100,
-                                                        translateY: 0,
-                                                        itemsSpacing: 0,
-                                                        itemDirection: 'left-to-right',
-                                                        itemWidth: 80,
-                                                        itemHeight: 20,
-                                                        itemOpacity: 0.75,
-                                                        symbolSize: 12,
-                                                        symbolShape: 'circle',
-                                                        symbolBorderColor: 'rgba(0, 0, 0, .5)',
-                                                        effects: [
-                                                            {
-                                                                on: 'hover',
-                                                                style: {
-                                                                    itemBackground: 'rgba(0, 0, 0, .03)',
-                                                                    itemOpacity: 1
-                                                                }
+                                                    anchor: 'bottom-right',
+                                                    direction: 'column',
+                                                    justify: false,
+                                                    translateX: 100,
+                                                    translateY: 0,
+                                                    itemsSpacing: 0,
+                                                    itemDirection: 'left-to-right',
+                                                    itemWidth: 80,
+                                                    itemHeight: 20,
+                                                    itemOpacity: 0.75,
+                                                    symbolSize: 12,
+                                                    symbolShape: 'circle',
+                                                    symbolBorderColor: 'rgba(0, 0, 0, .5)',
+                                                    effects: [
+                                                        {
+                                                            on: 'hover',
+                                                            style: {
+                                                                itemBackground: 'rgba(0, 0, 0, .03)',
+                                                                itemOpacity: 1
                                                             }
-                                                        ]
+                                                        }
+                                                    ]
                                                 }]}
                                             />
                                         </Col>
@@ -1054,7 +1232,6 @@ export class StaticVisuals extends React.Component {
                         data = this.filterGenders(this.state.finalData, defaultGender) //only filter by female
                         data = this.filterSingleYear(data, Math.max(...this.state.lists.yearList))
                         data = this.restructureData(data)
-                        console.log(data)
                         var ASEANCOUNTRIES = featuresArray.features.filter(feature => this.state.lists.countryList.includes(feature.properties.name))
                         var k = {
                             Gender: [defaultGender]
@@ -1161,7 +1338,156 @@ export class StaticVisuals extends React.Component {
                         });
                         break;
                     case 2: //bar chart, yearval is not an array
-                        
+                        //use genderRadio and radioAgeGroup here
+                        /* this filtration method costs more time on average of 2 tries
+                            var restructuredData = this.state.finalData.filter((row, __) => 
+                            row.Year == Math.max(...this.state.lists.yearList) &&
+                            this.state.lists.countryList.filter((_,i) => i < 10).includes(row.Country) && 
+                            row.AgeGroup == this.state.lists.ageGroupList[0] &&
+                            row.Gender == this.state.lists.genderList[0]
+                        )*/
+                        var restructuredData = this.filterGenders(this.state.finalData, [this.state.lists.genderList[0]])
+                        restructuredData = restructuredData.filter(row => row.Year == Math.max(...this.state.lists.yearList));
+                        restructuredData = this.filterAgeGroup(restructuredData, this.state.lists.ageGroupList[0])
+                        restructuredData = this.filterCountries(restructuredData, this.state.lists.countryList.filter((_, i) => i < 15))
+                        //filter according to countries
+                        //this block generates the list of checkboxes for the data and viewtype
+                        var checkBoxList = {};
+                        //have to do manual way because not all headers should be inside the checkbox list
+                        var k = 0;
+                        {
+                            checkBoxList.Country = this.state.lists.countryList.map((item, index) => {
+                                var obj = {};
+                                obj[item] = (k < 15 ? true : false);
+                                k++
+                                return obj;
+                            });
+                            k = 0;
+                            checkBoxList.Severity = this.state.lists.severityList.map((item, index) => {
+                                var obj = {};
+                                obj[item] = (k < 15 ? true : false);
+                                k++
+                                return obj;
+                            });
+                        }
+                        var headers = {
+                            Country: this.state.lists.countryList.filter((_, i) => i < 15),
+                            Gender: this.state.lists.genderList,
+                            Severity: this.state.lists.severityList,
+                            AgeGroup: [Math.max(...this.state.lists.ageGroupList)],
+                            GroupMode: false
+                        }
+                        this.setState({
+                            yearVal: Math.max(...this.state.lists.yearList),
+                            filteredData: restructuredData,
+                            filteredHeaders: headers
+                        });
+                        var visProps = {
+                            indexBy: "Country",
+                            layout: "horizontal",
+                            margin: { top: 50, right: 130, bottom: 50, left: 180 },
+                            padding: 0.3,
+                            valueFormat: " > .2f",
+                            valueScale: { type: 'linear' },
+                            indexScale: { type: 'band', round: true },
+                            colors: { scheme: 'paired' },
+                            borderColor: { from: 'color', modifiers: [['darker', 1.6]] },
+                            axisTop: null,
+                            axisRight: null,
+                            axisBottom: {
+                                tickSize: 5,
+                                tickPadding: 5,
+                                tickRotation: 0,
+                                legend: yLegend,
+                                legendPosition: 'middle',
+                                legendOffset: 32
+                            },
+                            axisLeft: {
+                                tickSize: 5,
+                                tickPadding: 5,
+                                tickRotation: 0,
+                                legend: xLegend,
+                                legendPosition: 'middle',
+                                legendOffset: -140
+                            },
+                            labelSkipWidth: 12,
+                            labelSkipHeight: 12,
+                            labelTextColor: { from: 'color', modifiers: [['darker', 1.6]] },
+                            legends:
+                                [
+                                    {
+                                        dataFrom: 'keys',
+                                        anchor: 'bottom-right',
+                                        direction: 'column',
+                                        justify: false,
+                                        translateX: 120,
+                                        translateY: 0,
+                                        itemsSpacing: 2,
+                                        itemWidth: 100,
+                                        itemHeight: 20,
+                                        itemDirection: 'left-to-right',
+                                        itemOpacity: 0.85,
+                                        symbolSize: 20,
+                                        effects: [
+                                            {
+                                                on: 'hover',
+                                                style: {
+                                                    itemOpacity: 1
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                        }
+                        this.setState({
+                            visualProps: visProps,
+                            checkBoxList: checkBoxList,
+                            renderItem: <>
+                                <Row>
+                                    <Col style={{ minHeight: "500px", maxHeight: "auto" }}>
+                                        <ResponsiveBar
+                                            data={restructuredData}
+                                            keys={headers.Severity}
+                                            {...visProps}
+                                        />
+                                    </Col>
+                                </Row>
+                                <FormControlLabel control={<Switch onChange={this.handleGroupModeChange} />} label="Group mode" />
+                                <FormControl component="fieldset">
+                                    <FormLabel component="legend">Age Group</FormLabel>
+                                    <RadioGroup
+                                        row aria-label="agegroup"
+                                        value={Math.max(...this.state.lists.ageGroupList)}
+                                        onChange={this.radioAgeGroupChange}
+                                        name="row-radio-buttons-group"
+                                    >
+                                        {
+                                            this.renderAgeGroupRadios()
+                                        }
+
+                                    </RadioGroup>
+                                </FormControl>
+                                <FormControl component="fieldset">
+                                    <FormLabel component="legend">Gender</FormLabel>
+                                    <RadioGroup
+                                        row aria-label="gender"
+                                        value={this.state.lists.genderList[0]}
+                                        onChange={this.radioGenderChange}
+                                        name="row-radio-buttons-group"
+                                    >
+                                        <FormControlLabel value="Boys" control={<Radio />} label="Boys" />
+                                        <FormControlLabel value="Girls" control={<Radio />} label="Girls" />
+                                    </RadioGroup>
+                                </FormControl>
+                                <FiltrationPanel
+                                    yearList={this.state.lists.yearList}
+                                    checkBoxList={checkBoxList}
+                                    onCheckBoxListChange={this.onCheckBoxListChange}
+                                    onYearValChange={this.handleSingleSliderChange}
+                                    singlePointSlider={true}
+                                />
+                            </>,
+                        });
                         break;
                     case 3:
                         break;
@@ -1215,3 +1541,5 @@ export class StaticVisuals extends React.Component {
         }
     }
 }
+
+export default withSnackbar(StaticVisuals);
