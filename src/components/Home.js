@@ -19,7 +19,7 @@ function Home() {
                     </div>
                     <div className="col-lg-5">
                         <p align="justify">
-                            Snekstats is a data visualisation page that shows meaningful information aboubt your country's obesity rate. 
+                            Snekstats is a data visualisation page that shows meaningful information about your country's obesity rate. 
                             The page has several datasets sources for you to choose from, each of them providing a different type of filtration and analysis. 
                             You can also view the raw data in table format and interact with it. <br/><br/>
                             Our goal is to provide a better understanding of the obesity rate in your country. <br/><br/>

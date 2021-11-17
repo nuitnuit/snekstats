@@ -182,6 +182,7 @@ class StaticVisuals extends React.Component {
                                 }
                             ]
                         */
+
                         restructuredData = this.state.lists.countryList.map(country => {
                             return {
                                 id: country,
@@ -233,6 +234,23 @@ class StaticVisuals extends React.Component {
                 switch (this.props.viewType) {
                     case 2://no need to restructure
                         break;
+                    case 4:
+                        //151,Afghanistan,Boys,1985,5,13.25024405,0.001799496,0.008307156,0.616211163,0.275923528
+                        console.log(data)
+                        console.log(this.state.lists)
+                        console.log(this.state.filteredHeaders)
+                        restructuredData = this.state.filteredHeaders.Country.map(country => {
+                            return {
+                                id: country,
+                                data: data.filter(row => row.Country === country).map(r => {
+                                    console.log(r.id, r.Country, r.AgeGroup, r.Year, r.Gender)
+                                    return {
+                                        x: r.Year,
+                                        y: Number(r[this.state.filteredHeaders.Severity[0]])
+                                    }
+                                })
+                            }
+                        })
                 }
         }
         return restructuredData;
@@ -594,8 +612,7 @@ class StaticVisuals extends React.Component {
                         });
                         break;
                     case 2:
-                        if (this.state.filteredHeaders.Country.length > 15 || this.state.filteredHeaders.Country.length == 0)
-                        {
+                        if (this.state.filteredHeaders.Country.length > 15 || this.state.filteredHeaders.Country.length == 0) {
                             this.alertMessage()
                             break;
                         }
@@ -1147,35 +1164,6 @@ class StaticVisuals extends React.Component {
                                                 pointBorderWidth={2}
                                                 pointBorderColor={{ from: 'serieColor' }}
                                                 enableSlices="x"
-                                                //probably not going to use the one below anymore
-                                                /*tooltip={function (e) {
-                                                    return (<>
-                                                        <div
-                                                            style={{
-                                                                background: 'white',
-                                                                padding: '9px 12px',
-                                                                border: '1px solid #ccc',
-                                                            }}
-                                                        >
-                                                            <div style={{top: "50%", bottom: "50%"}}>
-                                                                <div
-                                                                    style={{
-                                                                        display: "inline-block",
-                                                                        //position:'absolute',
-                                                                        backgroundColor: e.point.serieColor,
-                                                                        borderRadius: "50%",
-                                                                        width: 20,
-                                                                        height: 20,
-                                                                    }}
-                                                                ></div>
-                                                                <strong>
-                                                                    {e.point.serieId}
-                                                                </strong>
-                                                            </div>
-                                                        </div>
-                                                    </>)
-                                                }}*/
-                                                //pointLabel={function(e){return e.id+"\n"+e.x+": "+e.y}}
                                                 pointLabelYOffset={-12}
                                                 useMesh={true}
                                                 legends={[{
@@ -1348,7 +1336,7 @@ class StaticVisuals extends React.Component {
                         )*/
                         var restructuredData = this.filterGenders(this.state.finalData, [this.state.lists.genderList[0]])
                         restructuredData = restructuredData.filter(row => row.Year == Math.max(...this.state.lists.yearList));
-                        restructuredData = this.filterAgeGroup(restructuredData, this.state.lists.ageGroupList[0])
+                        restructuredData = this.filterAgeGroup(restructuredData, Math.max(...this.state.lists.ageGroupList))
                         restructuredData = this.filterCountries(restructuredData, this.state.lists.countryList.filter((_, i) => i < 15))
                         //filter according to countries
                         //this block generates the list of checkboxes for the data and viewtype
@@ -1492,6 +1480,39 @@ class StaticVisuals extends React.Component {
                     case 3:
                         break;
                     case 4:
+                        var checkBoxList = {};
+                        //have to do manual way because not all headers should be inside the checkbox list
+                        var k = 0;
+                        {
+                            checkBoxList.Country = this.state.lists.countryList.map((item, index) => {
+                                var obj = {};
+                                obj[item] = (k < 15 ? true : false);
+                                k++
+                                return obj;
+                            });
+                            k = 0;
+                        }
+                        var headers = {
+                            Country: this.state.lists.countryList.filter((_, i) => i < 15),
+                            Gender: this.state.lists.genderList,
+                            Severity: [this.state.lists.severityList[0]],
+                            AgeGroup: [Math.max(...this.state.lists.ageGroupList)],
+                            GroupMode: false
+                        }
+                        this.setState({
+                            yearVal: Math.max(...this.state.lists.yearList),
+                            filteredData: restructuredData,
+                            filteredHeaders: headers
+                        });
+                        var restructuredData = this.filterGenders(this.state.finalData, [this.state.lists.genderList[0]])
+                        console.log(restructuredData)
+                        restructuredData = this.filterAgeGroup(restructuredData, Math.max(...this.state.lists.ageGroupList))
+                        console.log(restructuredData)
+                        restructuredData = this.restructureData(restructuredData);
+                        console.log(restructuredData)
+                        this.setState({
+
+                        })
                         break;
                     case 5:
                         break;
