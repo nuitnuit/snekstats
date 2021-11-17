@@ -17,6 +17,7 @@ import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider'
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import { Tooltip } from "@mui/material";
 import { StaticVisuals } from "./StaticVisuals";
 
 function onlyUnique(value, index, self) {
@@ -36,9 +37,9 @@ class CollectedDatasets extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            datasetNum: 2,
-            datasetHeader: "Dataset 2",
-            datasetAddr: "https://raw.githubusercontent.com/nuitnuit/snekstats/master/src/data/cleanedNCD_d2.csv",
+            datasetNum: 1,
+            datasetHeader: "Dataset 1",
+            datasetAddr: "https://raw.githubusercontent.com/nuitnuit/snekstats/master/src/data/compiled_countries_d1.csv",
             dataViewNum: 2,
             renderItem: null
         };
@@ -98,7 +99,7 @@ class CollectedDatasets extends React.Component {
                             </Dropdown>
                         </Col>
                     </Row>
-                    <Row className="xl">
+                    <Row style={{ minWidth: "1000px" }}>
                         <Col xs={1}>
                             <ToggleButtonGroup
                                 orientation="vertical"
@@ -109,21 +110,33 @@ class CollectedDatasets extends React.Component {
                                 }}
                                 exclusive
                             >
-                                <ToggleButton value={1}>
-                                    <TableViewIcon></TableViewIcon>
-                                </ToggleButton>
-                                <ToggleButton value={2}>
-                                    <BarChartIcon></BarChartIcon>
-                                </ToggleButton>
-                                <ToggleButton value={3}>
-                                    <PieChartIcon></PieChartIcon>
-                                </ToggleButton>
-                                <ToggleButton value={4}>
-                                    <MultilineChartIcon></MultilineChartIcon>
-                                </ToggleButton>
-                                <ToggleButton value={5}>
-                                    <PublicIcon></PublicIcon>
-                                </ToggleButton>
+                                <Tooltip title="Table" placement="left">
+                                    <ToggleButton value={1}>
+                                        <TableViewIcon></TableViewIcon>
+                                    </ToggleButton>
+                                </Tooltip>
+
+                                <Tooltip title="Bar chart" placement="left">
+                                    <ToggleButton value={2}>
+                                        <BarChartIcon></BarChartIcon>
+                                    </ToggleButton>
+                                </Tooltip>
+                                <Tooltip title="Pie chart / Sunburst" placement="left">
+                                    <ToggleButton value={3}>
+                                        <PieChartIcon></PieChartIcon>
+                                    </ToggleButton>
+                                </Tooltip>
+                                <Tooltip title="Line chart" placement="left">
+                                    <ToggleButton value={4}>
+                                        <MultilineChartIcon></MultilineChartIcon>
+                                    </ToggleButton>
+                                </Tooltip>
+                                <Tooltip title="Choropleth" placement="left">
+                                    <ToggleButton value={5}>
+                                        <PublicIcon></PublicIcon>
+                                    </ToggleButton>
+                                </Tooltip>
+
                             </ToggleButtonGroup>
                         </Col>
                         <Col xs={true} className="text-center align-self-center">
