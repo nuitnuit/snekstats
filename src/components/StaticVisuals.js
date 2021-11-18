@@ -260,6 +260,20 @@ class StaticVisuals extends React.Component {
                                 })
                             }
                         })
+                        break;
+                    case 5:
+                        var countries = require("i18n-iso-countries");
+                        countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
+
+                        for (let i = 0; i < data.length; i++) {
+                            restructuredData.push(
+                                {
+                                    "id": countries.getAlpha3Code(data[i].Country, "en"),
+                                    "value": Number(data[i][this.state.filteredHeaders.Severity[0]])
+                                }
+                            );
+                        }
+                        break;
                 }
         }
         return restructuredData;
@@ -885,6 +899,7 @@ class StaticVisuals extends React.Component {
 
                         break;
                     case 5:
+
                         break;
                 }
                 break;
@@ -1783,6 +1798,8 @@ class StaticVisuals extends React.Component {
                         })
                         break;
                     case 5:
+                        //radio or gender, agegroup and severity
+
                         break;
                 }
                 break;
