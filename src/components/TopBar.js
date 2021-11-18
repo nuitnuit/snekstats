@@ -36,14 +36,10 @@ function Topbar() {
                             <a className="dropdown-item" href="/live-datasets">Live Datasets</a>
                         </div>
                     </li>
-                    <li className="nav-item">
-                        <a className="nav-link" href="/centers">Centers</a>
-                    </li>
                 </ul>
             </div>
         </nav>
     )
-
 }
 
 export default Topbar
