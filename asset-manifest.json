@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/snekstats/static/css/main.4f257cbf.chunk.css",
-    "main.js": "/snekstats/static/js/main.b280947a.chunk.js",
-    "main.js.map": "/snekstats/static/js/main.b280947a.chunk.js.map",
+    "main.js": "/snekstats/static/js/main.a00f212f.chunk.js",
+    "main.js.map": "/snekstats/static/js/main.a00f212f.chunk.js.map",
     "runtime-main.js": "/snekstats/static/js/runtime-main.c209e344.js",
     "runtime-main.js.map": "/snekstats/static/js/runtime-main.c209e344.js.map",
-    "static/js/2.df6239bf.chunk.js": "/snekstats/static/js/2.df6239bf.chunk.js",
-    "static/js/2.df6239bf.chunk.js.map": "/snekstats/static/js/2.df6239bf.chunk.js.map",
+    "static/js/2.9ca76e70.chunk.js": "/snekstats/static/js/2.9ca76e70.chunk.js",
+    "static/js/2.9ca76e70.chunk.js.map": "/snekstats/static/js/2.9ca76e70.chunk.js.map",
     "static/js/3.58e743cd.chunk.js": "/snekstats/static/js/3.58e743cd.chunk.js",
     "static/js/3.58e743cd.chunk.js.map": "/snekstats/static/js/3.58e743cd.chunk.js.map",
     "index.html": "/snekstats/index.html",
     "static/css/main.4f257cbf.chunk.css.map": "/snekstats/static/css/main.4f257cbf.chunk.css.map",
-    "static/js/2.df6239bf.chunk.js.LICENSE.txt": "/snekstats/static/js/2.df6239bf.chunk.js.LICENSE.txt",
+    "static/js/2.9ca76e70.chunk.js.LICENSE.txt": "/snekstats/static/js/2.9ca76e70.chunk.js.LICENSE.txt",
     "static/media/CDCLogo.c12897f3.png": "/snekstats/static/media/CDCLogo.c12897f3.png",
     "static/media/WHOLogo.b58a65ee.png": "/snekstats/static/media/WHOLogo.b58a65ee.png",
     "static/media/WikipediaLogo.d614f006.png": "/snekstats/static/media/WikipediaLogo.d614f006.png",
@@ -23,8 +23,8 @@
   },
   "entrypoints": [
     "static/js/runtime-main.c209e344.js",
-    "static/js/2.df6239bf.chunk.js",
+    "static/js/2.9ca76e70.chunk.js",
     "static/css/main.4f257cbf.chunk.css",
-    "static/js/main.b280947a.chunk.js"
+    "static/js/main.a00f212f.chunk.js"
   ]
 }
