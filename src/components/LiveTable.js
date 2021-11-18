@@ -356,10 +356,8 @@ class LiveTable extends React.Component {
             case 2: //filter year, the country, then the gender
                 var filteredData = this.restructureData(this.state.items, this.props.viewType);
                 console.log(this.state.checkBoxList, this.state.filteredHeaders.Gender)
-                console.log(0, new Date())
                 filteredData = this.filterSingleYear(filteredData, this.state.yearVal)
                 filteredData = this.filterCountries(filteredData, this.state.filteredHeaders.Country)
-                console.log(filteredData);
                 this.setState({
                     renderItem: <>
                         <Row style={{ height: "2600px" }}>
@@ -427,8 +425,6 @@ class LiveTable extends React.Component {
                         {console.log(this.state.lists)}
                         < FiltrationPanel
                             yearList={this.state.lists.yearList}
-                            genderVal={this.state.lists.genderList}
-                            countryVal={this.state.lists.countryList}
                             checkBoxList={this.state.checkBoxList}
                             onCheckBoxListChange={this.onCheckBoxListChange}
                             onYearValChange={this.handleSingleSliderChange}
@@ -453,7 +449,7 @@ class LiveTable extends React.Component {
                     var restructuredData = this.state.filteredData
                 }
                 console.log(restructuredData)
-                console.log(0, new Date())
+                console.log(this.state.checkBoxList)
                 this.setState({
                     filteredData: restructuredData,
                     renderItem:
@@ -766,7 +762,8 @@ class LiveTable extends React.Component {
                 this.setState({
                     yearVal: Math.max(...this.state.lists.yearList),
                     filteredData: restructuredData,
-                    filteredHeaders: headers
+                    filteredHeaders: headers,
+                    checkBoxList: checkBoxList,
                 });
                 this.setState({
                     filteredData: this.state.filteredData
@@ -777,6 +774,7 @@ class LiveTable extends React.Component {
                 filteredData = this.filterSingleYear(filteredData, this.state.yearVal);
                 filteredData = this.filterCountries(filteredData, this.state.filteredHeaders.Country)
                 console.log(filteredData);
+                console.log(this.state.lists)
                 this.setState({
                     renderItem:
                         <div>
@@ -842,7 +840,7 @@ class LiveTable extends React.Component {
                                     barAriaLabel={function (e) { return e.id + ": " + e.formattedValue + " in country: " + e.indexValue }}
                                 />
                             </Row>
-                            {console.log(this.state.lists)}
+                            { }
                             <FiltrationPanel
                                 yearList={this.state.lists.yearList}
                                 genderVal={this.state.lists.genderList}
@@ -1102,6 +1100,7 @@ class LiveTable extends React.Component {
                 break;
             case 5:
                 var data = [];
+                console.log(this.state.lists.yearList);
                 var generalData = this.changeGeneralData(this.state.oriData)
                 data = this.filterGenders(generalData, this.state.lists.genderList[0])
                 data = this.filterSingleYear(data, Math.max(...this.state.lists.yearList))

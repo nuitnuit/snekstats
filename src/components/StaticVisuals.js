@@ -365,8 +365,6 @@ class StaticVisuals extends React.Component {
                                 </Row>
                                 <FiltrationPanel
                                     yearList={this.state.lists.yearList}
-                                    genderVal={this.state.lists.genderList}
-                                    countryVal={this.state.lists.countryList}
                                     checkBoxList={this.state.checkBoxList}
                                     onCheckBoxListChange={this.onCheckBoxListChange}
                                     onYearValChange={this.handleSingleSliderChange}
