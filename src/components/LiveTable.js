@@ -1085,7 +1085,6 @@ class LiveTable extends React.Component {
                 data = this.filterGenders(generalData, this.state.lists.genderList[0])
                 data = this.filterSingleYear(data, Math.max(...this.state.lists.yearList))
                 data = this.restructureData(data, this.props.viewType)
-                console.log(this.state.lists.yearList)
                 var k = {
                     Gender: [this.state.lists.genderList[0]]
                 }
