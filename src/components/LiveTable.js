@@ -566,6 +566,7 @@ class LiveTable extends React.Component {
                                     onCheckBoxListChange={this.onCheckBoxListChange}
                                     onYearValChange={this.handleSingleSliderChange}
                                 />
+<<<<<<< HEAD
                             </div>
                     });
                     this.removeSnackbar(key);
@@ -573,6 +574,41 @@ class LiveTable extends React.Component {
                 if (this.state.errorMessageKey) {
                     this.removeSnackbar(this.state.errorMessageKey);
                 }
+=======
+                            </Col>
+                            <FormControl component="fieldset">
+                                <FormLabel component="legend">Gender</FormLabel>
+                                <RadioGroup
+                                    row aria-label="gender"
+                                    value={this.state.filteredHeaders.Gender[0]}
+                                    onChange={this.radioGenderChange}
+                                    name="row-radio-buttons-group"
+                                >
+                                    <FormControlLabel value="Male" control={<Radio />} label="Male" />
+                                    <FormControlLabel value="Female" control={<Radio />} label="Female" />
+                                    <FormControlLabel value="Both Sex" control={<Radio />} label="Both Sex" />
+                                </RadioGroup>
+                            </FormControl>
+                            {
+                                /*correctAmount ? return(
+                                    null
+                                ):
+                                return(
+                                    <div>
+                                        Maximum 3 countries
+                                    </div>
+                                )*/
+                            }
+                            <FiltrationPanel
+                                yearList={this.state.lists.yearList}
+                                countryVal={this.state.lists.countryList}
+                                checkBoxList={this.state.checkBoxList}
+                                onCheckBoxListChange={this.onCheckBoxListChange}
+                                onYearValChange={this.handleSingleSliderChange}
+                            />
+                        </div>
+                });
+>>>>>>> c9498a97b2fc6efbc85de44f6e82ee6bcddda875
                 break;
             case 5:
                 var key = this.loadingMessage();

@@ -67,10 +67,10 @@ function ExternalInfo() {
               <Card.Text className="m-3">
                 Obesity is a medical condition in which excess body fat has
                 accumulated to an extent that it may have a negative effect on
-                health.[1] People are generally considered obese when their body
+                health. People are generally considered obese when their body
                 mass index (BMI), a measurement obtained by dividing a person's
                 weight by the square of the person's height—despite known
-                allometric inaccuracies[a]—is over 30 kg/m2; the range 25–30
+                allometric inaccuracies is over 30 kg/m2; the range 25–30
                 kg/m2 is defined as overweight.
               </Card.Text>
               <Button
