@@ -78,6 +78,8 @@ class FiltrationPanel extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
+        console.log("update")
+        console.log(prevProps, this.props)
         if (prevProps.checkBoxList !== this.props.checkBoxList && this.props.checkBoxList != null) {
             //empty function to prevent reupdate of checkboxlist when renderItem of static visual is updated
         }
