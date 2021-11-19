@@ -110,9 +110,7 @@ class LiveDatasets extends React.Component {
                                 <ToggleButton value={2}>
                                     <BarChartIcon></BarChartIcon>
                                 </ToggleButton>
-                                <ToggleButton value={3}>
-                                    <PieChartIcon></PieChartIcon>
-                                </ToggleButton>
+
                                 <ToggleButton value={4}>
                                     <MultilineChartIcon></MultilineChartIcon>
                                 </ToggleButton>

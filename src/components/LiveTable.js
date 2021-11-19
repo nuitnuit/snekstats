@@ -276,23 +276,23 @@ class LiveTable extends React.Component {
                         width: 150
                     },
                     {
-                        headerName: 'SpatialDim',
                         field: 'SpatialDim',
+                        headerName: 'Country / Area',
                         width: 150
                     },
                     {
-                        headerName: 'TimeDim',
                         field: 'TimeDim',
+                        headerName: 'Year',
                         width: 150
                     },
                     {
-                        headerName: 'Dim1',
                         field: 'Dim1',
+                        headerName: 'Gender',
                         width: 150
                     },
                     {
-                        headerName: 'NumericValue',
                         field: 'NumericValue',
+                        headerName: 'Value',
                         width: 150
                     },];
                     break;
@@ -305,28 +305,28 @@ class LiveTable extends React.Component {
                         width: 150
                     },
                     {
-                        headerName: 'SpatialDim',
                         field: 'SpatialDim',
+                        headerName: 'Country / Area',
                         width: 150
                     },
                     {
-                        headerName: 'TimeDim',
                         field: 'TimeDim',
+                        headerName: 'Year',
                         width: 150
                     },
                     {
-                        headerName: 'Dim1',
                         field: 'Dim1',
+                        headerName: 'Gender',
                         width: 150
                     },
                     {
-                        headerName: 'Dim2',
                         field: 'Dim2',
+                        headerName: 'Age Group',
                         width: 150
                     },
                     {
-                        headerName: 'NumericValue',
                         field: 'NumericValue',
+                        headerName: 'Value',
                         width: 150
                     },];
                     break;
