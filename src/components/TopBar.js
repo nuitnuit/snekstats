@@ -17,7 +17,7 @@ function Topbar() {
                         <a className="nav-link" href="/about">About</a>
                     </li>
                     <li className="nav-item dropdown">
-                    <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Obesity
                         </a>
                         <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
@@ -31,7 +31,7 @@ function Topbar() {
                         <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Datasets
                         </a>
-                        <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                             <a className="dropdown-item" href="/collected-datasets">Collected Datasets</a>
                             <a className="dropdown-item" href="/live-datasets">Live Datasets</a>
                         </div>
