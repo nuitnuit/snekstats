@@ -5,9 +5,10 @@ import "../App.css";
 import { Row , Col} from "react-bootstrap";
 
 function Obesity() {
+ 
   return (
     <div className="Obesity">
-      <Container padding="10px">
+      <Container style = {{minHeight:"100vh", padding:"10px"}}>
       <Row>
       <Col>
         <h1>This is Obesity page</h1>

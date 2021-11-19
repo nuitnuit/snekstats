@@ -13,7 +13,7 @@ import { Row, Col } from "react-bootstrap";
 function ExternalInfo() {
   return (
     <div className="ExternalInfo">
-      <Container padding="10px">
+      <Container  style = {{minHeight:"100vh", padding:"10px"}}>
         <h1>More Info</h1>
         <h4>
           You may Click the following links to view more about the subject{" "}

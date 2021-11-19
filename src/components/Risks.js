@@ -7,7 +7,7 @@ import "../App.css";
 function Risks() {
   return (
     <div className="Risks">
-      <Container padding="10px">
+      <Container style = {{minHeight:"100vh", padding:"10px"}}>
       <Row>
       <Col>
         <h1>Risks</h1>

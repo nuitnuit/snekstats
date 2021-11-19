@@ -15,7 +15,7 @@ import loke from "../assets/loke.png"
 function About() {
     return (
         <div className="About">
-            <Container padding = "10px">
+            <Container style = {{minHeight:"100vh", padding:"10px"}}>
                 <Row>
                     <p className="headerText">Team Sneko <img src={sneko2} alt="team-logo" /></p>
                     <p>We are a group of university students whose aim is to create health datasets which are accessible to the public. Our focus is obesity

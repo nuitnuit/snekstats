@@ -76,7 +76,7 @@ class CollectedDatasets extends React.Component {
     render() {
         return (
             <div className="CollectedDatasets" >
-                <Container fluid="xl">
+                <Container fluid="xl" style = {{minHeight:"100vh"}}>
                     <br />
                     <div className="d-flex justify-content-center">
                         <h1>Collected datasets</h1>

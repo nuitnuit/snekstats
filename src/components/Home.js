@@ -3,7 +3,7 @@ import Container from 'react-bootstrap/Container'
 function Home() {
     return (
         <div className="home">
-            <Container>
+            <Container style = {{minHeight:"100vh"}}>
                 <br />
                 <div className="d-flex justify-content-center">
                     <h1>Welcome To SnekStats</h1>

@@ -70,7 +70,7 @@ class LiveDatasets extends React.Component {
     render() {
         return (
             <div className="CollectedDatasets" >
-                <Container>
+                <Container style = {{minHeight:"100vh"}}>
                     <br />
                     <div className="d-flex justify-content-center">
 

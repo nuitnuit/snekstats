@@ -1189,7 +1189,7 @@ class LiveTable extends React.Component {
             );
         } else {
             return (
-                <div style={{ height: '100%', width: '100%' }}>
+                <div style = {{minHeight:"100vh"}}>
                     <p>{this.state.title}</p>
                     {this.state.renderItem}
                 </div >
