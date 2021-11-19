@@ -6,7 +6,7 @@ import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
-import { LiveTable } from './LiveTable';
+import LiveTable from './LiveTable';
 import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import TableViewIcon from '@mui/icons-material/TableView';
