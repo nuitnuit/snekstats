@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import Home from './components/Home';
 import About from './components/About';
-import Centers from './components/Centers';
 import Obesity from './components/Obesity';
 import Risks from './components/Risks';
 import Prevention from './components/Prevention';
@@ -17,25 +16,26 @@ import { SnackbarProvider } from 'notistack';
 class App extends Component {
   render() {
     return (
-      <SnackbarProvider maxSnack={3} >
-        <BrowserRouter>
+      <>
+      <BrowserRouter basename={process.env.PUBLIC_URL}> 
+        <SnackbarProvider maxSnack={3} >
           <Topbar />
           <div>
             <Switch>
               <Route path="/" component={Home} exact />
-              <Route path="/about" component={About} />
-              <Route path="/centers" component={Centers} />
-              <Route path="/obesity" component={Obesity} />
-              <Route path="/Risks" component={Risks} />
-              <Route path="/ExternalInfo" component={ExternalInfo} />
-              <Route path="/Prevention" component={Prevention} />
-              <Route path="/collected-datasets" component={CollectedDatasets} />
-              <Route path="/live-datasets" component={LiveDatasets} />
+              <Route path="/about" component={About} exact />
+              <Route path="/obesity" component={Obesity} exact />
+              <Route path="/Risks" component={Risks} exact />
+              <Route path="/ExternalInfo" component={ExternalInfo} exact />
+              <Route path="/Prevention" component={Prevention} exact />
+              <Route path="/collected-datasets" component={CollectedDatasets} exact />
+              <Route path="/live-datasets" component={LiveDatasets} exact />
             </Switch>
           </div>
           <Footerbar />
-        </BrowserRouter >
-      </SnackbarProvider>
+        </SnackbarProvider>
+      </BrowserRouter >
+      </>
     );
   }
 }
