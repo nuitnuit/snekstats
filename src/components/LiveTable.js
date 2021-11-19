@@ -13,7 +13,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-
+import { withSnackbar } from "notistack";
 class LiveTable extends React.Component {
 
     constructor(props) {
@@ -136,6 +136,23 @@ class LiveTable extends React.Component {
         }, () => {
             this.reloadVisuals()
         });
+    }
+    loadingMessage = () => {
+        const key = this.props.enqueueSnackbar("Loading visualisation...", {
+            preventDuplicate: true,
+            variant: 'info',
+        })
+        return key;
+    }
+    alertMessage = () => {
+        const key = this.props.enqueueSnackbar("Please select a maximum of up to 3 countries", {
+            preventDuplicate: true,
+            variant: 'error',
+        })
+        return key;
+    }
+    removeSnackbar(key) {
+        this.props.closeSnackbar(key);
     }
     loadDatasets() {
         if (this.props.fetchAddr !== null) {
@@ -341,7 +358,7 @@ class LiveTable extends React.Component {
     }
     reloadVisuals() {
         switch (this.props.viewType) {
-            case 1://bar chart
+            case 1://table
                 this.setState({
                     renderItem:
                         <div style={{ width: "100%" }}>
@@ -350,6 +367,7 @@ class LiveTable extends React.Component {
                 });
                 break;
             case 2: //filter year, the country, then the gender
+                var key = this.loadingMessage();
                 var filteredData = this.restructureData(this.state.items, this.props.viewType);
                 filteredData = this.filterSingleYear(filteredData, this.state.yearVal)
                 filteredData = this.filterCountries(filteredData, this.state.filteredHeaders.Country)
@@ -426,120 +444,138 @@ class LiveTable extends React.Component {
                         />
                     </>,
                 });
+                this.removeSnackbar(key);
                 break;
             case 3:
                 break;
             case 4://line chart
-                var generalData = this.changeGeneralData(this.state.items);
-                var correctAmount = true;
-                var finalData = this.filterGenders(generalData, this.state.filteredHeaders.Gender);
-                if (this.state.filteredHeaders.Country.length > 0 && this.state.filteredHeaders.Country.length <= 3) {
-                    var controlCountries = this.filterThreeCountries(finalData, this.state.filteredHeaders.Country);
-                    var restructuredData = this.restructureData(controlCountries, this.props.viewType);
+                var key;
+                if (this.state.filteredHeaders.Country.length > 3 || this.state.filteredHeaders.Country.length === 0) {
+                    key = this.alertMessage()
+                    this.setState({
+                        errorMessageKey: key
+                    })
+                    break;
                 }
                 else {
-                    correctAmount = false;
-                    var restructuredData = this.state.filteredData
-                }
-                this.setState({
-                    filteredData: restructuredData,
-                    renderItem:
-                        <div>
-                            <Col style={{ height: "3000px" }}>
-                                <ResponsiveLine
-                                    data={restructuredData}
-                                    margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
-                                    xScale={{ type: 'point' }}
-                                    yScale={{ type: 'linear', min: 'auto', max: 'auto', stacked: false, reverse: false }}
-                                    yFormat=" >-.2f"
-                                    axisTop={null}
-                                    axisRight={null}
-                                    axisBottom={{
-                                        orient: 'bottom',
-                                        tickSize: 5,
-                                        tickPadding: 5,
-                                        tickRotation: 90,
-                                        legend: 'Year',
-                                        legendOffset: 45,
-                                        legendPosition: 'middle'
-                                    }}
-                                    axisLeft={{
-                                        orient: 'left',
-                                        tickSize: 5,
-                                        tickPadding: 5,
-                                        tickRotation: 0,
-                                        legend: 'Value',
-                                        legendOffset: -40,
-                                        legendPosition: 'middle'
-                                    }}
-                                    pointSize={10}
-                                    pointColor={{ theme: 'background' }}
-                                    pointBorderWidth={2}
-                                    pointBorderColor={{ from: 'serieColor' }}
-                                    pointLabelYOffset={-12}
-                                    useMesh={true}
-                                    legends={[
-                                        {
-                                            anchor: 'bottom-right',
-                                            direction: 'column',
-                                            justify: false,
-                                            translateX: 100,
-                                            translateY: 0,
-                                            itemsSpacing: 0,
-                                            itemDirection: 'left-to-right',
-                                            itemWidth: 80,
-                                            itemHeight: 20,
-                                            itemOpacity: 0.75,
-                                            symbolSize: 12,
-                                            symbolShape: 'circle',
-                                            symbolBorderColor: 'rgba(0, 0, 0, .5)',
-                                            effects: [
-                                                {
-                                                    on: 'hover',
-                                                    style: {
-                                                        itemBackground: 'rgba(0, 0, 0, .03)',
-                                                        itemOpacity: 1
+                    var key = this.loadingMessage();
+                    var generalData = this.changeGeneralData(this.state.items);
+                    var correctAmount = true;
+                    var finalData = this.filterGenders(generalData, this.state.filteredHeaders.Gender);
+                    if (this.state.filteredHeaders.Country.length > 0 && this.state.filteredHeaders.Country.length <= 3) {
+                        var controlCountries = this.filterThreeCountries(finalData, this.state.filteredHeaders.Country);
+                        var restructuredData = this.restructureData(controlCountries, this.props.viewType);
+                    }
+                    else {
+                        correctAmount = false;
+                        var restructuredData = this.state.filteredData
+                    }
+                    this.setState({
+                        filteredData: restructuredData,
+                        errorMessageKey: null,
+                        renderItem:
+                            <div>
+                                <Col style={{ height: "3000px" }}>
+                                    <ResponsiveLine
+                                        data={restructuredData}
+                                        margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+                                        xScale={{ type: 'point' }}
+                                        yScale={{ type: 'linear', min: 'auto', max: 'auto', stacked: false, reverse: false }}
+                                        yFormat=" >-.2f"
+                                        axisTop={null}
+                                        axisRight={null}
+                                        axisBottom={{
+                                            orient: 'bottom',
+                                            tickSize: 5,
+                                            tickPadding: 5,
+                                            tickRotation: 90,
+                                            legend: 'Year',
+                                            legendOffset: 45,
+                                            legendPosition: 'middle'
+                                        }}
+                                        axisLeft={{
+                                            orient: 'left',
+                                            tickSize: 5,
+                                            tickPadding: 5,
+                                            tickRotation: 0,
+                                            legend: 'Value',
+                                            legendOffset: -40,
+                                            legendPosition: 'middle'
+                                        }}
+                                        pointSize={10}
+                                        pointColor={{ theme: 'background' }}
+                                        pointBorderWidth={2}
+                                        pointBorderColor={{ from: 'serieColor' }}
+                                        pointLabelYOffset={-12}
+                                        useMesh={true}
+                                        legends={[
+                                            {
+                                                anchor: 'bottom-right',
+                                                direction: 'column',
+                                                justify: false,
+                                                translateX: 100,
+                                                translateY: 0,
+                                                itemsSpacing: 0,
+                                                itemDirection: 'left-to-right',
+                                                itemWidth: 80,
+                                                itemHeight: 20,
+                                                itemOpacity: 0.75,
+                                                symbolSize: 12,
+                                                symbolShape: 'circle',
+                                                symbolBorderColor: 'rgba(0, 0, 0, .5)',
+                                                effects: [
+                                                    {
+                                                        on: 'hover',
+                                                        style: {
+                                                            itemBackground: 'rgba(0, 0, 0, .03)',
+                                                            itemOpacity: 1
+                                                        }
                                                     }
-                                                }
-                                            ]
-                                        }
-                                    ]}
+                                                ]
+                                            }
+                                        ]}
+                                    />
+                                </Col>
+                                <FormControl component="fieldset">
+                                    <FormLabel component="legend">Gender</FormLabel>
+                                    <RadioGroup
+                                        row aria-label="gender"
+                                        value={this.state.filteredHeaders.Gender[0]}
+                                        onChange={this.radioGenderChange}
+                                        name="row-radio-buttons-group"
+                                    >
+                                        <FormControlLabel value="Male" control={<Radio />} label="Male" />
+                                        <FormControlLabel value="Female" control={<Radio />} label="Female" />
+                                        <FormControlLabel value="Both Sex" control={<Radio />} label="Both Sex" />
+                                    </RadioGroup>
+                                </FormControl>
+                                {
+                                    /*correctAmount ? return(
+                                        null
+                                    ):
+                                    return(
+                                        <div>
+                                            Maximum 3 countries
+                                        </div>
+                                    )*/
+                                }
+                                <FiltrationPanel
+                                    yearList={this.state.lists.yearList}
+                                    countryVal={this.state.lists.countryList}
+                                    checkBoxList={this.state.checkBoxList}
+                                    onCheckBoxListChange={this.onCheckBoxListChange}
+                                    onYearValChange={this.handleSingleSliderChange}
                                 />
-                            </Col>
-                            <FormControl component="fieldset">
-                                <FormLabel component="legend">Gender</FormLabel>
-                                <RadioGroup
-                                    row aria-label="gender"
-                                    value={this.state.filteredHeaders.Gender[0]}
-                                    onChange={this.radioGenderChange}
-                                    name="row-radio-buttons-group"
-                                >
-                                    <FormControlLabel value="Male" control={<Radio />} label="Male" />
-                                    <FormControlLabel value="Female" control={<Radio />} label="Female" />
-                                    <FormControlLabel value="Both Sex" control={<Radio />} label="Both Sex" />
-                                </RadioGroup>
-                            </FormControl>
-                            {
-                                /*correctAmount ? return(
-                                    null
-                                ):
-                                return(
-                                    <div>
-                                        Maximum 3 countries
-                                    </div>
-                                )*/
-                            }
-                            <FiltrationPanel
-                                yearList={this.state.lists.yearList}
-                                countryVal={this.state.lists.countryList}
-                                checkBoxList={this.state.checkBoxList}
-                                onCheckBoxListChange={this.onCheckBoxListChange}
-                                onYearValChange={this.handleSingleSliderChange}
-                            />
-                        </div>
-                });
+                            </div>
+                    });
+                    this.removeSnackbar(key);
+                };
+                if (this.state.errorMessageKey) {
+                    this.removeSnackbar(this.state.errorMessageKey);
+                }
                 break;
             case 5:
+                var key = this.loadingMessage();
                 var generalData = this.changeGeneralData(this.state.oriData)
                 var data = this.filterGenders(generalData, this.state.filteredHeaders.Gender)
                 data = this.filterSingleYear(data, this.state.yearVal)
@@ -612,6 +648,7 @@ class LiveTable extends React.Component {
                             />
                         </div>
                 });
+                this.removeSnackbar(key);
                 break;
         }
     }
@@ -1197,4 +1234,4 @@ class LiveTable extends React.Component {
         }
     }
 }
-export { LiveTable }
+export default withSnackbar(LiveTable)
